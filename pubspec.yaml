@@ -22,7 +22,7 @@ dependencies:
   # UI
   logger: ^2.4.0
   kartal: ^3.5.0
-  flutter_svg: ^2.0.9
+  flutter_svg: ^2.0.16
   # iOS Style Icons
   cupertino_icons: ^1.0.8
 

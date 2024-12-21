@@ -8,6 +8,34 @@ class AgePickerController extends GetxController {
   final double visibleRangeTop = 150.0; // Üst çizginin listview içindeki konumu
   final double visibleRangeBottom = 200.0; // Alt çizginin listview içindeki konumu
 
+  // Seçilen yaşa göre font boyutunu ve ağırlığını hesaplayan fonksiyon
+  Map<String, dynamic> getTextStyleForAge(int index) {
+    double fontSize = 24;
+    FontWeight fontWeight = FontWeight.bold;
+
+    if (index == selectedAge.value) {
+      fontSize = 24;
+      fontWeight = FontWeight.bold;
+    } else if (index == selectedAge.value - 1 || index == selectedAge.value + 1) {
+      fontSize = 20;
+      fontWeight = FontWeight.w500;
+    } else if (index == selectedAge.value - 2 || index == selectedAge.value + 2) {
+      fontSize = 16;
+      fontWeight = FontWeight.w400;
+    } else if (index == selectedAge.value - 3 || index == selectedAge.value + 3) {
+      fontSize = 12;
+      fontWeight = FontWeight.w300;
+    } else if (index == selectedAge.value - 4 || index == selectedAge.value + 4) {
+      fontSize = 12;
+      fontWeight = FontWeight.w300;
+    }
+
+    return {
+      'fontSize': fontSize,
+      'fontWeight': fontWeight,
+    };
+  }
+
   void onScrollUpdate() {
     // Scroll sırasında güncel seçimi kontrol et
     final offset = scrollController.offset;
@@ -41,5 +69,14 @@ class AgePickerController extends GetxController {
   void onClose() {
     scrollController.dispose();
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    // İlk başlatmada scroll güncellemesini hemen başlatmak için
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      onScrollUpdate(); // Scroll güncellemesini başlat
+    });
   }
 }

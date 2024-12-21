@@ -15,6 +15,9 @@ enum AppColor {
   shadowedSteel,
   noxious,
   lightGreenGlint,
+  crystalBell,
+  sweetPatato,
+  vividBlue,
 }
 
 extension AppColorExtension on AppColor {
@@ -48,6 +51,12 @@ extension AppColorExtension on AppColor {
         return const Color(0xff8CA104);
       case AppColor.lightGreenGlint:
         return const Color(0xffE1F7D1);
+      case AppColor.crystalBell:
+        return const Color(0xffF0EFEF);
+      case AppColor.sweetPatato:
+        return const Color(0XFFD67D3E);
+      case AppColor.vividBlue:
+        return const Color(0xff1525FF);
     }
   }
 }

@@ -12,10 +12,10 @@ class AppSizes {
   double get floatActionButtonSize => 60;
   double get middleButtonSize => 50;
 
-  double get iconSizeLow => 30;
-  double get iconSizeNormal => 35;
+  double get iconSizeLow => 24;
+  double get iconSizeNormal => 32;
   double get iconSizeMedium => 40;
-  double get iconSizeLarge => 45;
-  double get iconSizeXLarge => 50;
+  double get iconSizeLarge => 48;
+  double get iconSizeXLarge => 64;
 
 }

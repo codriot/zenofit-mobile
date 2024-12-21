@@ -4,9 +4,10 @@ import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
+import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_sizes.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/dynamic_utils/app_radius.dart';
 import 'package:diet_app_mobile/product/widgets/general/custom_text_field.dart';
-import 'package:diet_app_mobile/product/widgets/general_page_button.dart';
+import 'package:diet_app_mobile/product/widgets/general/general_page_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -140,8 +141,8 @@ class RegisterView extends StatelessWidget {
             padding: AppPadding.instance.leftMedium,
             child: SvgPicture.asset(
               AppIconUtility.getIconPath(icon, format: IconFormat.svg),
-              width: 24,
-              height: 24,
+              width: AppSizes.instance.iconSizeLow,
+              height: AppSizes.instance.iconSizeLow,
             ),
           ),
           Expanded(

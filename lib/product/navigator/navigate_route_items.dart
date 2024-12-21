@@ -1,5 +1,7 @@
+import 'package:diet_app_mobile/product/widgets/onboarding/onboarding_three_view.dart';
 import 'package:diet_app_mobile/views/basic/login/login_view.dart';
-import 'package:diet_app_mobile/views/basic/onboarding/onboarding_one/onboarding_one_view.dart';
+import 'package:diet_app_mobile/views/basic/onboarding/onboarding_one_view.dart';
+import 'package:diet_app_mobile/views/basic/onboarding/onboarding_two_view.dart';
 import 'package:diet_app_mobile/views/basic/register/register_view.dart';
 import 'package:diet_app_mobile/views/basic/splash/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,9 @@ class NavigatorRoutes {
         curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.login.withSlash,page: () => const LoginView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.register.withSlash,page: () => const RegisterView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
-    GetPage(name: NavigateRoutesItems.onboardingOne.withSlash,page: () => const OnboardingOneView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.onboardingOne.withSlash,page: () => OnboardingOneView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.onboardingTwo.withSlash,page: () => OnboardingTwoView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.onboardingThree.withSlash,page: () => const OnboardingThreeView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -33,6 +37,8 @@ enum NavigateRoutesItems {
   home,
   register,
   onboardingOne,
+  onboardingTwo,
+  onboardingThree,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

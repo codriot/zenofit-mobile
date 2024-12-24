@@ -25,7 +25,7 @@ class OnboardingOneView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const OnboardingTopComponents(title: "Cinsiyetiniz Nedir?",),
+            OnboardingTopComponents(title: "Cinsiyetiniz Nedir?",),
             _buildPageGenderComponent(
                 context: context, icon: "men", text: "Erkek"),
             _buildPageGenderComponent(

@@ -1,8 +1,6 @@
-
-
 import 'package:get/get.dart';
 
-class GlobalOnboardingController extends GetxController{
+class GlobalOnboardingController extends GetxController {
   final onboardingPageCount = [
     true,
     false,
@@ -18,9 +16,23 @@ class GlobalOnboardingController extends GetxController{
     }
     onboardingPageCount[index] = true;
   }
+
+  void togglePreviousOnboardingPage() {
+    int currentIndex =
+        onboardingPageCount.indexWhere((element) => element == true);
+
+    if (currentIndex >= 0) {
+      onboardingPageCount[currentIndex] = false;
+
+      // Eğer currentIndex sıfırdan büyükse bir öncekini true yap
+      if (currentIndex > 0) {
+        onboardingPageCount[currentIndex - 1] = true;
+      }
+    }
+  }
 }
 
-enum OnboardingPageCountEnum{
+enum OnboardingPageCountEnum {
   onboardingPageOne,
   onboardingPageTwo,
   onboardingPageThree,

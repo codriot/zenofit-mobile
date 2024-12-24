@@ -1,3 +1,4 @@
+import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_three_view.dart';
 import 'package:diet_app_mobile/views/basic/login/login_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_one_view.dart';
@@ -22,6 +23,7 @@ class NavigatorRoutes {
     GetPage(name: NavigateRoutesItems.onboardingOne.withSlash,page: () => OnboardingOneView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.onboardingTwo.withSlash,page: () => OnboardingTwoView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.onboardingThree.withSlash,page: () => OnboardingThreeView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.onboardingFour.withSlash,page: () => OnboardingFourView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -39,6 +41,7 @@ enum NavigateRoutesItems {
   onboardingOne,
   onboardingTwo,
   onboardingThree,
+  onboardingFour,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

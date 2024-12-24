@@ -22,8 +22,9 @@ class OnboardingTwoView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const OnboardingTopComponents(title: "Yaşınız Kaç?"),
+            OnboardingTopComponents(title: "Yaşınız Kaç?"),
             AgePickerWidget(),
+            const Spacer(),
             GeneralOnboardingPageCircleComponent(),
             Padding(
               padding: AppPadding.instance.horizontalMedium,

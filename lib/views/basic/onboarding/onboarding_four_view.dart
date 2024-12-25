@@ -31,9 +31,9 @@ class OnboardingFourView extends StatelessWidget {
               child: GeneralPageButtonWidget(
                 onPressed: () {
                   globalOnboardingController.toggleOnboardingPageCount(
-                      OnboardingPageCountEnum.onboardingPageThree.index);
+                      OnboardingPageCountEnum.onboardingPageFive.index);
                   NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.onboardingFour);
+                      .pushToPage(NavigateRoutesItems.onboardingFive);
                 },
                 text: "Next",
                 padding: AppPadding.instance.bottomNormal,

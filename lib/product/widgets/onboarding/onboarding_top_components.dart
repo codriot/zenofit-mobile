@@ -13,11 +13,13 @@ import 'package:get/get.dart';
 class OnboardingTopComponents extends StatelessWidget {
   OnboardingTopComponents({
     super.key,
-    required this.title,
+    required this.title, this.textPadding,
   });
   final String title;
   final GlobalOnboardingController globalOnboardingController =
       Get.put(GlobalOnboardingController());
+  final EdgeInsets? textPadding;  
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,11 +49,14 @@ class OnboardingTopComponents extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              title,
-              style: context.appGeneral.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center, // Text ortalama
+            Padding(
+              padding: textPadding ?? EdgeInsets.zero,
+              child: Text(
+                title,
+                style: context.appGeneral.textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center, // Text ortalama
+              ),
             ),
           ],
         ),

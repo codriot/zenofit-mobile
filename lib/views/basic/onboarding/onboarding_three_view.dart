@@ -32,7 +32,7 @@ class OnboardingThreeView extends StatelessWidget {
               child: GeneralPageButtonWidget(
                 onPressed: () {
                   globalOnboardingController.toggleOnboardingPageCount(
-                      OnboardingPageCountEnum.onboardingPageThree.index);
+                      OnboardingPageCountEnum.onboardingPageFour.index);
                   NavigatorController.instance
                       .pushToPage(NavigateRoutesItems.onboardingFour);
                 },

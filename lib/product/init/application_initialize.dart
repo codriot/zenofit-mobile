@@ -4,6 +4,7 @@ import 'package:diet_app_mobile/API/services/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 
@@ -16,6 +17,7 @@ final class InitProject {
   Future<void> initProject() async {
     WidgetsFlutterBinding.ensureInitialized();
     await GetStorage.init();
+    await dotenv.load(fileName: ".env");
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
       await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

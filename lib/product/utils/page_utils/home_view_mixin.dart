@@ -232,8 +232,8 @@ mixin HomeViewMixin {
             Row(
               children: List.generate(
                 5,
-                (index) => Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                (index) => const Padding(
+                  padding: EdgeInsets.only(right: 8),
                   child: Icon(Icons.water_drop, color: Colors.blue, size: 30),
                 ),
               ),

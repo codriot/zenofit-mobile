@@ -1,8 +1,11 @@
+import 'package:diet_app_mobile/product/init/application_initialize.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-void main() {
+
+void main() async{
+ await InitProject().initProject();
   runApp(const MyApp());
 }
 

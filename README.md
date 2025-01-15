@@ -1,4 +1,5 @@
 # diet_app_mobile
+## şuanda yapım aşamasında
 
 A new Flutter project.
 

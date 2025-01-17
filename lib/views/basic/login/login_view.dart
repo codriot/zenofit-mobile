@@ -1,3 +1,4 @@
+import 'package:diet_app_mobile/API/services/auth/auth_service.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
@@ -115,18 +116,28 @@ class LoginView extends StatelessWidget {
         ),
         Padding(
           padding: AppPadding.instance.leftNormal,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColor.white.getColor(),
-            ),
-            height: Get.height * 0.09,
-            width: Get.height * 0.09,
-            child: Center(
-              child: SvgPicture.asset(
-                AppIconUtility.getIconPath("google", format: IconFormat.svg),
-                height: AppSizes.instance.iconSizeLarge,
-                width: AppSizes.instance.iconSizeLarge,
+          child: GestureDetector(
+                       onTap: () async {
+              // Google Sign-In işlemini başlat ve tamamlanmasını bekle
+           await AuthService().signInWithGoogle();
+            if (AuthService().currentUser != null) {
+              // Google Sign-In işlemi tamamlandıktan sonra sayfayı değiştir
+              NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
+            }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.white.getColor(),
+              ),
+              height: Get.height * 0.09,
+              width: Get.height * 0.09,
+              child: Center(
+                child: SvgPicture.asset(
+                  AppIconUtility.getIconPath("google", format: IconFormat.svg),
+                  height: AppSizes.instance.iconSizeLarge,
+                  width: AppSizes.instance.iconSizeLarge,
+                ),
               ),
             ),
           ),

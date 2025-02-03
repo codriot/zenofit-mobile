@@ -10,7 +10,7 @@ import 'package:logger/logger.dart';
 /// This class is responsible for initializing the project
 @immutable
 final class InitProject {
-  /// This method is used to initialize the project
+  /// This method is used to initialize the project1
 
   /// This method is used to initialize the project bussiness logic
   Future<void> initProject() async {

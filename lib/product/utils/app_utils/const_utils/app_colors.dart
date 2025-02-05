@@ -19,6 +19,9 @@ enum AppColor {
   sweetPatato,
   vividBlue,
   paintedDesert,
+  whiteSolid,
+  bleachedSilk,
+  vaporwaweBlue,
 }
 
 extension AppColorExtension on AppColor {
@@ -60,6 +63,12 @@ extension AppColorExtension on AppColor {
         return const Color(0xff1525FF);
       case AppColor.paintedDesert:
         return const Color(0xffBEB7B7);
+      case AppColor.whiteSolid:
+        return const Color(0xffF4F6FA);
+      case AppColor.bleachedSilk:
+        return const Color(0xfff2f2f2);
+      case AppColor.vaporwaweBlue:
+        return const Color(0xff29D2FF);
     }
   }
 }

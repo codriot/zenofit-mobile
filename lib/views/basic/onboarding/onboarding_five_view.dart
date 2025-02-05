@@ -83,7 +83,8 @@ class OnboardingFiveView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {},
+                onPressed: () {                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
+                  NavigatorController.instance.pushToPage(NavigateRoutesItems.home);},
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),
@@ -130,7 +131,7 @@ class OnboardingFiveView extends StatelessWidget {
                 padding: AppPadding.instance.topSmall,
                 child: Text(
                   title,
-                  style: context.appGeneral.textTheme.titleMedium
+                  style: context.appGeneral.textTheme.titleSmall
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),

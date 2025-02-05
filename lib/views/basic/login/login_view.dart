@@ -196,7 +196,7 @@ class LoginView extends StatelessWidget {
       children: [
         Text(
           "Hesabınız yok mu?",
-          style: context.appGeneral.textTheme.bodyMedium
+          style: context.appGeneral.textTheme.bodyLarge
               ?.copyWith(color: AppColor.shadowedSteel.getColor()),
         ),
         Padding(
@@ -204,7 +204,7 @@ class LoginView extends StatelessWidget {
           child: InkWell(
             child: Text(
               "Hesap Oluştur",
-              style: context.appGeneral.textTheme.bodyMedium
+              style: context.appGeneral.textTheme.bodyLarge
                   ?.copyWith(color: AppColor.noxious.getColor()),
             ),
             onTap: () {
@@ -221,7 +221,7 @@ class LoginView extends StatelessWidget {
     return Center(
       child: Text(
         "Giriş Yap",
-        style: context.appGeneral.textTheme.headlineSmall?.copyWith(
+        style: context.appGeneral.textTheme.headlineMedium?.copyWith(
           fontWeight: FontWeight.bold,
           color: AppColor.noxious.getColor(),
         ),

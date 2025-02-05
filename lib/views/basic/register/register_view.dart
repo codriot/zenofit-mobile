@@ -93,7 +93,7 @@ class RegisterView extends StatelessWidget {
       children: [
         Text(
           "Zaten bir hesabın var mı?",
-          style: context.appGeneral.textTheme.bodyMedium
+          style: context.appGeneral.textTheme.bodyLarge
               ?.copyWith(color: AppColor.shadowedSteel.getColor()),
         ),
         Padding(
@@ -101,7 +101,7 @@ class RegisterView extends StatelessWidget {
           child: InkWell(
             child: Text(
               "Giriş Yap",
-              style: context.appGeneral.textTheme.bodyMedium
+              style: context.appGeneral.textTheme.bodyLarge
                   ?.copyWith(color: AppColor.noxious.getColor()),
             ),
             onTap: () {
@@ -117,7 +117,7 @@ class RegisterView extends StatelessWidget {
     return Center(
       child: Text(
         "Kayıt Ol",
-        style: context.appGeneral.textTheme.headlineSmall?.copyWith(
+        style: context.appGeneral.textTheme.headlineMedium?.copyWith(
           fontWeight: FontWeight.bold,
           color: AppColor.noxious.getColor(),
         ),

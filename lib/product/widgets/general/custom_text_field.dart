@@ -49,7 +49,7 @@ class CustomTextField extends StatelessWidget {
             vertical: Get.height * 0.02,
             horizontal: Get.height * 0.03,
           ),
-          hintStyle: context.general.textTheme.labelLarge
+          hintStyle: context.general.textTheme.bodyLarge
               ?.copyWith(color: AppColor.grey.getColor()),
           errorStyle: const TextStyle(height: 0),
           counterText: '',

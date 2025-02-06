@@ -7,6 +7,8 @@ import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.d
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
+import 'package:diet_app_mobile/views/home/meal_add_view.dart';
+import 'package:get/get.dart';
 
 mixin HomeViewMixin {
   Widget buildHeader(BuildContext context) {
@@ -146,7 +148,12 @@ mixin HomeViewMixin {
         ),
         AppSpaces.instance.vertical15,
         CustomElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MealAddView()),
+            );
+          },
           width: double.infinity,
           height: 56,
           elevation: 0,
@@ -244,53 +251,189 @@ mixin HomeViewMixin {
             ],
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Günde 12 bardak su iç',
-                      style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-                        color: AppColor.grey.getColor(),
-                      )),
-                  Padding(
-                    padding: AppPadding.instance.leftNormal,
-                    child: Row(
-                      children: [
-                        Text('1.5L',
-                            style: context.appGeneral.textTheme.titleMedium
-                            ?.copyWith(color: AppColor.vaporwaweBlue.getColor())),
-                        Text(' / 2.5L',
-                            style: context.appGeneral.textTheme.titleMedium?.copyWith(
-                              color: AppColor.grey.getColor(),
-                            )),
-                      ],
-                    ),
+                  Text(
+                    'Günde 12 bardak su iç',
+                    style: context.appGeneral.textTheme.bodyLarge
+                        ?.copyWith(color: AppColor.grey.getColor()),
                   ),
+                  AppSpaces.instance.vertical10,
                   Row(
-                    children: List.generate(
-                      5,
-                      (index) => const Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Icon(Icons.water_drop,
-                            color: Colors.blue, size: 30),
+                    children: [
+                      Text(
+                        '1.5L',
+                        style:
+                            context.appGeneral.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.vaporwaweBlue.getColor(),
+                        ),
+                      ),
+                      Text(
+                        ' / 2.5L',
+                        style: context.appGeneral.textTheme.titleLarge
+                            ?.copyWith(color: AppColor.grey.getColor()),
+                      ),
+                    ],
+                  ),
+                  AppSpaces.instance.vertical15,
+                  SizedBox(
+                    height: 64,
+                    width: Get.width - 120,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              AppIconUtility.getIconPath(
+                                "water-circle",
+                                format: IconFormat.png,
+                              ),
+                              height: 40,
+                            ),
+                            Padding(
+                              padding: AppPadding.instance.leftSmall,
+                              child: Text(
+                                '500 ml',
+                                style: context.appGeneral.textTheme.bodyMedium
+                                    ?.copyWith(
+                                        color: AppColor.black.getColor()),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      itemCount: 5,
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding: AppPadding.instance.bottomNormal,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      top: -80,
+                      right: -15,
+                      child: SvgPicture.asset(
+                        AppIconUtility.getIconPath(
+                          "water-glass",
+                          format: IconFormat.svg,
+                        ),
+                        height: 56,
                       ),
                     ),
+                    CustomElevatedButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {},
+                      width: 48,
+                      height: 48,
+                      elevation: 0,
+                      backgroundColor: AppColor.noxious.getColor(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildDietPlanSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Kişisel Diyet Planı',
+          style: context.appGeneral.textTheme.titleLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        AppSpaces.instance.vertical10,
+        Container(
+          margin: AppPadding.instance.bottomNormal,
+          padding: AppPadding.instance.allNormal,
+          decoration: BoxDecoration(
+            color: AppColor.sweetPatato.getColor(),
+            borderRadius: AppRadius.instance.halfBorderRadius,
+            boxShadow: [
+              BoxShadow(
+                color: AppColor.crystalBell.getColor(),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Günde 12 bardak su iç',
+                        style: context.appGeneral.textTheme.bodyLarge
+                            ?.copyWith(color: AppColor.white.getColor()),
+                      ),
+                      Text(
+                        'Sporcu Diyeti',
+                        style: context.appGeneral.textTheme.titleLarge
+                            ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.white.getColor()),
+                      ),
+                    ],
+                  ),
+                  Image.asset(
+                    AppIconUtility.getIconPath("bowl", format: IconFormat.png),
+                    height: 48,
                   ),
                 ],
               ),
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SvgPicture.asset(AppIconUtility.getIconPath("water-glass",
-                  format: IconFormat.svg,),height: 56,),
-                  CustomElevatedButton(child: Icon(Icons.add,), onPressed: (){},
-                  elevation: 0,
-                  height: 48,
-                  width: 48,
-                  backgroundColor: AppColor.noxious.getColor(),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28  )),)
-                ],
+              AppSpaces.instance.vertical10,
+              _buildExpandableItem(
+                'Sporcu diyeti nedir?',
+                '',
+                AppColor.noxious.getColor(),
+                context,
+              ),
+              AppSpaces.instance.vertical10,
+              _buildExpandableItem(
+                'Dikkat edilmesi gerekenler',
+                '',
+                AppColor.noxious.getColor(),
+                context,
+              ),
+              AppSpaces.instance.vertical10,
+              _buildExpandableItem(
+                'Neler daha çok yenilmeli?',
+                '',
+                AppColor.noxious.getColor(),
+                context,
+              ),
+              AppSpaces.instance.vertical10,
+              _buildExpandableItem(
+                'Nelerden daha çok kaçınılmalı?',
+                '',
+                AppColor.noxious.getColor(),
+                context,
+                isLast: true,
               ),
             ],
           ),
@@ -299,47 +442,44 @@ mixin HomeViewMixin {
     );
   }
 
-  Widget buildDietPlanSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.orange[300],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(Icons.restaurant_menu, color: Colors.white),
-              SizedBox(width: 8),
-              Text(
-                'Kişisel Diyet Planı',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ],
+  Widget _buildExpandableItem(
+      String title, String subtitle, Color color, BuildContext context,
+      {bool? isLast = false}) {
+    return Column(
+      children: [
+        ExpansionTile(
+          childrenPadding: EdgeInsets.zero,
+          tilePadding: EdgeInsets.zero,
+          title: Text(
+            title,
+            style: context.appGeneral.textTheme.titleMedium?.copyWith(
+              color: AppColor.white.getColor(),
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          const SizedBox(height: 16),
-          buildDietPlanItem('Sporcu Diyeti'),
-          buildDietPlanItem('Sporcu diyeti nedir?'),
-          buildDietPlanItem('Dikkat edilmesi gerekenler'),
-          buildDietPlanItem('Neler daha çok yenilmeli?'),
-          buildDietPlanItem('Nelerden daha çok kaçınılmalı?'),
-        ],
-      ),
-    );
-  }
-
-  Widget buildDietPlanItem(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title, style: const TextStyle(color: Colors.white)),
-          const Icon(Icons.chevron_right, color: Colors.white),
-        ],
-      ),
+          trailing: Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColor.white.getColor(),
+          ),
+          shape: Border.all(color: Colors.transparent),
+          collapsedShape: Border.all(color: Colors.transparent),
+          children: [
+            Padding(
+              padding: AppPadding.instance.allSmall,
+              child: Text(
+                'Bu bölümde diyet planınızla ilgili detaylı bilgiler yer alacak.',
+                style: context.appGeneral.textTheme.bodyMedium
+                    ?.copyWith(color: AppColor.white.getColor()),
+              ),
+            ),
+          ],
+        ),
+        if (isLast == false)
+          Divider(
+            height: 1,
+            color: AppColor.white.getColor(),
+          ),
+      ],
     );
   }
 }

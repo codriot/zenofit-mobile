@@ -24,7 +24,7 @@ class HomeView extends StatelessWidget with HomeViewMixin {
               AppSpaces.instance.vertical20,
               buildWaterIntakeSection(context),
               AppSpaces.instance.vertical20,
-              buildDietPlanSection(),
+              buildDietPlanSection(context),
             ],
           ),
         ),

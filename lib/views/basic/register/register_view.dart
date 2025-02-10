@@ -1,3 +1,4 @@
+import 'package:diet_app_mobile/controller/features/auth/register_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends GetView<RegisterController> {
   const RegisterView({super.key});
 
   @override

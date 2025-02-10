@@ -1,3 +1,5 @@
+import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
+import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
@@ -7,7 +9,6 @@ import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.d
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
-import 'package:diet_app_mobile/views/home/meal_add_view.dart';
 import 'package:get/get.dart';
 
 mixin HomeViewMixin {
@@ -149,10 +150,7 @@ mixin HomeViewMixin {
         AppSpaces.instance.vertical15,
         CustomElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MealAddView()),
-            );
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.addMeal);
           },
           width: double.infinity,
           height: 56,

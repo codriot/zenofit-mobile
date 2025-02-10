@@ -1,3 +1,4 @@
+import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_binding.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_six_view.dart';
@@ -8,9 +9,12 @@ import 'package:diet_app_mobile/views/basic/onboarding/onboarding_two_view.dart'
 import 'package:diet_app_mobile/views/basic/register/register_view.dart';
 import 'package:diet_app_mobile/views/basic/splash/splash_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
+import 'package:diet_app_mobile/views/home/meal_add_detail_view.dart';
+import 'package:diet_app_mobile/views/home/meal_add_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:diet_app_mobile/controller/basic/meal/meal_add_binding.dart';
 
 class NavigatorRoutes {
   static const String init = "/";
@@ -32,6 +36,23 @@ class NavigatorRoutes {
     GetPage(name: NavigateRoutesItems.onboardingFour.withSlash,page: () => OnboardingFourView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.onboardingFive.withSlash,page: () => OnboardingFiveView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.onboardingSix.withSlash,page: () => OnboardingSixView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(
+      name: NavigateRoutesItems.addMeal.withSlash,
+      page: () => const MealAddView(),
+      binding: MealAddBinding(),
+      transition: Transition.zoom,
+      transitionDuration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut
+    ),
+    GetPage(
+      name: NavigateRoutesItems.addMealDetail.withSlash,
+      page: () => const MealAddDetailView(),
+      binding: MealAddDetailBinding(),
+      transition: Transition.zoom,
+      transitionDuration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut
+    ),
+
 
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
@@ -53,7 +74,11 @@ enum NavigateRoutesItems {
   onboardingFour,
   onboardingFive,
   onboardingSix,
+  addMeal,
+  addMealDetail,
 }
+
+
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {
   String get withSlash => "/$name";

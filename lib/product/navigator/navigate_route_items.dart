@@ -1,4 +1,10 @@
 import 'package:diet_app_mobile/bindings/views/auth/login_binding.dart';
+import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_one_binding.dart';
+import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_two_binding.dart';
+import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_three_binding.dart';
+import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_four_binding.dart';
+import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_five_binding.dart';
+import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_six_binding.dart';
 import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_binding.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
@@ -43,18 +49,21 @@ class NavigatorRoutes {
         name: NavigateRoutesItems.onboardingOne.withSlash,
         page: () => OnboardingOneView(),
         transition: Transition.cupertino,
+        binding: OnboardingOneBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.onboardingTwo.withSlash,
         page: () => OnboardingTwoView(),
         transition: Transition.cupertino,
+        binding: OnboardingTwoBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.onboardingThree.withSlash,
         page: () => OnboardingThreeView(),
         transition: Transition.cupertino,
+        binding: OnboardingThreeBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
 
@@ -69,18 +78,21 @@ class NavigatorRoutes {
         name: NavigateRoutesItems.onboardingFour.withSlash,
         page: () => OnboardingFourView(),
         transition: Transition.cupertino,
+        binding: OnboardingFourBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.onboardingFive.withSlash,
         page: () => OnboardingFiveView(),
         transition: Transition.cupertino,
+        binding: OnboardingFiveBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.onboardingSix.withSlash,
         page: () => OnboardingSixView(),
         transition: Transition.cupertino,
+        binding: OnboardingSixBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(

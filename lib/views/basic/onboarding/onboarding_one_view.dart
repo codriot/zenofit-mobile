@@ -17,8 +17,7 @@ import 'package:get/get.dart';
 
 class OnboardingOneView extends StatelessWidget {
   OnboardingOneView({super.key});
-  final GlobalOnboardingController globalOnboardingController =
-      Get.put(GlobalOnboardingController());
+  final GlobalOnboardingController globalOnboardingController = Get.find<GlobalOnboardingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

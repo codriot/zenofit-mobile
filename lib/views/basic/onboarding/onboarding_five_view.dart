@@ -24,7 +24,7 @@ class OnboardingFiveView extends StatelessWidget {
       Get.find<GlobalOnboardingController>();
 
   final OnboardingFiveController controller =
-      Get.put(OnboardingFiveController());
+      Get.find<OnboardingFiveController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

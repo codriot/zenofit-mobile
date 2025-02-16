@@ -310,22 +310,19 @@ class AddMealButton extends StatelessWidget {
               ),
               child: Center(
                 child: isSelected
-                    ? Flexible(
-                        child: Padding(
-                          padding: AppPadding.instance.horizontalNormal,
-                          child: Flexible(
-                            child: Text(
-                              'Bugün, ${date.day} ${controller.getMonthName(date.month)}',
-                              overflow: TextOverflow.ellipsis,
-                              style: context.appGeneral.textTheme.bodyMedium
-                                  ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.white.getColor(),
-                              ),
-                            ),
-                          ),
+                    ? Padding(
+                      padding: AppPadding.instance.horizontalNormal,
+                      child: Text(
+                        'Bugün, ${date.day} ${controller.getMonthName(date.month)}',
+                        overflow: TextOverflow.ellipsis,
+                        style: context.appGeneral.textTheme.bodyMedium
+                            ?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.white.getColor(),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      )
+                      ),
+                    )
                     : Text(
                         date.day.toString(),
                         style:

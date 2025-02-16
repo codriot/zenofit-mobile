@@ -24,9 +24,9 @@ class MealAddDetailController extends GetxController {
 
   void selectMealContent(int index) {
     if (selectedMeal.value != null) {
-      for (var i = 0; i < selectedMeal.value!.recommendedContents.length; i++) {
-        selectedMeal.value!.recommendedContents[i].isSelected = i == index;
-      }
+      // Mevcut seçim durumunun tersini al
+      selectedMeal.value?.recommendedContents[index].isSelected = 
+        !(selectedMeal.value?.recommendedContents[index].isSelected ?? false);
       selectedMeal.refresh();
     }
   }
@@ -37,15 +37,20 @@ class MealAddDetailController extends GetxController {
         return selectedMeal.value!.recommendedContents
             .firstWhere((element) => element.isSelected);
       } catch (e) {
-        // Eğer seçili öğe yoksa ilk öğeyi seç ve onu döndür
-        if (selectedMeal.value!.recommendedContents.isNotEmpty) {
-          selectedMeal.value!.recommendedContents[0].isSelected = true;
-          selectedMeal.refresh();
-          return selectedMeal.value!.recommendedContents[0];
-        }
+        // Artık otomatik seçim yapmıyoruz
+        return null;
       }
     }
     return null;
+  }
+
+  // Eğer gerekirse, ilk öğeyi seçmek için ayrı bir metod oluşturabiliriz
+  void selectFirstContent() {
+    if (selectedMeal.value != null && 
+        selectedMeal.value!.recommendedContents.isNotEmpty) {
+      selectedMeal.value!.recommendedContents[0].isSelected = true;
+      selectedMeal.refresh();
+    }
   }
 
   Map<String, dynamic> getTotalMacros() {

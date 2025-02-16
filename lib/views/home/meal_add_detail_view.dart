@@ -1,12 +1,16 @@
 import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_controller.dart';
+import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_radius.dart';
 import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.dart';
+import 'package:diet_app_mobile/product/widgets/general/wave_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:diet_app_mobile/product/widgets/charts/isometric_bar_widget.dart';
 
 class MealAddDetailView extends GetView<MealAddDetailController> {
   const MealAddDetailView({super.key});
@@ -15,76 +19,116 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
-      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
-        padding: AppPadding.instance.allNormal,
+        padding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(context),
-            AppSpaces.instance.vertical25,
-            _buildRecommendedMeals(context),
-            AppSpaces.instance.vertical25,
-            _buildMacronutrients(context),
-            AppSpaces.instance.vertical25,
-            _buildAddButton(context),
+            SafeArea(
+              child: Padding(
+                padding: AppPadding.instance.horizontalNormal,
+                child: _buildHeader(context),
+              ),
+            ),
+            Padding(
+              padding: AppPadding.instance.horizontalNormal,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildPageHeader(context),
+                  _buildRecomendedTitleText(context),
+                  AppSpaces.instance.vertical5,
+                ],
+              ),
+            ),
+            WaveCardWidget(
+              width: double.infinity,
+              backgroundColor: AppColor.white.getColor(),
+              padding: AppPadding.instance.allNormal,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppSpaces.instance.vertical25,
+                  _buildRecommendedMeals(context),
+                  AppSpaces.instance.vertical25,
+                  _buildMacronutrients(context),
+                  AppSpaces.instance.vertical25,
+                  _buildAddButton(context),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Obx(() => Text(
-        controller.selectedMeal.value?.title ?? '',
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
         ),
-      )),
+        Expanded(
+          child: Center(
+            child: Obx(() => Text(
+                  controller.selectedMeal.value?.title ?? '',
+                  style: context.appGeneral.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
+          ),
+        ),
+        const SizedBox(width: 40), // Simetri için sağ tarafta boşluk
+      ],
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      padding: AppPadding.instance.allNormal,
-      decoration: BoxDecoration(
-        color: AppColor.white.getColor(),
-        borderRadius: AppRadius.instance.halfBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.crystalBell.getColor(),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  SizedBox _buildPageHeader(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      width: double.infinity,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Obx(() => Text(
-            'Önerilen ve Eklenen ${controller.selectedMeal.value?.title ?? ''}lar',
-            style: context.appGeneral.textTheme.titleMedium?.copyWith(
+          Text(
+            "${controller.selectedMeal.value?.subtitle}",
+            style: context.appGeneral.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
-          )),
+          ),
+          Positioned(
+            right: -30,
+            top: -60,
+            child: Image.asset(
+              AppImageUtility.getImagePath(
+                  controller.selectedMeal.value?.imageKey ?? '',
+                  format: ImageFormat.png),
+              width: 100,
+              height: 100,
+            ),
+          )
         ],
       ),
     );
+  }
+
+  Widget _buildRecomendedTitleText(BuildContext context) {
+    return Obx(() => Text(
+          'Önerilen ve Eklenen ${controller.selectedMeal.value?.title ?? ''}lar',
+          style: context.appGeneral.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ));
   }
 
   Widget _buildRecommendedMeals(BuildContext context) {
     return Obx(() {
       if (controller.selectedMeal.value == null) return const SizedBox();
-      
+
       return Column(
         children: List.generate(
           controller.selectedMeal.value!.recommendedContents.length,
@@ -98,61 +142,116 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
   }
 
   Widget _buildMealItem(BuildContext context, int index) {
-    final content = controller.selectedMeal.value!.recommendedContents[index];
-    return InkWell(
-      onTap: () => controller.selectMealContent(index),
-      child: Container(
-        padding: AppPadding.instance.allNormal,
-        decoration: BoxDecoration(
-          color: content.isSelected
-              ? AppColor.noxious.getColor().withOpacity(0.1)
-              : AppColor.white.getColor(),
-          borderRadius: AppRadius.instance.halfBorderRadius,
-          border: Border.all(
-            color: content.isSelected
-                ? AppColor.noxious.getColor()
-                : AppColor.crystalBell.getColor(),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              content.title,
-              style: context.appGeneral.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+    return Obx(() {
+      final content = controller.selectedMeal.value!.recommendedContents[index];
+      final isSelected = content.isSelected;
+      
+      return Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              height: 80,
+              decoration: BoxDecoration(
+                color: content.backgroundColor,
+                borderRadius: AppRadius.instance.normalBorderRadius,
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: AppPadding.instance.leftMedium,
+                    child: InkWell(
+                      onTap: () => controller.selectMealContent(index),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColor.transparent.getColor(),
+                          borderRadius: AppRadius.instance.smallBorderRadius,
+                          border: Border.all(
+                            width: 2,
+                            color: AppColor.white.getColor(),
+                          ),
+                        ),
+                        child: isSelected
+                            ? Icon(
+                                Icons.check,
+                                color: AppColor.white.getColor(),
+                              )
+                            : const SizedBox(),
+                      ),
+                    ),
+                  ),
+                  AppSpaces.instance.horizontal10,
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        content.title,
+                        style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                          color: AppColor.white.getColor(),
+                          decoration: isSelected
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            AppSpaces.instance.vertical10,
-            Row(
-              children: [
-                _buildNutrientInfo(context, 'Protein', content.proteinText),
-                AppSpaces.instance.horizontal15,
-                _buildNutrientInfo(context, 'Karbonhidrat', content.carbsText),
-                AppSpaces.instance.horizontal15,
-                _buildNutrientInfo(context, 'Yağ', content.fatText),
-              ],
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 80,
+              decoration: BoxDecoration(
+                color: content.backgroundColor,
+                borderRadius: AppRadius.instance.normalBorderRadius,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildNutrientIcon(context, 'carbs', content.carbsText),
+                  AppSpaces.instance.horizontal10,
+                  _buildNutrientIcon(context, 'protein', content.proteinText),
+                  AppSpaces.instance.horizontal10,
+                  _buildNutrientIcon(context, 'fat', content.fatText),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ],
+      );
+    });
   }
 
-  Widget _buildNutrientInfo(BuildContext context, String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildNutrientIcon(BuildContext context, String type, String value) {
+    String icon;
+    switch (type) {
+      case 'carbs':
+        icon = 'carbs';
+        break;
+      case 'protein':
+        icon = 'protein';
+        break;
+      case 'fat':
+        icon = 'fat';
+        break;
+      default:
+        icon = 'carbs';
+    }
+
+    return Row(
       children: [
-        Text(
-          title,
-          style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-            color: AppColor.grey.getColor(),
-          ),
+        AppSpaces.instance.horizontal5,
+        Image.asset(
+          AppIconUtility.getIconPath(icon, format: IconFormat.png),
+          color: Colors.black87,
         ),
         Text(
-          value,
+          ":$value",
           style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
+            color: AppColor.white.getColor(),
           ),
         ),
       ],
@@ -162,7 +261,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
   Widget _buildMacronutrients(BuildContext context) {
     return Obx(() {
       final macros = controller.getTotalMacros();
-      
+
       return Container(
         padding: AppPadding.instance.allNormal,
         decoration: BoxDecoration(
@@ -222,37 +321,46 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
     String percentage,
     String amount,
   ) {
-    return Column(
+    // Yüzde değerini double'a çevirme
+    final percentageValue =
+        double.tryParse(percentage.replaceAll('%', '')) ?? 0;
+
+    return Row(
       children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: AppColor.bleachedSilk.getColor(),
-            shape: BoxShape.circle,
+        SizedBox(
+          height: 100,
+          child: IsometricBarWidget(
+            height: 80,
+            width: 40,
+            topColor: Colors.grey[300]!,
+            frontColor: Colors.blue,
+            fillPercentage: 0.6,
+            duration: const Duration(milliseconds: 500), // Animasyon süresi
           ),
-          child: Center(
-            child: Text(
-              percentage,
-              style: context.appGeneral.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColor.noxious.getColor(),
-              ),
+        ),
+        AppSpaces.instance.horizontal5,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: context.appGeneral.textTheme.bodyMedium),
+            Row(
+              children: [
+                Text(
+                  "${0.6}%",
+                  style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                    color: AppColor.vividBlue.getColor(),
+                  ),
+                ),
+                AppSpaces.instance.horizontal5,
+                Text(
+                  "($amount)",
+                  style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                    color: AppColor.grey.getColor(),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ),
-        AppSpaces.instance.vertical10,
-        Text(
-          title,
-          style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-            color: AppColor.grey.getColor(),
-          ),
-        ),
-        Text(
-          amount,
-          style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          ],
         ),
       ],
     );
@@ -260,16 +368,18 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
 
   Widget _buildAddButton(BuildContext context) {
     return CustomElevatedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: AppRadius.instance.halfBorderRadius,
+      ),
       onPressed: () {
         // Yemek ekleme işlemi
-        Get.back();
       },
       width: double.infinity,
       height: 50,
       backgroundColor: AppColor.noxious.getColor(),
       child: Text(
-        'Yemek Ekle',
-        style: context.appGeneral.textTheme.titleMedium?.copyWith(
+        '+ Yemek Ekle',
+        style: context.appGeneral.textTheme.titleLarge?.copyWith(
           color: AppColor.white.getColor(),
           fontWeight: FontWeight.bold,
         ),

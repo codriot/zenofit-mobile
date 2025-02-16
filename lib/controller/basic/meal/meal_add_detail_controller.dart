@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../../../model/meal_model.dart';
+import 'package:flutter/material.dart';
 
 class MealAddDetailController extends GetxController {
   final Rx<MealModel?> selectedMeal = Rx<MealModel?>(null);
@@ -81,25 +82,39 @@ class MealAddDetailController extends GetxController {
     }
   }
 
-  MealContentModel? getSelectedContent() {
+  // Hızlı ekleme için özel metod
+  void addCustomMeal(Map<String, dynamic> mealData) {
     if (selectedMeal.value != null) {
-      try {
-        return selectedMeal.value!.recommendedContents
-            .firstWhere((element) => element.isSelected);
-      } catch (e) {
-        // Artık otomatik seçim yapmıyoruz
-        return null;
-      }
+      final newContent = MealContentModel(
+        title: mealData['title'],
+        protein: int.tryParse(mealData['proteinText']) ?? 0,
+        carbs: int.tryParse(mealData['carbsText']) ?? 0,
+        fat: int.tryParse(mealData['fatText']) ?? 0,
+        backgroundColor: mealData['backgroundColor'] as Color,
+        isSelected: mealData['isSelected'] as bool,
+      );
+
+      selectedMeal.value!.recommendedContents.add(newContent);
+      selectedMeal.refresh();
+      calculateTotalMacros();
     }
-    return null;
   }
 
-  // Eğer gerekirse, ilk öğeyi seçmek için ayrı bir metod oluşturabiliriz
-  void selectFirstContent() {
-    if (selectedMeal.value != null && 
-        selectedMeal.value!.recommendedContents.isNotEmpty) {
-      selectedMeal.value!.recommendedContents[0].isSelected = true;
+  // Filtrelenmiş arama için özel metod
+  void addFilteredMeal(Map<String, dynamic> meal) {
+    if (selectedMeal.value != null) {
+      final newContent = MealContentModel(
+        title: meal['title'],
+        protein: meal['protein'] as int,
+        carbs: meal['carbs'] as int,
+        fat: meal['fat'] as int,
+        backgroundColor: meal['backgroundColor'] as Color,
+        isSelected: true,
+      );
+
+      selectedMeal.value!.recommendedContents.add(newContent);
       selectedMeal.refresh();
+      calculateTotalMacros();
     }
   }
 

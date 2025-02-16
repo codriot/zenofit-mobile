@@ -1,4 +1,6 @@
 import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_controller.dart';
+import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
+import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -144,7 +146,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
     return Obx(() {
       final content = controller.selectedMeal.value!.recommendedContents[index];
       final isSelected = content.isSelected;
-      
+
       return Row(
         children: [
           Expanded(
@@ -186,7 +188,8 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
                     child: Center(
                       child: Text(
                         content.title,
-                        style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                        style:
+                            context.appGeneral.textTheme.bodyMedium?.copyWith(
                           color: AppColor.white.getColor(),
                           decoration: isSelected
                               ? TextDecoration.lineThrough
@@ -302,7 +305,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
                   '${macros['protein']?['percentage']}%',
                   '${macros['protein']?['amount']}g',
                   'protein',
-                  ),
+                ),
                 _buildMacronutrientItem(
                   context,
                   'Yağ',
@@ -326,7 +329,8 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
     String icon,
   ) {
     // Yüzde değerini double'a çevirme
-    final percentageValue = double.tryParse(percentage.replaceAll('%', '')) ?? 0;
+    final percentageValue =
+        double.tryParse(percentage.replaceAll('%', '')) ?? 0;
 
     return Expanded(
       child: Row(
@@ -357,10 +361,8 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
                 ),
                 SizedBox(
                   height: 20,
-                  child: Text(
-                    title, 
-                    style: context.appGeneral.textTheme.bodyMedium
-                  ),
+                  child: Text(title,
+                      style: context.appGeneral.textTheme.bodyMedium),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -394,7 +396,9 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
         borderRadius: AppRadius.instance.halfBorderRadius,
       ),
       onPressed: () {
-        // Yemek ekleme işlemi
+        NavigatorController.instance.pushToPage(
+          NavigateRoutesItems.addMealFilterSearch,
+        );
       },
       width: double.infinity,
       height: 50,

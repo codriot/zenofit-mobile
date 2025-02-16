@@ -5,6 +5,9 @@ import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_three
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_four_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_five_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_six_binding.dart';
+import 'package:diet_app_mobile/bindings/views/meal/meal_add_fast_item_binding.dart';
+import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_binding.dart';
+import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_detail_binding.dart';
 import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_binding.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
@@ -17,6 +20,9 @@ import 'package:diet_app_mobile/views/basic/register/register_view.dart';
 import 'package:diet_app_mobile/views/basic/splash/splash_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_detail_view.dart';
+import 'package:diet_app_mobile/views/home/meal_add_fast_item_view.dart';
+import 'package:diet_app_mobile/views/home/meal_add_filter_search_detail_view.dart';
+import 'package:diet_app_mobile/views/home/meal_add_filter_search_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -109,6 +115,27 @@ class NavigatorRoutes {
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.addMealFilterSearch.withSlash,
+        page: () => const MealAddFilterSearchView(),
+        binding: MealAddFilterSearchBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.addMealFastItem.withSlash,
+        page: () => const MealAddFastItemView(),
+        binding: MealAddFastItemBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.addMealFilterSearchDetail.withSlash,
+        page: () => const MealAddFilterSearchDetailView(),
+        binding: MealAddFilterSearchDetailBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -131,6 +158,9 @@ enum NavigateRoutesItems {
   onboardingSix,
   addMeal,
   addMealDetail,
+  addMealFilterSearch,
+  addMealFastItem,
+  addMealFilterSearchDetail,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

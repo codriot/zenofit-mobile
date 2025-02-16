@@ -330,7 +330,10 @@ mixin HomeViewMixin {
                     ),
                     CustomElevatedButton(
                       padding: EdgeInsets.zero,
-                      onPressed: () {},
+                      onPressed: () {
+                        NavigatorController.instance.pushToPage(
+                            NavigateRoutesItems.addWater);
+                      },
                       width: 48,
                       height: 48,
                       elevation: 0,

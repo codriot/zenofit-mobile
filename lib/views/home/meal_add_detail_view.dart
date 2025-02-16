@@ -8,7 +8,6 @@ import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_radius.d
 import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.dart';
 import 'package:diet_app_mobile/product/widgets/general/wave_card_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:diet_app_mobile/product/widgets/charts/isometric_bar_widget.dart';
 
@@ -263,6 +262,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
       final macros = controller.getTotalMacros();
 
       return Container(
+        width: double.infinity,
         padding: AppPadding.instance.allNormal,
         decoration: BoxDecoration(
           color: AppColor.white.getColor(),
@@ -285,27 +285,30 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            AppSpaces.instance.vertical15,
+            AppSpaces.instance.vertical25,
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildMacronutrientItem(
                   context,
                   'Karbonhidrat',
-                  '${macros['carbs']['percentage']}%',
-                  '${macros['carbs']['amount']}g',
+                  '${macros['carbs']?['percentage']}%',
+                  '${macros['carbs']?['amount']}g',
+                  'carbs',
                 ),
                 _buildMacronutrientItem(
                   context,
                   'Protein',
-                  '${macros['protein']['percentage']}%',
-                  '${macros['protein']['amount']}g',
-                ),
+                  '${macros['protein']?['percentage']}%',
+                  '${macros['protein']?['amount']}g',
+                  'protein',
+                  ),
                 _buildMacronutrientItem(
                   context,
                   'Yağ',
-                  '${macros['fat']['percentage']}%',
-                  '${macros['fat']['amount']}g',
+                  '${macros['fat']?['percentage']}%',
+                  '${macros['fat']?['amount']}g',
+                  'fat',
                 ),
               ],
             ),
@@ -320,49 +323,68 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
     String title,
     String percentage,
     String amount,
+    String icon,
   ) {
     // Yüzde değerini double'a çevirme
-    final percentageValue =
-        double.tryParse(percentage.replaceAll('%', '')) ?? 0;
+    final percentageValue = double.tryParse(percentage.replaceAll('%', '')) ?? 0;
 
-    return Row(
-      children: [
-        SizedBox(
-          height: 100,
-          child: IsometricBarWidget(
-            height: 80,
-            width: 40,
-            topColor: Colors.grey[300]!,
-            frontColor: Colors.blue,
-            fillPercentage: 0.6,
-            duration: const Duration(milliseconds: 500), // Animasyon süresi
+    return Expanded(
+      child: Row(
+        children: [
+          SizedBox(
+            height: 100,
+            child: IsometricBarWidget(
+              height: 80,
+              width: 30,
+              topColor: Colors.grey[300]!,
+              frontColor: Colors.blue,
+              fillPercentage: percentageValue / 100,
+              duration: const Duration(milliseconds: 500),
+            ),
           ),
-        ),
-        AppSpaces.instance.horizontal5,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: context.appGeneral.textTheme.bodyMedium),
-            Row(
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "${0.6}%",
-                  style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-                    color: AppColor.vividBlue.getColor(),
+                SizedBox(
+                  height: 24,
+                  child: Image.asset(
+                    AppIconUtility.getIconPath(icon, format: IconFormat.png),
+                    color: Colors.black87,
                   ),
                 ),
-                AppSpaces.instance.horizontal5,
-                Text(
-                  "($amount)",
-                  style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-                    color: AppColor.grey.getColor(),
+                SizedBox(
+                  height: 20,
+                  child: Text(
+                    title, 
+                    style: context.appGeneral.textTheme.bodyMedium
                   ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      percentage,
+                      style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                        color: AppColor.vividBlue.getColor(),
+                      ),
+                    ),
+                    AppSpaces.instance.horizontal5,
+                    Text(
+                      "($amount)",
+                      style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                        color: AppColor.grey.getColor(),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 

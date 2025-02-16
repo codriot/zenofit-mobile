@@ -103,17 +103,20 @@ class IsometricBarPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
-    // Dolu kısmın yüksekliği
-    final filledHeight = size.height * fillPercentage;
-    final emptyHeight = size.height - filledHeight;
+    // Sabit değerler
+    final sideOffset = 15.0;  // Yan genişlik (20'den 15'e düşürüldü)
+    final topOffset = 12.0;   // Üst kısım yüksekliği
+    final barWidth = 30.0;    // Toplam genişlik (40'tan 30'a düşürüldü)
+    final barHeight = size.height - topOffset; // Toplam yükseklik (üst kısım hariç)
+    final filledHeight = barHeight * fillPercentage;
 
     // Boş kısım (gri)
     // Sol yüz
     final emptyFrontPath = Path()
       ..moveTo(0, 0)
-      ..lineTo(20, 16)
-      ..lineTo(20, size.height - filledHeight)
-      ..lineTo(0, size.height - filledHeight - 16)
+      ..lineTo(sideOffset, topOffset)
+      ..lineTo(sideOffset, size.height - filledHeight)
+      ..lineTo(0, size.height - filledHeight - topOffset)
       ..close();
 
     paint.color = topColor.withOpacity(0.7);
@@ -121,37 +124,39 @@ class IsometricBarPainter extends CustomPainter {
 
     // Sağ yüz
     final emptyReversePath = Path()
-      ..moveTo(40, 0)
-      ..lineTo(20, 16)
-      ..lineTo(20, size.height - filledHeight)
-      ..lineTo(40, size.height - filledHeight - 16)
+      ..moveTo(barWidth, 0)
+      ..lineTo(sideOffset, topOffset)
+      ..lineTo(sideOffset, size.height - filledHeight)
+      ..lineTo(barWidth, size.height - filledHeight - topOffset)
       ..close();
 
     paint.color = topColor.withOpacity(0.5);
     canvas.drawPath(emptyReversePath, paint);
 
+    Path? frontPath;
+    Path? reverseFrontPath;
+
     // Dolu kısım için pathler
-    final frontPath = Path()
-      ..moveTo(0, size.height - filledHeight - 16)
-      ..lineTo(20, size.height - filledHeight)
-      ..lineTo(20, size.height)
-      ..lineTo(0, size.height - 16)
-      ..close();
-
-    final reverseFrontPath = Path()
-      ..moveTo(40, size.height - filledHeight - 16)
-      ..lineTo(20, size.height - filledHeight)
-      ..lineTo(20, size.height)
-      ..lineTo(40, size.height - 16)
-      ..close();
-
-    // Dolu kısım (mavi)
     if (fillPercentage > 0) {
-      // Sağ yüz (koyu)
+      frontPath = Path()
+        ..moveTo(0, size.height - filledHeight - topOffset)
+        ..lineTo(sideOffset, size.height - filledHeight)
+        ..lineTo(sideOffset, size.height)
+        ..lineTo(0, size.height - topOffset)
+        ..close();
+
+      reverseFrontPath = Path()
+        ..moveTo(barWidth, size.height - filledHeight - topOffset)
+        ..lineTo(sideOffset, size.height - filledHeight)
+        ..lineTo(sideOffset, size.height)
+        ..lineTo(barWidth, size.height - topOffset)
+        ..close();
+
+      // Sol yüz (koyu)
       paint.color = frontColor;
       canvas.drawPath(frontPath, paint);
 
-      // Sol yüz gradient (açık)
+      // Sağ yüz gradient (açık)
       final frontGradient = LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
@@ -162,17 +167,39 @@ class IsometricBarPainter extends CustomPainter {
       );
 
       paint.shader = frontGradient.createShader(
-        Rect.fromLTWH(0, size.height - filledHeight, size.width, filledHeight),
+        Rect.fromLTWH(0, size.height - filledHeight, barWidth, filledHeight),
       );
       canvas.drawPath(reverseFrontPath, paint);
+
+      // Dolu kısım için üst yüz (sadece kısmi dolulukta)
+      if (fillPercentage < 1.0) {
+        final filledTopPath = Path()
+          ..moveTo(0, size.height - filledHeight - topOffset)
+          ..lineTo(sideOffset, size.height - filledHeight)
+          ..lineTo(barWidth, size.height - filledHeight - topOffset)
+          ..lineTo(sideOffset, size.height - filledHeight - topOffset * 2)
+          ..close();
+
+        paint.shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            frontColor.withOpacity(0.9),
+            frontColor.withOpacity(0.4),
+          ],
+        ).createShader(
+          Rect.fromLTWH(0, size.height - filledHeight - topOffset * 2, barWidth, topOffset * 2),
+        );
+        canvas.drawPath(filledTopPath, paint);
+      }
     }
 
-    // Üst yüz
+    // En üst yüz (her zaman en üstte)
     final topPath = Path()
       ..moveTo(0, 0)
-      ..lineTo(20, -16)
-      ..lineTo(40, 0)
-      ..lineTo(20, 16)
+      ..lineTo(sideOffset, -topOffset)
+      ..lineTo(barWidth, 0)
+      ..lineTo(sideOffset, topOffset)
       ..close();
   
     // Üst yüz gradient
@@ -186,31 +213,9 @@ class IsometricBarPainter extends CustomPainter {
     );
 
     paint.shader = topGradient.createShader(
-      Rect.fromLTWH(0, -16, size.width, 32),
+      Rect.fromLTWH(0, -topOffset, barWidth, topOffset * 2),
     );
     canvas.drawPath(topPath, paint);
-
-    // Dolu kısım için üst yüz
-    if (fillPercentage > 0 && fillPercentage < 1.0) {
-      final filledTopPath = Path()
-        ..moveTo(0, size.height - filledHeight - 16)
-        ..lineTo(20, size.height - filledHeight)
-        ..lineTo(40, size.height - filledHeight - 16)
-        ..lineTo(20, size.height - filledHeight - 32)
-        ..close();
-
-      paint.shader = LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          frontColor.withOpacity(0.9),
-          frontColor.withOpacity(0.4),
-        ],
-      ).createShader(
-        Rect.fromLTWH(0, size.height - filledHeight - 32, size.width, 32),
-      );
-      canvas.drawPath(filledTopPath, paint);
-    }
 
     // Kenar çizgileri
     final strokePaint = Paint()
@@ -221,7 +226,7 @@ class IsometricBarPainter extends CustomPainter {
     canvas.drawPath(emptyFrontPath, strokePaint);
     canvas.drawPath(emptyReversePath, strokePaint);
     canvas.drawPath(topPath, strokePaint);
-    if (fillPercentage > 0) {
+    if (fillPercentage > 0 && frontPath != null && reverseFrontPath != null) {
       canvas.drawPath(frontPath, strokePaint);
       canvas.drawPath(reverseFrontPath, strokePaint);
     }

@@ -4,10 +4,18 @@ import '../../../model/meal_model.dart';
 class MealAddDetailController extends GetxController {
   final Rx<MealModel?> selectedMeal = Rx<MealModel?>(null);
 
+  // Toplam makro değerlerini tutacak RxMap
+  final RxMap<String, Map<String, dynamic>> totalMacros = RxMap({
+    'carbs': {'amount': 0, 'percentage': 0},
+    'protein': {'amount': 0, 'percentage': 0},
+    'fat': {'amount': 0, 'percentage': 0},
+  });
+
   @override
   void onInit() {
     super.onInit();
     _initializeMealData();
+    calculateTotalMacros(); // Başlangıçta hesapla
   }
 
   void _initializeMealData() {
@@ -22,12 +30,54 @@ class MealAddDetailController extends GetxController {
     }
   }
 
+  // Seçilen öğünlerin makrolarını hesapla
+  void calculateTotalMacros() {
+    num totalCarbs = 0;
+    num totalProtein = 0;
+    num totalFat = 0;
+
+    // Maksimum değerleri hesapla (tüm öğelerin toplamı)
+    num maxCarbs = 0;
+    num maxProtein = 0;
+    num maxFat = 0;
+
+    // Önce maksimum değerleri hesapla
+    for (var content in selectedMeal.value?.recommendedContents ?? []) {
+      maxCarbs += content.carbs;
+      maxProtein += content.protein;
+      maxFat += content.fat;
+    }
+
+    // Seçili öğünlerin değerlerini topla
+    for (var content in selectedMeal.value?.recommendedContents ?? []) {
+      if (content.isSelected) {
+        totalCarbs += content.carbs;
+        totalProtein += content.protein;
+        totalFat += content.fat;
+      }
+    }
+    
+    // Yüzdeleri hesapla (maksimum değere göre)
+    final carbsPercentage = maxCarbs > 0 ? (totalCarbs / maxCarbs * 100).round() : 0;
+    final proteinPercentage = maxProtein > 0 ? (totalProtein / maxProtein * 100).round() : 0;
+    final fatPercentage = maxFat > 0 ? (totalFat / maxFat * 100).round() : 0;
+
+    // Değerleri güncelle
+    totalMacros.value = {
+      'carbs': {'amount': totalCarbs.round(), 'percentage': carbsPercentage},
+      'protein': {'amount': totalProtein.round(), 'percentage': proteinPercentage},
+      'fat': {'amount': totalFat.round(), 'percentage': fatPercentage},
+    };
+  }
+
+  // Öğün seçme metodunu güncelle
   void selectMealContent(int index) {
     if (selectedMeal.value != null) {
-      // Mevcut seçim durumunun tersini al
       selectedMeal.value?.recommendedContents[index].isSelected = 
         !(selectedMeal.value?.recommendedContents[index].isSelected ?? false);
       selectedMeal.refresh();
+      // Seçim değiştiğinde makroları yeniden hesapla
+      calculateTotalMacros();
     }
   }
 
@@ -53,32 +103,8 @@ class MealAddDetailController extends GetxController {
     }
   }
 
-  Map<String, dynamic> getTotalMacros() {
-    final selectedContent = getSelectedContent();
-    if (selectedContent != null) {
-      final totalCalories = (selectedContent.protein * 4) +
-          (selectedContent.carbs * 4) +
-          (selectedContent.fat * 9);
-
-      return {
-        'protein': {
-          'percentage': ((selectedContent.protein * 4) / totalCalories * 100).round(),
-          'amount': selectedContent.protein
-        },
-        'carbs': {
-          'percentage': ((selectedContent.carbs * 4) / totalCalories * 100).round(),
-          'amount': selectedContent.carbs
-        },
-        'fat': {
-          'percentage': ((selectedContent.fat * 9) / totalCalories * 100).round(),
-          'amount': selectedContent.fat
-        },
-      };
-    }
-    return {
-      'protein': {'percentage': 0, 'amount': 0},
-      'carbs': {'percentage': 0, 'amount': 0},
-      'fat': {'percentage': 0, 'amount': 0},
-    };
+  // Makro değerlerini almak için getter
+  Map<String, Map<String, dynamic>> getTotalMacros() {
+    return totalMacros;
   }
 } 

@@ -1,4 +1,4 @@
-import 'package:diet_app_mobile/controller/basic/meal/meal_add_filter_search_detail_controller.dart';
+import 'package:diet_app_mobile/controller/home/meal/meal_add_filter_search_detail_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';

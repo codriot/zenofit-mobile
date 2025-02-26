@@ -1,68 +1,78 @@
-
 import 'package:diet_app_mobile/product/controller/custom_text_field_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
+import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:kartal/kartal.dart';
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    super.key,
-    required this.hintText,
-    this.validator,
-    this.onSaved,
-    required this.controller,
-    this.isPhoneNumber = false,
-    this.onSubmit,
-    this.color,
-    this.focusNode,
-    this.onTap, this.padding,
-  });
 
+class CustomTextField extends StatelessWidget {
   final String hintText;
+  final TextEditingController controller;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
   final void Function(String?)? onSubmit;
-  final TextEditingController controller;
-  final bool? isPhoneNumber;
-  final Color? color;
-  final FocusNode? focusNode;
-  final void Function()? onTap;
+  final bool showSearchIcon;
   final EdgeInsets? padding;
+  final double height; // Yükseklik parametresi
+
+  const CustomTextField({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    this.validator,
+    this.onSaved,
+    this.onSubmit,
+    this.showSearchIcon = false,
+    this.padding,
+    this.height = 50, // Varsayılan yükseklik
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: padding ?? context.padding.onlyTopLow,
+      margin: padding ?? EdgeInsets.only(top: 10.0),
+      height: height, // Yükseklik ayarı
       decoration: BoxDecoration(
-        color: color ?? AppColor.scaffoldBackgorundColor.getColor(),
-        borderRadius: context.border.normalBorderRadius,
+        color: Colors.white, // Arka plan rengi
+        borderRadius: BorderRadius.circular(16), // Kenar yuvarlama
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.crystalBell.getColor(),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // Gölge konumu
+          ),
+        ],
       ),
       child: TextFormField(
-        onTap: onTap,
         controller: controller,
         cursorColor: Colors.black,
         decoration: InputDecoration(
+          prefixIcon: showSearchIcon
+              ? Padding(
+                  padding: AppPadding.instance.allSmall,
+                  child: SvgPicture.asset(
+                    'assets/icons/search.svg', // İkon dosya yolu
+                    width: 20,
+                    color: AppColor.grey.getColor(),
+                    height: 20,
+                    fit: BoxFit.contain,
+                  ),
+                )
+              : null,
           hintText: hintText,
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: Get.height * 0.02,
-            horizontal: Get.height * 0.03,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 10, // İçerik üst ve alt boşluğu
+            horizontal: 20, // İçerik sağ ve sol boşluğu
           ),
-          hintStyle: context.general.textTheme.bodyLarge
-              ?.copyWith(color: AppColor.grey.getColor()),
-          errorStyle: const TextStyle(height: 0),
-          counterText: '',
-          counterStyle: const TextStyle(height: 0),
+          hintStyle: const TextStyle(color: Colors.grey), // Hint metin rengi
         ),
-        maxLength: isPhoneNumber ?? false ? 10 : null,
-        keyboardType: isPhoneNumber ?? false
-            ? TextInputType.phone
-            : TextInputType.emailAddress,
-        maxLines: 1,
         validator: validator,
         onSaved: onSaved,
-        onFieldSubmitted: onSubmit, // Bu kısım submit işlemi için eklenmiştir
+        onFieldSubmitted: onSubmit,
       ),
     );
   }

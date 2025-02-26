@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_controller.dart';
+import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_controller.dart';
 
 class MealAddFilterSearchDetailController extends GetxController {
   final TextEditingController nameController = TextEditingController();

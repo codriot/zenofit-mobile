@@ -29,15 +29,6 @@ class HomeView extends StatelessWidget with HomeViewMixin {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ana Sayfa'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Keşfet'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: 'Öğünlerim'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
-      ),
     );
   }
 }

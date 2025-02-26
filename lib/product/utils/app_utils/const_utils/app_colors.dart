@@ -22,6 +22,7 @@ enum AppColor {
   whiteSolid,
   bleachedSilk,
   vaporwaweBlue,
+  orochimaru,
 }
 
 extension AppColorExtension on AppColor {
@@ -69,6 +70,8 @@ extension AppColorExtension on AppColor {
         return const Color(0xfff2f2f2);
       case AppColor.vaporwaweBlue:
         return const Color(0xff29D2FF);
+      case AppColor.orochimaru:
+        return const Color(0xffd9d9d9);
     }
   }
 }

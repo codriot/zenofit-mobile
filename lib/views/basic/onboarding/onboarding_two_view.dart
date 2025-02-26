@@ -44,7 +44,7 @@ class OnboardingTwoView extends StatelessWidget {
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
                 onPressed: () {                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.home);},
+                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);},
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),

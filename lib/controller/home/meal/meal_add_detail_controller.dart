@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../../../model/meal_model.dart';
+import '../../../model/home/meal_model.dart';
 import 'package:flutter/material.dart';
 
 class MealAddDetailController extends GetxController {

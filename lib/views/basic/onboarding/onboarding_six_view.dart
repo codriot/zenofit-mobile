@@ -74,7 +74,7 @@ class OnboardingSixView extends StatelessWidget {
                   globalOnboardingController.toggleOnboardingPageCount(
                       OnboardingPageCountEnum.onboardingPageSix.index);
                   NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.home);
+                      .pushToPage(NavigateRoutesItems.main);
                 },
                 text: "Next",
                 padding: AppPadding.instance.bottomNormal,
@@ -88,7 +88,7 @@ class OnboardingSixView extends StatelessWidget {
                   globalOnboardingController.toggleOnboardingPageCount(
                       OnboardingPageCountEnum.onboardingPageSix.index);
                   NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.home);
+                      .pushToPage(NavigateRoutesItems.main);
                 },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,

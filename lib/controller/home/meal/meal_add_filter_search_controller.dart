@@ -2,7 +2,7 @@ import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:diet_app_mobile/controller/basic/meal/meal_add_detail_controller.dart';
+import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_controller.dart';
 
 class MealAddFilterSearchController extends GetxController {
   final TextEditingController searchController = TextEditingController();

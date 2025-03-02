@@ -1,5 +1,7 @@
 // lib/views/discover/discover_view.dart
 import 'package:diet_app_mobile/controller/discover/discover_controller.dart';
+import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
+import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
@@ -20,18 +22,21 @@ class DiscoverView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       appBar: _buildAppBar(),
-      body: Obx(() {
-        return NotificationListener<ScrollNotification>(
-          onNotification: discoverController.onNotification,
-          child: ListView(
-            children: [
-              _buildPageGridViewBuilder(),
-              if (discoverController.isLoading.value)
-                _buildPageCircleProgressBar(),
-            ],
-          ),
-        );
-      }),
+      body: Padding(
+        padding: AppPadding.instance.horizontalNormal,
+        child: Obx(() {
+          return NotificationListener<ScrollNotification>(
+            onNotification: discoverController.onNotification,
+            child: ListView(
+              children: [
+                _buildPageGridViewBuilder(),
+                if (discoverController.isLoading.value)
+                  _buildPageCircleProgressBar(),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -40,19 +45,32 @@ class DiscoverView extends StatelessWidget {
       padding: AppPadding.instance.verticalNormal,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
       ),
       itemCount: discoverController.items.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColor.orochimaru.getColor(),
-            borderRadius: AppRadius.instance.normalBorderRadius,
+        return InkWell(
+          onTap: () {
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.discoverDetail,
+            arguments: discoverController.items[index]);
+          },
+          child: Container(
+            margin: const EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              color: AppColor.orochimaru.getColor(),
+              borderRadius: AppRadius.instance.normalBorderRadius,
+              boxShadow: [BoxShadow(
+                blurRadius: 1,
+                spreadRadius: 1,
+                color: AppColor.black12.getColor()
+              )],
+              image: DecorationImage(image: NetworkImage(discoverController.items[index].imageUrl),
+              fit: BoxFit.cover),
+            ),
           ),
-          child: Center(child: Text(discoverController.items[index])),
         );
       },
     );

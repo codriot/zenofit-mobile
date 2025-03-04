@@ -1,7 +1,6 @@
 import 'package:diet_app_mobile/model/discover/discover_item_model.dart';
 import 'package:diet_app_mobile/product/widgets/discover/comments_bottom_sheet.dart';
 import 'package:flutter/material.dart' show showModalBottomSheet;
-import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/widgets.dart' show BuildContext;
 import 'package:get/get.dart';
 

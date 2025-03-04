@@ -9,6 +9,8 @@ class DiscoverController extends GetxController {
   var items = <DiscoverItemModel>[].obs; // Observable liste
   var isLoading = false.obs; // Loading durumu
   var hasMoreItems = true.obs; // Daha fazla öğe var mı?
+  var isMenuOpen = false.obs; // Menü durumunu tutacak
+  var activeFilterIndex = (0).obs; // Aktif filtre indeksi (-1: hiçbiri)
 
   @override
   void onInit() {
@@ -52,6 +54,10 @@ class DiscoverController extends GetxController {
         },
       ),
     );
+  }
+
+  void toggleMenuOpen(){
+    isMenuOpen.value = !isMenuOpen.value;
   }
 
   void loadMoreItems() async {
@@ -114,5 +120,13 @@ class DiscoverController extends GetxController {
       loadMoreItems(); // Daha fazla öğe yükle
     }
     return true;
+  }
+
+  void toggleFilter(int index) {
+    if (activeFilterIndex.value == index) {
+      activeFilterIndex.value = -1; // Aynı butona tıklanırsa aktifliği kaldır
+    } else {
+      activeFilterIndex.value = index; // Aktif filtreyi değiştir
+    }
   }
 }

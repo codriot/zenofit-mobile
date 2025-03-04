@@ -11,7 +11,7 @@ import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_bindi
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_detail_binding.dart';
 import 'package:diet_app_mobile/bindings/views/water/add_water_binding.dart';
 import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_binding.dart';
-import 'package:diet_app_mobile/model/discover/discover_detail_view.dart';
+import 'package:diet_app_mobile/views/discover/discover_detail_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_six_view.dart';

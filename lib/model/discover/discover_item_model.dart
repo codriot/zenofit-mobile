@@ -1,17 +1,20 @@
+import 'package:diet_app_mobile/model/general/comment_model.dart';
+
 class DiscoverItemModel {
   final String imageUrl;
   final String description;
   final int likeCount;
   final int commentCount;
   final String type;
+  final List<CommentModel> comments;
 
-  DiscoverItemModel({
-    required this.imageUrl,
-    required this.description,
-    required this.likeCount,
-    required this.commentCount,
-    required this.type,
-  });
+  DiscoverItemModel(
+      {required this.imageUrl,
+      required this.description,
+      required this.likeCount,
+      required this.commentCount,
+      required this.type,
+      required this.comments});
 }
 
 /* 

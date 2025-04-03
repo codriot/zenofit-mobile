@@ -11,6 +11,7 @@ import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_bindi
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_detail_binding.dart';
 import 'package:diet_app_mobile/bindings/views/water/add_water_binding.dart';
 import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_binding.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_detail_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_detail_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
@@ -162,6 +163,13 @@ class NavigatorRoutes {
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionDetail.withSlash,
+        page: () => DietitionDetailView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -190,6 +198,7 @@ enum NavigateRoutesItems {
   addWater,
   main,
   discoverDetail,
+  dietitionDetail,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

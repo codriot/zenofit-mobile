@@ -2,6 +2,7 @@ import 'package:diet_app_mobile/controller/main/main_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_duration.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class MainView extends GetView<MainController> {
           children: [
             const HomeView(), // Ana sayfa
             DiscoverView(), // Keşfet sayfası
+            DietitionView()
           ],
         ),
         bottomNavigationBar: AnimatedBottomNavigationBar(

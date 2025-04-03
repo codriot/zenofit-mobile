@@ -1,0 +1,2 @@
+D:/Programing_Language/Flutter_And_Dart/diet_app_mobile/android/app/.cxx/Debug/2o1q8vm4/x86_64/CMakeFiles/edit_cache.dir
+D:/Programing_Language/Flutter_And_Dart/diet_app_mobile/android/app/.cxx/Debug/2o1q8vm4/x86_64/CMakeFiles/rebuild_cache.dir

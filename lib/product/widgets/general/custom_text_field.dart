@@ -37,14 +37,6 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white, // Arka plan rengi
         borderRadius: BorderRadius.circular(16), // Kenar yuvarlama
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.crystalBell.getColor(),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // Gölge konumu
-          ),
-        ],
       ),
       child: TextFormField(
         controller: controller,

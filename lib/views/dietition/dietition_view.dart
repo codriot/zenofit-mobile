@@ -131,9 +131,10 @@ class DietitionView extends StatelessWidget {
     return Stack(
       children: [
         InkWell(
-          onTap: (){
-            NavigatorController.instance.pushToPage(NavigateRoutesItems.dietitionDetail,
-            arguments: controller.dietitions[index]);
+          onTap: () {
+            NavigatorController.instance.pushToPage(
+                NavigateRoutesItems.dietitionDetail,
+                arguments: controller.dietitions[index]);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -171,7 +172,8 @@ class DietitionView extends StatelessWidget {
                       style: context.appGeneral.textTheme.titleSmall,
                     ),
                     Text("${controller.dietitions[index].workBranch}",
-                        style: context.appGeneral.textTheme.labelLarge?.copyWith(
+                        style:
+                            context.appGeneral.textTheme.labelLarge?.copyWith(
                           color: AppColor.grey.getColor(),
                         )),
                     Row(
@@ -250,7 +252,8 @@ class DietitionView extends StatelessWidget {
                       height: 32,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40)),
-                      child: SvgPicture.asset(AppIconUtility.getIconPath("more-2",
+                      child: SvgPicture.asset(AppIconUtility.getIconPath(
+                          "more-2",
                           format: IconFormat.svg)),
                     ),
                   ],
@@ -295,7 +298,10 @@ class DietitionView extends StatelessWidget {
                             buttonIcon: "error-warning-line",
                             buttonText: "Şikayet Et",
                             context: context,
-                            onTap: () {},
+                            onTap: () {
+                              NavigatorController.instance.pushToPage(
+                                  NavigateRoutesItems.dietitionComplain);
+                            },
                             color: AppColor.red.getColor(),
                           ),
                           AppSpaces.instance.vertical5,

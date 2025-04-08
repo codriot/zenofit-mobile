@@ -11,6 +11,8 @@ import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_bindi
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_detail_binding.dart';
 import 'package:diet_app_mobile/bindings/views/water/add_water_binding.dart';
 import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_binding.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_complain_succes_view.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_complain_view.dart';
 import 'package:diet_app_mobile/views/dietition/dietition_detail_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_detail_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
@@ -170,6 +172,20 @@ class NavigatorRoutes {
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionComplain.withSlash,
+        page: () => const DietitionComplainView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionComplainSucces.withSlash,
+        page: () => const DietitionComplainSuccesView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -199,6 +215,8 @@ enum NavigateRoutesItems {
   main,
   discoverDetail,
   dietitionDetail,
+  dietitionComplain,
+  dietitionComplainSucces,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

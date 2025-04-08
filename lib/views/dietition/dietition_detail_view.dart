@@ -3,6 +3,7 @@ import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
+import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_duration.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_radius.dart';
 import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.dart';
@@ -46,76 +47,79 @@ class DietitionDetailView extends StatelessWidget {
 
   Padding _buildStatsDivider() {
     return Padding(
-              padding: AppPadding.instance.horizontalSmall,
-              child: Divider(color: AppColor.grey.getColor(),height: 2,),
-            );
+      padding: AppPadding.instance.horizontalSmall,
+      child: Divider(
+        color: AppColor.grey.getColor(),
+        height: 2,
+      ),
+    );
   }
 
   Text _buildDytWorkBranchText(BuildContext context) {
     return Text(
-              controller.dietition.workBranch == "Sporcu"
-                  ? "Sporcu Beslenme Diyetisyeni"
-                  : "Girilmedi",
-              style: context.appGeneral.textTheme.titleSmall?.copyWith(
-                color: AppColor.grey.getColor(),
-              ),
-            );
+      controller.dietition.workBranch == "Sporcu"
+          ? "Sporcu Beslenme Diyetisyeni"
+          : "Girilmedi",
+      style: context.appGeneral.textTheme.titleSmall?.copyWith(
+        color: AppColor.grey.getColor(),
+      ),
+    );
   }
 
   Text _buildDytName(BuildContext context) {
     return Text(
-              "Dyt. ${controller.dietition.name} ${controller.dietition.lastName}",
-              style: context.appGeneral.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            );
+      "Dyt. ${controller.dietition.name} ${controller.dietition.lastName}",
+      style: context.appGeneral.textTheme.titleLarge?.copyWith(
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 
   SizedBox _build90PxSizedBox() {
     return const SizedBox(
-              height: 90,
-            );
+      height: 90,
+    );
   }
 
   Stack _buildTopProfileAndAppBarComponent() {
     return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  height: 200,
-                  color: AppColor.crystalBell.getColor(),
-                ),
-                _buildBodyPageAppBar(),
-                Positioned(
-                  bottom: -90,
-                  right: (Get.width - 180) / 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColor.white.getColor(),
-                      borderRadius: AppRadius.instance.largeBorderRadius,
-                    ),
-                    width: 180,
-                    height: 180,
-                  ),
-                ),
-                Positioned(
-                  bottom: -80,
-                  right: (Get.width - 160) / 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColor.crystalBell.getColor(),
-                      borderRadius: AppRadius.instance.mediumBorderRadius,
-                    ),
-                    width: 160,
-                    height: 160,
-                    child: Image.asset(
-                      AppImageUtility.getImagePath("person"),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ],
-            );
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 200,
+          color: AppColor.crystalBell.getColor(),
+        ),
+        _buildBodyPageAppBar(),
+        Positioned(
+          bottom: -90,
+          right: (Get.width - 180) / 2,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColor.white.getColor(),
+              borderRadius: AppRadius.instance.largeBorderRadius,
+            ),
+            width: 180,
+            height: 180,
+          ),
+        ),
+        Positioned(
+          bottom: -80,
+          right: (Get.width - 160) / 2,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColor.crystalBell.getColor(),
+              borderRadius: AppRadius.instance.mediumBorderRadius,
+            ),
+            width: 160,
+            height: 160,
+            child: Image.asset(
+              AppImageUtility.getImagePath("person"),
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Container _buildBodyPageAppBar() {
@@ -211,35 +215,39 @@ class DietitionDetailView extends StatelessWidget {
         children: [
           _buildAccordionItem(
             context,
-            "Hakkında",
+            "Diyetisyen Hakkında",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
             controller.isAboutExpanded,
             controller.toggleAbout,
             "user",
+            AppColor.goldenGlam.getColor(),
           ),
           _buildAccordionItem(
             context,
-            "Hakkında",
+            "Tecrübeleri",
             "Deneyim bilgileri...",
             controller.isExperienceExpanded,
             controller.toggleExperience,
             "suitcase-line",
+            AppColor.vaporwaweBlue.getColor(),
           ),
           _buildAccordionItem(
             context,
-            "Hakkında",
+            "Seans Takvimi",
             "Eğitim bilgileri...",
             controller.isEducationExpanded,
             controller.toggleEducation,
             "calendar-line",
+            AppColor.noxious.getColor(),
           ),
           _buildAccordionItem(
             context,
-            "Hakkında",
+            "Hakkındaki Yorumlar",
             "Yorumlar...",
             controller.isCommentsExpanded,
             controller.toggleComments,
             "chat",
+            AppColor.vividBlue.getColor(),
           ),
         ],
       ),
@@ -253,26 +261,29 @@ class DietitionDetailView extends StatelessWidget {
     RxBool isExpanded,
     VoidCallback onTap,
     String iconName,
+    Color iconColor,
   ) {
     return Column(
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: SvgPicture.asset(
-            AppIconUtility.getIconPath(iconName, format: IconFormat.svg),
-            color: AppColor.black.getColor(),
+          leading: CircleAvatar(
+            backgroundColor: AppColor.white.getColor(),
+            child: SvgPicture.asset(
+              AppIconUtility.getIconPath(iconName, format: IconFormat.svg),
+              color: iconColor,
+            ),
           ),
           title: Text(
             title,
             style: context.appGeneral.textTheme.titleMedium,
           ),
-          trailing: Obx(
-            () => Icon(
-              isExpanded.value
-                  ? Icons.keyboard_arrow_up
-                  : Icons.keyboard_arrow_down,
+          trailing: AnimatedCrossFade(
+              duration: AppDuration.instance.durationFast,
+              firstChild: SvgPicture.asset(AppIconUtility.getIconPath("arrow-down-s-fill",format: IconFormat.svg)),
+              secondChild: SvgPicture.asset(AppIconUtility.getIconPath("arrow-up-s-fill",format: IconFormat.svg)),
+              crossFadeState: CrossFadeState.showFirst,
             ),
-          ),
           onTap: onTap,
         ),
         Obx(
@@ -299,13 +310,15 @@ class DietitionDetailView extends StatelessWidget {
     return Padding(
       padding: AppPadding.instance.allNormal,
       child: CustomElevatedButton(
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.instance.normalBorderRadius),
+        height: 48,
         onPressed: controller.onCommunicatePressed,
-        backgroundColor: AppColor.lucentLime.getColor(),
+        backgroundColor: AppColor.noxious.getColor(),
         width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.chat_bubble_outline, color: Colors.white),
+            SvgPicture.asset(AppIconUtility.getIconPath("chat",format: IconFormat.svg),color: AppColor.white.getColor()),
             AppSpaces.instance.horizontal10,
             Text(
               "İletişime Geç",

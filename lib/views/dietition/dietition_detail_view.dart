@@ -1,4 +1,5 @@
 import 'package:diet_app_mobile/controller/dietition/dietition_detail_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -8,7 +9,6 @@ import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_radius.dart';
 import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -21,8 +21,8 @@ class DietitionDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark));
+    ChromeStatusBarService.setDarkStatusBar();
+
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(
@@ -279,11 +279,15 @@ class DietitionDetailView extends StatelessWidget {
             style: context.appGeneral.textTheme.titleMedium,
           ),
           trailing: AnimatedCrossFade(
-              duration: AppDuration.instance.durationFast,
-              firstChild: SvgPicture.asset(AppIconUtility.getIconPath("arrow-down-s-fill",format: IconFormat.svg)),
-              secondChild: SvgPicture.asset(AppIconUtility.getIconPath("arrow-up-s-fill",format: IconFormat.svg)),
-              crossFadeState: CrossFadeState.showFirst,
-            ),
+            duration: AppDuration.instance.durationFast,
+            firstChild: SvgPicture.asset(AppIconUtility.getIconPath(
+                "arrow-down-s-fill",
+                format: IconFormat.svg)),
+            secondChild: SvgPicture.asset(AppIconUtility.getIconPath(
+                "arrow-up-s-fill",
+                format: IconFormat.svg)),
+            crossFadeState: CrossFadeState.showFirst,
+          ),
           onTap: onTap,
         ),
         Obx(
@@ -310,7 +314,8 @@ class DietitionDetailView extends StatelessWidget {
     return Padding(
       padding: AppPadding.instance.allNormal,
       child: CustomElevatedButton(
-        shape: RoundedRectangleBorder(borderRadius: AppRadius.instance.normalBorderRadius),
+        shape: RoundedRectangleBorder(
+            borderRadius: AppRadius.instance.normalBorderRadius),
         height: 48,
         onPressed: controller.onCommunicatePressed,
         backgroundColor: AppColor.noxious.getColor(),
@@ -318,7 +323,9 @@ class DietitionDetailView extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(AppIconUtility.getIconPath("chat",format: IconFormat.svg),color: AppColor.white.getColor()),
+            SvgPicture.asset(
+                AppIconUtility.getIconPath("chat", format: IconFormat.svg),
+                color: AppColor.white.getColor()),
             AppSpaces.instance.horizontal10,
             Text(
               "İletişime Geç",

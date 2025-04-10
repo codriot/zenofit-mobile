@@ -14,6 +14,7 @@ import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_binding.dar
 import 'package:diet_app_mobile/views/dietition/dietition_complain_succes_view.dart';
 import 'package:diet_app_mobile/views/dietition/dietition_complain_view.dart';
 import 'package:diet_app_mobile/views/dietition/dietition_detail_view.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_vote_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_detail_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
@@ -186,6 +187,13 @@ class NavigatorRoutes {
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionVote.withSlash,
+        page: () => const DietitionVoteView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -217,6 +225,7 @@ enum NavigateRoutesItems {
   dietitionDetail,
   dietitionComplain,
   dietitionComplainSucces,
+  dietitionVote,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

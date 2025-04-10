@@ -2,6 +2,7 @@
 import 'package:diet_app_mobile/controller/dietition/dietition_view_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -21,6 +22,8 @@ class DietitionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
+
     return GestureDetector(
       onTap: controller.closeMenuAndDietitionInfoStates,
       child: Scaffold(
@@ -309,7 +312,10 @@ class DietitionView extends StatelessWidget {
                             buttonIcon: "star-fill",
                             buttonText: "Diyetisyeni puanla",
                             context: context,
-                            onTap: () {},
+                            onTap: () {
+                              NavigatorController.instance.pushToPage(
+                                  NavigateRoutesItems.dietitionVote);
+                            },
                             color: AppColor.white.getColor(),
                           ),
                         ],

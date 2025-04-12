@@ -26,6 +26,8 @@ import 'package:diet_app_mobile/views/basic/onboarding/onboarding_two_view.dart'
 import 'package:diet_app_mobile/views/basic/register/register_view.dart';
 import 'package:diet_app_mobile/views/basic/splash/splash_view.dart';
 import 'package:diet_app_mobile/views/home/add_water_view.dart';
+import 'package:diet_app_mobile/views/home/chat_detail_view.dart';
+import 'package:diet_app_mobile/views/home/chat_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_detail_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_fast_item_view.dart';
@@ -194,6 +196,20 @@ class NavigatorRoutes {
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.chat.withSlash,
+        page: () => ChatView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.chatDetail.withSlash,
+        page: () => ChatDetailView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -226,6 +242,8 @@ enum NavigateRoutesItems {
   dietitionComplain,
   dietitionComplainSucces,
   dietitionVote,
+  chat,
+  chatDetail,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

@@ -43,13 +43,19 @@ mixin HomeViewMixin {
           ],
         ),
         const Spacer(),
-        Container(
-          decoration: BoxDecoration(
-              color: AppColor.crystalBell.getColor(), shape: BoxShape.circle),
-          padding: AppPadding.instance.allSmall,
-          child: SvgPicture.asset(
-            AppIconUtility.getIconPath("message", format: IconFormat.svg),
-            height: 32,
+        InkWell(
+          borderRadius: BorderRadius.circular(32),
+          onTap: (){
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.chat);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: AppColor.crystalBell.getColor(), shape: BoxShape.circle),
+            padding: AppPadding.instance.allSmall,
+            child: SvgPicture.asset(
+              AppIconUtility.getIconPath("message", format: IconFormat.svg),
+              height: 32,
+            ),
           ),
         ),
       ],

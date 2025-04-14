@@ -14,7 +14,7 @@ class GeneralPageButtonWidget extends StatelessWidget {
     required this.onPressed,
     this.padding,
     required this.text,
-    this.isIconActive, this.backgroundColor,
+    this.isIconActive, this.backgroundColor, this.height,
   });
 
   final void Function() onPressed;
@@ -22,6 +22,7 @@ class GeneralPageButtonWidget extends StatelessWidget {
   final String text;
   final bool? isIconActive;
   final Color? backgroundColor;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class GeneralPageButtonWidget extends StatelessWidget {
       child: CustomElevatedButton(
         elevation: 0,
         backgroundColor: backgroundColor ?? AppColor.noxious.getColor(),
-        height: 56,
+        height: height ?? 56,
         width: double.infinity,
         shape: RoundedRectangleBorder(
           borderRadius: context.border.normalBorderRadius,

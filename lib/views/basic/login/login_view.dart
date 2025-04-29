@@ -67,7 +67,7 @@ Widget build(BuildContext context) {
                             padding: EdgeInsets.only(top: Get.height * 0.03),
                           ),
                           _buildFingerPrintButton(),
-                          AppSpaces.instance.vertical10,
+                          AppSpaces.instance.vertical15,
                         ],
                       ),
                     ),
@@ -187,7 +187,7 @@ Widget build(BuildContext context) {
       padding: EdgeInsets.only(top: Get.height * 0.03),
       child: Text(
         "Şifre",
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
+        style: context.appGeneral.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -199,7 +199,7 @@ Widget build(BuildContext context) {
       padding: EdgeInsets.only(top: Get.height * 0.03),
       child: Text(
         "E-Posta",
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
+        style: context.appGeneral.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
         ),
       ),

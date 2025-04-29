@@ -2,8 +2,10 @@ import 'package:diet_app_mobile/API/services/auth/auth_service.dart';
 import 'package:diet_app_mobile/controller/auth/login_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
+import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_sizes.dart';
@@ -18,54 +20,67 @@ class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
-      children: [
-        _buildAppLogo(),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-                color: AppColor.lightGreenGlint.getColor(),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(64),
-                  topRight: Radius.circular(64),
-                )),
-            child: Padding(
-              padding: EdgeInsets.only(top: Get.height * 0.03),
-              child: Padding(
-                padding: AppPadding.instance.horizontalMedium,
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    _buildMakeLoginText(context),
-                    _buildDoYouHaveAcountEither(context),
-                    _buildMailText(context),
-                    _buildPageTextField(context,
-                        hintText: "example@example.com", icon: "mail"),
-                    _buildPasswordText(context),
-                    _buildPageTextField(context,
-                        hintText: "example", icon: "password"),
-                    _buildForgetThePasswordText(context),
-                    _buildOrText(context),
-                    _buildLoginWithGooglOrApple(),
-                    GeneralPageButtonWidget(
-                      onPressed: () {
-                        NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
-                      },
-                      text: "Giriş Yap",
-                      padding: EdgeInsets.only(top: Get.height * 0.03),
+Widget build(BuildContext context) {
+  ChromeStatusBarService.setDarkStatusBar();
+  return Scaffold(
+    body: SafeArea(
+      child: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: Get.height),
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                _buildAppLogo(),
+                AppSpaces.instance.vertical15,
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.lightGreenGlint.getColor(),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(64),
+                        topRight: Radius.circular(64),
+                      ),
                     ),
-                    _buildFingerPrintButton()
-                  ],
+                    child: Padding(
+                      padding: AppPadding.instance.horizontalMedium,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppSpaces.instance.vertical20,
+                          _buildMakeLoginText(context),
+                          _buildDoYouHaveAcountEither(context),
+                          _buildMailText(context),
+                          _buildPageTextField(context,
+                              hintText: "example@example.com", icon: "mail"),
+                          _buildPasswordText(context),
+                          _buildPageTextField(context,
+                              hintText: "example", icon: "password"),
+                          _buildForgetThePasswordText(context),
+                          _buildOrText(context),
+                          _buildLoginWithGooglOrApple(),
+                          GeneralPageButtonWidget(
+                            onPressed: () {
+                              NavigatorController.instance
+                                  .pushToPage(NavigateRoutesItems.onboardingOne);
+                            },
+                            text: "Giriş Yap",
+                            padding: EdgeInsets.only(top: Get.height * 0.03),
+                          ),
+                          _buildFingerPrintButton(),
+                          AppSpaces.instance.vertical10,
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
-      ],
-    ));
-  }
+      ),
+    ),
+  );
+}
 
   Padding _buildAppLogo() {
     return Padding(
@@ -88,8 +103,8 @@ class LoginView extends GetView<LoginController> {
         child: InkWell(
           child: SvgPicture.asset(
             AppIconUtility.getIconPath("finger", format: IconFormat.svg),
-            width: AppSizes.instance.iconSizeXLarge,
-            height: AppSizes.instance.iconSizeXLarge,
+            width: Get.height * 0.09,
+            height: Get.height * 0.09,
           ),
         ),
       ),

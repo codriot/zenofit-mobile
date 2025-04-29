@@ -26,13 +26,13 @@ class CustomTextField extends StatelessWidget {
     this.onSubmit,
     this.showSearchIcon = false,
     this.padding,
-    this.height = 50, // Varsayılan yükseklik
+    this.height = 48, // Varsayılan yükseklik
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: padding ?? EdgeInsets.only(top: 10.0),
+      margin: padding ?? const EdgeInsets.only(top: 10.0),
       height: height, // Yükseklik ayarı
       decoration: BoxDecoration(
         color: Colors.white, // Arka plan rengi

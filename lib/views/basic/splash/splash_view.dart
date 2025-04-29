@@ -1,5 +1,6 @@
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
@@ -13,6 +14,7 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       floatingActionButton: Padding(
         padding: AppPadding.instance.horizontalMedium,

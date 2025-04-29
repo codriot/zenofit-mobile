@@ -31,7 +31,7 @@ class GeneralPageButtonWidget extends StatelessWidget {
       child: CustomElevatedButton(
         elevation: 0,
         backgroundColor: backgroundColor ?? AppColor.noxious.getColor(),
-        height: height ?? 56,
+        height: height ?? Get.height * 0.075,
         width: double.infinity,
         shape: RoundedRectangleBorder(
           borderRadius: context.border.normalBorderRadius,

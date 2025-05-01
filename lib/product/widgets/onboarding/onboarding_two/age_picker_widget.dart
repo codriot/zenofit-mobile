@@ -24,7 +24,7 @@ class AgePickerWidget extends StatelessWidget {
             children: [
               // ListView (Yaşlar)
               Container(
-                height: 350,
+                height: controller.ageContainerHeight,
                 width: 145,
                 decoration: BoxDecoration(
                   color: AppColor.crystalBell.getColor(),
@@ -48,9 +48,9 @@ class AgePickerWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Obx(() {
                         // TextStyle'ı controller'dan al
-                        final textStyle = controller.getTextStyleForAge(index);
-                        final fontSize = textStyle['fontSize'];
-                        final fontWeight = textStyle['fontWeight'];
+                        final textStyle = controller.getTextStyleForAge(context,index);
+                        final fontSize = textStyle.fontSize;
+                        final fontWeight = textStyle.fontWeight;
                         final isSelected = index == controller.selectedAge.value;
                         final textColor = isSelected
                             ? AppColor.vividBlue.getColor()
@@ -72,7 +72,7 @@ class AgePickerWidget extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 150,
+                top: controller.visibleRangeTop,
                 left: 0,
                 right: 0,
                 child: Container(
@@ -81,7 +81,7 @@ class AgePickerWidget extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 150,
+                bottom: controller.visibleRangeTop,
                 left: 0,
                 right: 0,
                 child: Container(

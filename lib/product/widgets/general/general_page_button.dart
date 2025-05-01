@@ -1,7 +1,6 @@
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
-import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_sizes.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/dynamic_utils/app_radius.dart';
 import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +56,6 @@ class GeneralPageButtonWidget extends StatelessWidget {
                 child: SvgPicture.asset(
                   AppIconUtility.getIconPath("arrow-right",
                       format: IconFormat.svg),
-                  height: AppSizes.instance.iconSizeNormal,
                 ),
               ),
           ],

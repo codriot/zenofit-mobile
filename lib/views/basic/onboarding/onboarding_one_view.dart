@@ -51,8 +51,8 @@ class OnboardingOneView extends StatelessWidget {
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
                 onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);
+                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageTwo.index);
+                  NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingTwo);
                 },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
@@ -70,7 +70,7 @@ class OnboardingOneView extends StatelessWidget {
       required String text,
       required String icon}) {
     return Container(
-      margin: const EdgeInsets.only(top: 24),
+      margin: EdgeInsets.only(top: Get.height * 0.035),
       decoration: BoxDecoration(
           borderRadius: AppRadius.instance.mediumBorderRadius,
           color: AppColor.crystalBell.getColor(),
@@ -79,7 +79,7 @@ class OnboardingOneView extends StatelessWidget {
           ]),
       padding: AppPadding.instance.leftMedium,
       width: Get.width * 0.72,
-      height: 72,
+      height: Get.height * 0.1,
       child: Row(
         children: [
           SvgPicture.asset(

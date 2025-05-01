@@ -23,29 +23,7 @@ class MealAddView extends GetView<MealAddController> {
       appBar: _buildPageAppBar(context),
       body: Column(
         children: [
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColor.transparent.getColor(),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.crystalBell.getColor(),
-                  spreadRadius: 1,
-                  blurRadius: 2,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: controller.days.length,
-              itemBuilder: (context, index) {
-                final date = controller.days[index];
-                return AddMealButton(
-                    controller: controller, date: date, index: index);
-              },
-            ),
-          ),
+          _buildDateContainer(),
           AppSpaces.instance.vertical15,
           Expanded(
             child: SingleChildScrollView(
@@ -56,11 +34,38 @@ class MealAddView extends GetView<MealAddController> {
                   _buildProgressSection(context),
                   AppSpaces.instance.vertical25,
                   _buildMealList(context),
+                  AppSpaces.instance.vertical25,
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Container _buildDateContainer() {
+    return Container(
+      height: Get.height * 0.07,
+      decoration: BoxDecoration(
+        color: AppColor.transparent.getColor(),
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.crystalBell.getColor(),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.days.length,
+        itemBuilder: (context, index) {
+          final date = controller.days[index];
+          return AddMealButton(
+              controller: controller, date: date, index: index);
+        },
       ),
     );
   }
@@ -228,8 +233,7 @@ class MealAddView extends GetView<MealAddController> {
                     arguments: {'meal': MealModel.fromType(imageKey)},
                   );
                 },
-                width: 108,
-                height: 40,
+                width: Get.width * 0.3,
                 elevation: 0,
                 backgroundColor: AppColor.noxious.getColor(),
                 shape: RoundedRectangleBorder(
@@ -293,7 +297,7 @@ class AddMealButton extends StatelessWidget {
             return AnimatedContainer(
               duration: AppDuration.instance.durationFast,
               curve: Curves.easeInOut,
-              width: isSelected ? 140 : 50,
+              width: isSelected ? Get.width * 0.36 : Get.height * 0.07,
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColor.vividBlue.getColor()
@@ -311,18 +315,18 @@ class AddMealButton extends StatelessWidget {
               child: Center(
                 child: isSelected
                     ? Padding(
-                      padding: AppPadding.instance.horizontalNormal,
-                      child: Text(
-                        'Bugün, ${date.day} ${controller.getMonthName(date.month)}',
-                        overflow: TextOverflow.ellipsis,
-                        style: context.appGeneral.textTheme.bodyMedium
-                            ?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.white.getColor(),
+                        padding: AppPadding.instance.horizontalNormal,
+                        child: Text(
+                          'Bugün, ${date.day} ${controller.getMonthName(date.month)}',
                           overflow: TextOverflow.ellipsis,
+                          style:
+                              context.appGeneral.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.white.getColor(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    )
+                      )
                     : Text(
                         date.day.toString(),
                         style:

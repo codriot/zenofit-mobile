@@ -16,16 +16,22 @@ class MealAddFilterSearchView extends GetView<MealAddFilterSearchController> {
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            _buildSearchBar(context),
-            AppSpaces.instance.vertical15,
-            _buildSectionTitle(context, "Geçmiş"),
-            Expanded(
-              child: _buildMealList(context),
-            ),
-          ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus(); // klavyeyi kapatır
+            print("tıklandı");
+          },
+          child: Column(
+            children: [
+              _buildHeader(context),
+              _buildSearchBar(context),
+              AppSpaces.instance.vertical15,
+              _buildSectionTitle(context, "Geçmiş"),
+              Expanded(
+                child: _buildMealList(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -45,7 +51,8 @@ class MealAddFilterSearchView extends GetView<MealAddFilterSearchController> {
             child: Center(
               child: Obx(() => Text(
                     controller.selectedMealType.value,
-                    style: context.appGeneral.textTheme.headlineMedium?.copyWith(
+                    style:
+                        context.appGeneral.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   )),
@@ -58,21 +65,35 @@ class MealAddFilterSearchView extends GetView<MealAddFilterSearchController> {
   }
 
   Widget _buildSearchBar(BuildContext context) {
+    final double height = Get.height * 0.07;
     return Padding(
       padding: AppPadding.instance.horizontalNormal,
-      child: TextField(
-        controller: controller.searchController,
-        decoration: InputDecoration(
-          hintText: 'Yemek ara',
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderRadius: AppRadius.instance.normalBorderRadius,
-            borderSide: BorderSide.none,
+      child: SizedBox(
+        height: height,
+        child: Obx(
+          () => TextField(
+            controller: controller.searchController,
+            decoration: InputDecoration(
+              hintText: 'Yemek ara',
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: (height - 24) / 2), // 24: yaklaşık yazı yüksekliği
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: AppRadius.instance.normalBorderRadius,
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: controller.isSearchActive.value
+                  ? InkWell(
+                      onTap: controller.clearSearch,
+                      child: const Icon(Icons.close),
+                    )
+                  : null,
+              filled: true,
+              fillColor: AppColor.crystalBell.getColor().withOpacity(0.5),
+            ),
+            onChanged: controller.onSearchChanged,
           ),
-          filled: true,
-          fillColor: AppColor.crystalBell.getColor().withOpacity(0.5),
         ),
-        onChanged: controller.onSearchChanged,
       ),
     );
   }
@@ -83,12 +104,12 @@ class MealAddFilterSearchView extends GetView<MealAddFilterSearchController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: context.appGeneral.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Obx(() => Text(
+                controller.isSearchActive.value ? 'Aranıyor...' : title,
+                style: context.appGeneral.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
           TextButton(
             onPressed: controller.onQuickAddPressed,
             child: Text(
@@ -133,6 +154,7 @@ class MealAddFilterSearchView extends GetView<MealAddFilterSearchController> {
           ],
         ),
         child: ListTile(
+          
           title: Text(
             meal['title'] as String,
             style: context.appGeneral.textTheme.bodyLarge?.copyWith(

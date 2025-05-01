@@ -52,11 +52,12 @@ class AnimatedBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: Get.height * 0.1,
       decoration: BoxDecoration(
         color: AppColor.white.getColor(),
         borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(36),
-          bottomRight: Radius.circular(36),
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
         ),
         boxShadow: const [
           BoxShadow(
@@ -89,7 +90,7 @@ class AnimatedBottomNavigationBar extends StatelessWidget {
           children: [
             AnimatedContainer(
               duration: AppDuration.instance.durationFast,
-              padding: EdgeInsets.symmetric(vertical: isSelected ? 10 : 0),
+              padding: EdgeInsets.symmetric(vertical: isSelected ? Get.height * 0.01 : 0),
               child: SvgPicture.asset(
                 AppIconUtility.getIconPath(icon, format: IconFormat.svg),
                 color: isSelected

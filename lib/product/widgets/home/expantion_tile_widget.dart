@@ -38,7 +38,7 @@ class ExpantionTileWidget extends StatelessWidget {
                   color: AppColor.white.getColor(),
                   fontWeight: FontWeight.w500,
                 ),
-              ),
+              ), 
               trailing: AnimatedRotation(
                 turns: controller.isExpanded.value ? 0.5 : 0.0,
                 duration: const Duration(milliseconds: 200),

@@ -56,6 +56,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
                   _buildMacronutrients(context),
                   AppSpaces.instance.vertical25,
                   _buildAddButton(context),
+                  AppSpaces.instance.vertical20,
                 ],
               ),
             ),
@@ -401,7 +402,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
         );
       },
       width: double.infinity,
-      height: 50,
+      height: Get.height * 0.07,
       backgroundColor: AppColor.noxious.getColor(),
       child: Text(
         '+ Yemek Ekle',

@@ -1,5 +1,6 @@
 import 'package:diet_app_mobile/controller/home/meal/meal_add_filter_search_detail_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
@@ -8,64 +9,71 @@ import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_radius.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MealAddFilterSearchDetailView extends GetView<MealAddFilterSearchDetailController> {
+class MealAddFilterSearchDetailView
+    extends GetView<MealAddFilterSearchDetailController> {
   const MealAddFilterSearchDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppPadding.instance.allNormal,
-                child: Column(
-                  children: [
-                    _buildNutrientInput(
-                      context,
-                      'Öğün Adı',
-                      'Öğün adını girin',
-                      controller.nameController,
-                      TextInputType.text,
-                    ),
-                    _buildNutrientInput(
-                      context,
-                      'Kalori Miktarı',
-                      'Kalori miktarını gir',
-                      controller.calorieController,
-                      TextInputType.number,
-                    ),
-                    _buildNutrientInput(
-                      context,
-                      'Yağ',
-                      'Yağ miktarını gir',
-                      controller.fatController,
-                      TextInputType.number,
-                    ),
-                    _buildNutrientInput(
-                      context,
-                      'Karbonhidrat',
-                      'Karbonhidrat miktarını gir',
-                      controller.carbController,
-                      TextInputType.number,
-                    ),
-                    _buildNutrientInput(
-                      context,
-                      'Protein',
-                      'Protein miktarını gir',
-                      controller.proteinController,
-                      TextInputType.number,
-                    ),
-                    AppSpaces.instance.vertical25,
-                    _buildMacroCards(context),
-                  ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Column(
+            children: [
+              _buildHeader(context),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: AppPadding.instance.allNormal,
+                  child: Column(
+                    children: [
+                      _buildNutrientInput(
+                        context,
+                        'Öğün Adı',
+                        'Öğün adını girin',
+                        controller.nameController,
+                        TextInputType.text,
+                      ),
+                      _buildNutrientInput(
+                        context,
+                        'Kalori Miktarı',
+                        'Kalori miktarını gir',
+                        controller.calorieController,
+                        TextInputType.number,
+                      ),
+                      _buildNutrientInput(
+                        context,
+                        'Yağ',
+                        'Yağ miktarını gir',
+                        controller.fatController,
+                        TextInputType.number,
+                      ),
+                      _buildNutrientInput(
+                        context,
+                        'Karbonhidrat',
+                        'Karbonhidrat miktarını gir',
+                        controller.carbController,
+                        TextInputType.number,
+                      ),
+                      _buildNutrientInput(
+                        context,
+                        'Protein',
+                        'Protein miktarını gir',
+                        controller.proteinController,
+                        TextInputType.number,
+                      ),
+                      AppSpaces.instance.vertical25,
+                      _buildMacroCards(context),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -171,50 +179,50 @@ class MealAddFilterSearchDetailView extends GetView<MealAddFilterSearchDetailCon
         ),
         AppSpaces.instance.vertical15,
         Obx(() => Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: _buildNutritionCard(
-                      'Kalori',
-                      '${controller.calories.value} Cal',
-                      AppColor.noxious.getColor(),
-                      context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: _buildNutritionCard(
+                          'Kalori',
+                          '${controller.calories.value} Cal',
+                          AppColor.noxious.getColor(),
+                          context),
+                    ),
+                    AppSpaces.instance.horizontal10,
+                    Expanded(
+                      child: _buildNutritionCard(
+                          'Protein',
+                          '${controller.protein.value} g',
+                          AppColor.sweetPatato.getColor(),
+                          context),
+                    ),
+                  ],
                 ),
-                AppSpaces.instance.horizontal10,
-                Expanded(
-                  child: _buildNutritionCard(
-                      'Protein',
-                      '${controller.protein.value} g',
-                      AppColor.sweetPatato.getColor(),
-                      context),
+                AppSpaces.instance.vertical10,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: _buildNutritionCard(
+                          'Karbonhidrat',
+                          '${controller.carbs.value} g',
+                          AppColor.vividBlue.getColor(),
+                          context),
+                    ),
+                    AppSpaces.instance.horizontal10,
+                    Expanded(
+                      child: _buildNutritionCard(
+                          'Yağ',
+                          '${controller.fat.value} g',
+                          AppColor.vaporwaweBlue.getColor(),
+                          context),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            AppSpaces.instance.vertical10,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: _buildNutritionCard(
-                      'Karbonhidrat',
-                      '${controller.carbs.value} g',
-                      AppColor.vividBlue.getColor(),
-                      context),
-                ),
-                AppSpaces.instance.horizontal10,
-                Expanded(
-                  child: _buildNutritionCard(
-                      'Yağ',
-                      '${controller.fat.value} g',
-                      AppColor.vaporwaweBlue.getColor(),
-                      context),
-                ),
-              ],
-            ),
-          ],
-        )),
+            )),
       ],
     );
   }
@@ -243,8 +251,8 @@ class MealAddFilterSearchDetailView extends GetView<MealAddFilterSearchDetailCon
           Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: Get.height * 0.07,
+                height: Get.height * 0.07,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -254,23 +262,28 @@ class MealAddFilterSearchDetailView extends GetView<MealAddFilterSearchDetailCon
                 ),
               ),
               AppSpaces.instance.horizontal10,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: context.appGeneral.textTheme.titleSmall?.copyWith(
-                      color: AppColor.grey.getColor(),
+              Flexible(
+                // Flexible ekleniyor
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: context.appGeneral.textTheme.titleSmall?.copyWith(
+                        color: AppColor.grey.getColor(),
+                      ),
+                      overflow: TextOverflow.ellipsis, // Taşmaları engelle
                     ),
-                  ),
-                  Text(
-                    value,
-                    style: context.appGeneral.textTheme.titleMedium?.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      value,
+                      style: context.appGeneral.textTheme.titleMedium?.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis, // Taşmaları engelle
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

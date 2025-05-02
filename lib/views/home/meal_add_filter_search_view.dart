@@ -137,50 +137,47 @@ class MealAddFilterSearchView extends GetView<MealAddFilterSearchController> {
   }
 
   Widget _buildMealItem(BuildContext context, Map<String, dynamic> meal) {
-    return InkWell(
-      onTap: () => controller.onAddMealPressed(meal),
-      child: Container(
-        margin: AppPadding.instance.bottomSmall,
-        decoration: BoxDecoration(
-          color: AppColor.white.getColor(),
-          borderRadius: AppRadius.instance.normalBorderRadius,
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.crystalBell.getColor(),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
+    return Container(
+      margin: AppPadding.instance.bottomSmall,
+      decoration: BoxDecoration(
+        color: AppColor.white.getColor(),
+        borderRadius: AppRadius.instance.normalBorderRadius,
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.crystalBell.getColor(),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: ListTile(
+        
+        title: Text(
+          meal['title'] as String,
+          style: context.appGeneral.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        child: ListTile(
-          
-          title: Text(
-            meal['title'] as String,
-            style: context.appGeneral.textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
+        subtitle: Text(
+          '${meal['calories']} kal, ${meal['amount']}',
+          style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+            color: AppColor.grey.getColor(),
           ),
-          subtitle: Text(
-            '${meal['calories']} kal, ${meal['amount']}',
-            style: context.appGeneral.textTheme.bodyMedium?.copyWith(
-              color: AppColor.grey.getColor(),
-            ),
+        ),
+        trailing: CustomElevatedButton(
+          onPressed: () => controller.onAddMealPressed(meal),
+          elevation: 0,
+          backgroundColor: AppColor.crystalBell.getColor(),
+          shape: RoundedRectangleBorder(
+            borderRadius: AppRadius.instance.largeBorderRadius,
           ),
-          trailing: CustomElevatedButton(
-            onPressed: () => controller.onAddMealPressed(meal),
-            elevation: 0,
-            backgroundColor: AppColor.crystalBell.getColor(),
-            shape: RoundedRectangleBorder(
-              borderRadius: AppRadius.instance.largeBorderRadius,
-            ),
-            width: 40,
-            height: 40,
-            child: Icon(
-              Icons.add,
-              color: AppColor.vividBlue.getColor(),
-              size: 20,
-            ),
+          width: 40,
+          height: 40,
+          child: Icon(
+            Icons.add,
+            color: AppColor.vividBlue.getColor(),
+            size: 20,
           ),
         ),
       ),

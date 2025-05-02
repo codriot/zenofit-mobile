@@ -30,13 +30,10 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
             children: [
               Padding(
                 padding: AppPadding.instance.horizontalNormal,
-                child: _buildHeader(context),
-              ),
-              Padding(
-                padding: AppPadding.instance.horizontalNormal,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    _buildHeader(context),
                     _buildPageHeader(context),
                     _buildRecomendedTitleText(context),
                     AppSpaces.instance.vertical5,
@@ -78,12 +75,12 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
         ),
         Expanded(
           child: Center(
-            child: Obx(() => Text(
-                  controller.selectedMeal.value?.title ?? '',
-                  style: context.appGeneral.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
+            child: Text(
+              controller.selectedMeal.value?.title ?? '',
+              style: context.appGeneral.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 40), // Simetri için sağ tarafta boşluk
@@ -121,12 +118,12 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
   }
 
   Widget _buildRecomendedTitleText(BuildContext context) {
-    return Obx(() => Text(
-          'Önerilen ve Eklenen ${controller.selectedMeal.value?.title ?? ''}lar',
-          style: context.appGeneral.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ));
+    return Text(
+      'Önerilen ve Eklenen ${controller.selectedMeal.value?.title ?? ''}',
+      style: context.appGeneral.textTheme.bodyLarge?.copyWith(
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 
   Widget _buildRecommendedMeals(BuildContext context) {

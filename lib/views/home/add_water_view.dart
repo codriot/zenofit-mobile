@@ -1,5 +1,6 @@
 import 'package:diet_app_mobile/controller/home/water/add_water_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -16,27 +17,33 @@ class AddWaterView extends GetView<AddWaterController> {
 
   @override
   Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            _buildDateSelector(context),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppPadding.instance.allNormal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildWaterAmountInput(context),
-                    AppSpaces.instance.vertical25,
-                    buildWaterIntakeSection(context),
-                  ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Column(
+            children: [
+              _buildHeader(context),
+              _buildDateSelector(context),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: AppPadding.instance.allNormal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildWaterAmountInput(context),
+                      AppSpaces.instance.vertical25,
+                      buildWaterIntakeSection(context),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -79,14 +86,6 @@ class AddWaterView extends GetView<AddWaterController> {
       height: 50,
       decoration: BoxDecoration(
         color: AppColor.transparent.getColor(),
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.crystalBell.getColor(),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
       ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -172,86 +171,89 @@ class AddWaterView extends GetView<AddWaterController> {
               ),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Günde 12 bardak su iç',
-                    style: context.appGeneral.textTheme.bodyLarge
-                        ?.copyWith(color: AppColor.grey.getColor()),
-                  ),
-                  AppSpaces.instance.vertical10,
-                  Obx(() => Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${controller.currentWaterAmount.value}L',
-                        style:
-                            context.appGeneral.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.vaporwaweBlue.getColor(),
-                        ),
-                      ),
-                      Text(
-                        ' / ${controller.targetWaterAmount.value}L',
-                        style: context.appGeneral.textTheme.titleLarge
+                        'Günde 12 bardak su iç',
+                        style: context.appGeneral.textTheme.bodyLarge
                             ?.copyWith(color: AppColor.grey.getColor()),
                       ),
+                      AppSpaces.instance.vertical10,
+                      Obx(() => Row(
+                            children: [
+                              Text(
+                                '${controller.currentWaterAmount.value.toStringAsFixed(2)} L',
+                                style: context.appGeneral.textTheme.titleLarge
+                                    ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.vaporwaweBlue.getColor(),
+                                ),
+                              ),
+                              Text(
+                                ' / ${controller.targetWaterAmount.value}L',
+                                style: context.appGeneral.textTheme.titleLarge
+                                    ?.copyWith(color: AppColor.grey.getColor()),
+                              ),
+                            ],
+                          )),
                     ],
-                  )),
-                  AppSpaces.instance.vertical15,
-                  SizedBox(
-                    height: 64,
-                    width: Get.width - 120,
-                    child: Obx(() {
-                      if (controller.addedWaterAmounts.isEmpty) {
-                        return const SizedBox(); // Boş liste durumunda boş widget döndür
-                      }
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.addedWaterAmounts.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  AppIconUtility.getIconPath(
-                                    "water-circle",
-                                    format: IconFormat.png,
-                                  ),
-                                  height: 40,
-                                ),
-                                Padding(
-                                  padding: AppPadding.instance.leftSmall,
-                                  child: Text(
-                                    '${controller.addedWaterAmounts[index]} ml',
-                                    style: context.appGeneral.textTheme.bodyMedium
-                                        ?.copyWith(
-                                            color: AppColor.black.getColor()),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }),
-                  )
+                  ),
+                  Padding(
+                    padding: AppPadding.instance.bottomNormal,
+                    child: SvgPicture.asset(
+                      AppIconUtility.getIconPath(
+                        "water-glass",
+                        format: IconFormat.svg,
+                      ),
+                      height: 56,
+                    ),
+                  ),
                 ],
               ),
-              Padding(
-                padding: AppPadding.instance.bottomNormal,
-                child: SvgPicture.asset(
-                  AppIconUtility.getIconPath(
-                    "water-glass",
-                    format: IconFormat.svg,
-                  ),
-                  height: 56,
-                ),
+              AppSpaces.instance.vertical15,
+              SizedBox(
+                height: 64,
+                child: Obx(() {
+                  if (controller.addedWaterAmounts.isEmpty) {
+                    return const SizedBox(); // Boş liste durumunda boş widget döndür
+                  }
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.addedWaterAmounts.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              AppIconUtility.getIconPath(
+                                "water-circle",
+                                format: IconFormat.png,
+                              ),
+                              height: 40,
+                            ),
+                            Padding(
+                              padding: AppPadding.instance.leftSmall,
+                              child: Text(
+                                '${controller.addedWaterAmounts[index]} ml',
+                                style: context.appGeneral.textTheme.bodyMedium
+                                    ?.copyWith(
+                                        color: AppColor.black.getColor()),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
               )
             ],
           ),
@@ -295,7 +297,8 @@ class AddWaterView extends GetView<AddWaterController> {
                   ),
                   decoration: InputDecoration(
                     hintText: '0 ml',
-                    hintStyle: context.appGeneral.textTheme.titleMedium?.copyWith(
+                    hintStyle:
+                        context.appGeneral.textTheme.titleMedium?.copyWith(
                       color: AppColor.vividBlue.getColor(),
                     ),
                     border: InputBorder.none,
@@ -309,7 +312,7 @@ class AddWaterView extends GetView<AddWaterController> {
         Divider(
           color: AppColor.black12.getColor(),
           height: 1,
-        ),  
+        ),
       ],
     );
   }

@@ -22,58 +22,74 @@ class RegisterView extends GetView<RegisterController> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: Get.height),
-            child: IntrinsicHeight(
-              child: Column(
-                children: [
-                  _buildLogo(),
-                  AppSpaces.instance.vertical15,
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: AppColor.lightGreenGlint.getColor(),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(64),
-                            topRight: Radius.circular(64),
-                          )),
-                      child: Padding(
-                        padding: EdgeInsets.only(top: Get.height * 0.03),
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: Get.height),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    _buildLogo(),
+                    AppSpaces.instance.vertical15,
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: AppColor.lightGreenGlint.getColor(),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(64),
+                              topRight: Radius.circular(64),
+                            )),
                         child: Padding(
-                          padding: AppPadding.instance.horizontalMedium,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildMakeRegisterText(context),
-                              _buildDoYouHaveAcountEither(context),
-                              _buildInputText(context, text: "Ad, Soyad"),
-                              _buildPageTextField(context,
-                                  hintText: "example", icon: "user"),
-                              _buildInputText(context, text: "E-Posta"),
-                              _buildPageTextField(context,
-                                  hintText: "example@gmail.com",
-                                  icon: "password"),
-                              _buildInputText(context, text: "Şifre"),
-                              _buildPageTextField(context,
-                                  hintText: "example", icon: "mail"),
-                              _buildInputText(context, text: "Şifre Yeniden"),
-                              _buildPageTextField(context,
-                                  hintText: "example", icon: "password"),
-                              GeneralPageButtonWidget(
-                                onPressed: () {},
-                                text: "Giriş Yap",
-                                padding:
-                                    EdgeInsets.only(top: Get.height * 0.02),
-                              ),
-                              AppSpaces.instance.vertical15,
-                            ],
+                          padding: EdgeInsets.only(top: Get.height * 0.03),
+                          child: Padding(
+                            padding: AppPadding.instance.horizontalMedium,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildMakeRegisterText(context),
+                                _buildDoYouHaveAcountEither(context),
+                                _buildInputText(context, text: "Ad, Soyad"),
+                                _buildPageTextField(context,
+                                    hintText: "example",
+                                    icon: "user",
+                                    textEditingController:
+                                        controller.nameController),
+                                _buildInputText(context, text: "E-Posta"),
+                                _buildPageTextField(context,
+                                    textEditingController:
+                                        controller.emailController,
+                                    hintText: "example@gmail.com",
+                                    icon: "password"),
+                                _buildInputText(context, text: "Şifre"),
+                                _buildPageTextField(context,
+                                    textEditingController:
+                                        controller.passwordController,
+                                    hintText: "example",
+                                    icon: "mail"),
+                                _buildInputText(context, text: "Şifre Yeniden"),
+                                _buildPageTextField(context,
+                                    textEditingController:
+                                        controller.passwordAgainController,
+                                    hintText: "example",
+                                    icon: "password"),
+                                GeneralPageButtonWidget(
+                                  onPressed: () {},
+                                  text: "Giriş Yap",
+                                  padding:
+                                      EdgeInsets.only(top: Get.height * 0.02),
+                                ),
+                                AppSpaces.instance.vertical15,
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -151,6 +167,7 @@ class RegisterView extends GetView<RegisterController> {
     BuildContext context, {
     required String icon,
     required String hintText,
+    required TextEditingController textEditingController,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -171,7 +188,7 @@ class RegisterView extends GetView<RegisterController> {
             child: CustomTextField(
                 padding: EdgeInsets.zero,
                 hintText: hintText,
-                controller: TextEditingController()),
+                controller: textEditingController),
           ),
         ],
       ),

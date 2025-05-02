@@ -1,11 +1,13 @@
+import 'package:diet_app_mobile/controller/home/home_view_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/page_utils/home_view_mixin.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
-class HomeView extends StatelessWidget with HomeViewMixin {
+class HomeView extends GetView<HomeViewController> with HomeViewMixin {
   const HomeView({super.key});
 
   @override
@@ -24,7 +26,7 @@ class HomeView extends StatelessWidget with HomeViewMixin {
               AppSpaces.instance.vertical20,
               buildWaterIntakeSection(context),
               AppSpaces.instance.vertical20,
-              buildDietPlanSection(context),
+              buildDietPlanSection(context,Get.put<HomeViewController>(HomeViewController())),
             ],
           ),
         ),

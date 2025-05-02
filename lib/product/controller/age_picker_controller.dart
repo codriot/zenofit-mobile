@@ -46,29 +46,37 @@ class AgePickerController extends GetxController {
     }
   }
 
-  void onScrollUpdate() {
-    final offset = scrollController.offset;
-    final double listViewCenter = (visibleRangeTop + visibleRangeBottom) / 2;
+void onScrollUpdate() {
+  final offset = scrollController.offset;
+  final double listViewCenter = (visibleRangeTop + visibleRangeBottom) / 2;
 
-    final int index =
-        ((offset + listViewCenter - (itemHeight / 2)) / itemHeight).round();
+  int index = ((offset + listViewCenter - (itemHeight / 2)) / itemHeight).round();
 
-    if (index >= 0 && index < 100) {
-      selectedAge.value = index;
-    }
-  }
+  // Clamp index between 0 and 99
+  index = index.clamp(0, 99);
 
-  void onScrollEnd() {
-    final offset = scrollController.offset;
-    final int index = (offset / itemHeight).round();
-    final double targetOffset = index * itemHeight;
+  selectedAge.value = index;
+}
 
+void onScrollEnd() {
+  if (!scrollController.hasClients) return;
+
+  final double listViewCenter = (visibleRangeTop + visibleRangeBottom) / 2;
+  int index = ((scrollController.offset + listViewCenter - (itemHeight / 2)) / itemHeight).round();
+  index = index.clamp(0, 125);
+
+  final double targetOffset = index * itemHeight - listViewCenter + (itemHeight / 2);
+
+  if ((scrollController.offset - targetOffset).abs() > 0.5) {
     scrollController.animateTo(
       targetOffset,
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOut,
     );
   }
+
+  selectedAge.value = index;
+}
 
   @override
   void onClose() {

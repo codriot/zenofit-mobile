@@ -20,80 +20,90 @@ class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
 
   @override
-Widget build(BuildContext context) {
-  ChromeStatusBarService.setDarkStatusBar();
-  return Scaffold(
-    body: SafeArea(
-      child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: Get.height),
-          child: IntrinsicHeight(
-            child: Column(
-              children: [
-                _buildAppLogo(),
-                AppSpaces.instance.vertical15,
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColor.lightGreenGlint.getColor(),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(64),
-                        topRight: Radius.circular(64),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: AppPadding.instance.horizontalMedium,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppSpaces.instance.vertical20,
-                          _buildMakeLoginText(context),
-                          _buildDoYouHaveAcountEither(context),
-                          _buildMailText(context),
-                          _buildPageTextField(context,
-                              hintText: "example@example.com", icon: "mail"),
-                          _buildPasswordText(context),
-                          _buildPageTextField(context,
-                              hintText: "example", icon: "password"),
-                          _buildForgetThePasswordText(context),
-                          _buildOrText(context),
-                          _buildLoginWithGooglOrApple(),
-                          GeneralPageButtonWidget(
-                            onPressed: () {
-                              NavigatorController.instance
-                                  .pushToPage(NavigateRoutesItems.onboardingOne);
-                            },
-                            text: "Giriş Yap",
-                            padding: EdgeInsets.only(top: Get.height * 0.03),
+  Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
+    return Scaffold(
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: Get.height),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    _buildAppLogo(),
+                    AppSpaces.instance.vertical15,
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColor.lightGreenGlint.getColor(),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(64),
+                            topRight: Radius.circular(64),
                           ),
-                          _buildFingerPrintButton(),
-                          AppSpaces.instance.vertical15,
-                        ],
+                        ),
+                        child: Padding(
+                          padding: AppPadding.instance.horizontalMedium,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppSpaces.instance.vertical20,
+                              _buildMakeLoginText(context),
+                              _buildDoYouHaveAcountEither(context),
+                              _buildMailText(context),
+                              _buildPageTextField(context,
+                                  hintText: "example@example.com",
+                                  icon: "mail",
+                                  controller: controller.mailController),
+                              _buildPasswordText(context),
+                              _buildPageTextField(context,
+                                  hintText: "example",
+                                  icon: "password",
+                                  controller: controller.passwordController),
+                              _buildForgetThePasswordText(context),
+                              _buildOrText(context),
+                              _buildLoginWithGooglOrApple(),
+                              GeneralPageButtonWidget(
+                                onPressed: () {
+                                  NavigatorController.instance.pushToPage(
+                                      NavigateRoutesItems.onboardingOne);
+                                },
+                                text: "Giriş Yap",
+                                padding:
+                                    EdgeInsets.only(top: Get.height * 0.03),
+                              ),
+                              _buildFingerPrintButton(),
+                              AppSpaces.instance.vertical15,
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Padding _buildAppLogo() {
     return Padding(
-        padding: EdgeInsets.only(top: Get.height * 0.03),
-        child: Align(
-          alignment: Alignment.center,
-          child: Image.asset(
-            AppImageUtility.getImagePath("bitirme-logo"),
-            width: 120,
-            height: 120,
-          ),
+      padding: EdgeInsets.only(top: Get.height * 0.03),
+      child: Align(
+        alignment: Alignment.center,
+        child: Image.asset(
+          AppImageUtility.getImagePath("bitirme-logo"),
+          width: 120,
+          height: 120,
         ),
-      );
+      ),
+    );
   }
 
   Center _buildFingerPrintButton() {
@@ -133,13 +143,14 @@ Widget build(BuildContext context) {
         Padding(
           padding: AppPadding.instance.leftNormal,
           child: GestureDetector(
-                       onTap: () async {
+            onTap: () async {
               // Google Sign-In işlemini başlat ve tamamlanmasını bekle
-           await AuthService().signInWithGoogle();
-            if (AuthService().currentUser != null) {
-              // Google Sign-In işlemi tamamlandıktan sonra sayfayı değiştir
-              NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
-            }
+              await AuthService().signInWithGoogle();
+              if (AuthService().currentUser != null) {
+                // Google Sign-In işlemi tamamlandıktan sonra sayfayı değiştir
+                NavigatorController.instance
+                    .pushToPage(NavigateRoutesItems.onboardingOne);
+              }
             },
             child: Container(
               decoration: BoxDecoration(
@@ -249,6 +260,7 @@ Widget build(BuildContext context) {
     BuildContext context, {
     required String icon,
     required String hintText,
+    required TextEditingController controller,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -269,7 +281,7 @@ Widget build(BuildContext context) {
             child: CustomTextField(
                 padding: EdgeInsets.zero,
                 hintText: hintText,
-                controller: TextEditingController()),
+                controller: controller),
           ),
         ],
       ),

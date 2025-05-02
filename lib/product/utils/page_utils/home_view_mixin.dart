@@ -1,3 +1,5 @@
+import 'package:diet_app_mobile/controller/home/home_view_controller.dart'
+    show ExpansionSection, HomeViewController;
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
@@ -345,7 +347,8 @@ mixin HomeViewMixin {
                       elevation: 0,
                       backgroundColor: AppColor.noxious.getColor(),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius:
+                            BorderRadius.circular(Get.height * 0.07 / 2),
                       ),
                       child: const Icon(Icons.add, color: Colors.white),
                     ),
@@ -359,7 +362,8 @@ mixin HomeViewMixin {
     );
   }
 
-  Widget buildDietPlanSection(BuildContext context) {
+  Widget buildDietPlanSection(
+      BuildContext context, HomeViewController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -415,24 +419,32 @@ mixin HomeViewMixin {
               ),
               AppSpaces.instance.vertical10,
               ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.diet,
                 title: 'Sporcu diyeti nedir?',
                 color: AppColor.noxious.getColor(),
                 subtitle: "Bu bölümde diyet bilgisi bulunucaktır.",
               ),
               AppSpaces.instance.vertical10,
               ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.attention,
                 title: 'Dikkat edilmesi gerekenler',
                 color: AppColor.noxious.getColor(),
                 subtitle: "Bu bölümde diyet bilgisi bulunucaktır.",
               ),
               AppSpaces.instance.vertical10,
               ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.shouldEat,
                 title: 'Neler daha çok yenilmeli?',
                 color: AppColor.noxious.getColor(),
                 subtitle: 'Bu bölümde diyet bilgisi bulunucaktır.',
               ),
               AppSpaces.instance.vertical10,
               ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.shouldAvoid,
                 subtitle: "Bu bölümde diyet bilgisi bulunucaktır.",
                 title: 'Nelerden daha çok kaçınılmalı?',
                 color: AppColor.noxious.getColor(),

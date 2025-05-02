@@ -1,10 +1,12 @@
 import 'package:diet_app_mobile/bindings/views/auth/login_binding.dart';
+import 'package:diet_app_mobile/bindings/views/auth/register_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_one_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_two_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_three_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_four_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_five_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_six_binding.dart';
+import 'package:diet_app_mobile/bindings/views/home/home_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/main/main_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_fast_item_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_binding.dart';
@@ -61,6 +63,7 @@ class NavigatorRoutes {
         name: NavigateRoutesItems.register.withSlash,
         page: () => const RegisterView(),
         transition: Transition.cupertino,
+        binding: RegisterBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
@@ -89,6 +92,7 @@ class NavigatorRoutes {
         name: NavigateRoutesItems.home.withSlash,
         page: () => const HomeView(),
         transition: Transition.cupertino,
+        binding: HomeViewBindings(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
 

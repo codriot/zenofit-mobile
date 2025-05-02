@@ -2,6 +2,7 @@ import 'package:diet_app_mobile/controller/home/meal/meal_add_controller.dart';
 import 'package:diet_app_mobile/model/home/meal_model.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -16,27 +17,24 @@ import 'package:get/get.dart';
 class MealAddView extends GetView<MealAddController> {
   const MealAddView({super.key});
 
-  @override
+@override
   Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
-      appBar: _buildPageAppBar(context),
-      body: Column(
-        children: [
-          _buildDateContainer(),
-          AppSpaces.instance.vertical15,
-          Expanded(
-            child: SingleChildScrollView(
-              padding: AppPadding.instance.horizontalNormal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProgressSection(context),
-                  AppSpaces.instance.vertical25,
-                  _buildMealList(context),
-                  AppSpaces.instance.vertical25,
-                ],
-              ),
+      body: CustomScrollView(
+        slivers: [
+          _buildPageAppBar(context),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                _buildDateContainer(),
+                AppSpaces.instance.vertical15,
+                _buildProgressSection(context),
+                AppSpaces.instance.vertical25,
+                _buildMealList(context),
+                AppSpaces.instance.vertical25,
+              ],
             ),
           ),
         ],
@@ -49,14 +47,6 @@ class MealAddView extends GetView<MealAddController> {
       height: Get.height * 0.07,
       decoration: BoxDecoration(
         color: AppColor.transparent.getColor(),
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.crystalBell.getColor(),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
       ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -70,19 +60,22 @@ class MealAddView extends GetView<MealAddController> {
     );
   }
 
-  AppBar _buildPageAppBar(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      backgroundColor: Colors.transparent,
+  SliverAppBar _buildPageAppBar(BuildContext context) {
+    return SliverAppBar(
+      floating: false,
+      pinned: true,
       elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Text(
-        'Öğün Ekle',
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text(
+          'Öğün Ekle',
+          style: context.appGeneral.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        background: Container(
+          color: AppColor.whiteSolid.getColor(), // Burada arka plan rengini belirleyebilirsiniz
         ),
       ),
     );
@@ -303,14 +296,6 @@ class AddMealButton extends StatelessWidget {
                     ? AppColor.vividBlue.getColor()
                     : AppColor.white.getColor(),
                 borderRadius: AppRadius.instance.largeBorderRadius,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.crystalBell.getColor(),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
               ),
               child: Center(
                 child: isSelected

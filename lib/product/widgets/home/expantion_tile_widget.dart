@@ -1,4 +1,4 @@
-import 'package:diet_app_mobile/product/controller/expand_tile_controller.dart';
+import 'package:diet_app_mobile/controller/home/home_view_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
@@ -6,41 +6,47 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ExpantionTileWidget extends StatelessWidget {
-  final ExpandTileController controller = Get.put(ExpandTileController());
-
   final String title;
   final String subtitle;
   final Color color;
   final bool? isLast;
+  final ExpansionSection section;
 
-  ExpantionTileWidget({
+  final HomeViewController controller;
+
+  const ExpantionTileWidget({
     super.key,
     required this.title,
     required this.subtitle,
     required this.color,
-    this.isLast = false,
+    required this.section,
+    this.isLast = false, required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      final isExpanded = controller.isSectionExpanded(section);
+
       return Column(
         children: [
           Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
-              onExpansionChanged: controller.toggleExpanded,
+              onExpansionChanged: (value) =>
+                  controller.toggleSection(section, value),
+              initiallyExpanded: isExpanded,
               childrenPadding: EdgeInsets.zero,
               tilePadding: EdgeInsets.zero,
               title: Text(
                 title,
                 style: context.appGeneral.textTheme.titleMedium?.copyWith(
-                  color: AppColor.white.getColor(),
-                  fontWeight: FontWeight.w500,
-                ),
-              ), 
+                      color: AppColor.white.getColor(),
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
               trailing: AnimatedRotation(
-                turns: controller.isExpanded.value ? 0.5 : 0.0,
+                turns: isExpanded ? 0.5 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: Icon(
                   Icons.keyboard_arrow_down,

@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart' show TextEditingController;
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
@@ -6,6 +7,9 @@ class LoginController extends GetxController {
   final RxString email = ''.obs;
   final RxString password = ''.obs;
   final RxBool rememberMe = false.obs;
+
+  final TextEditingController mailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;

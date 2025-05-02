@@ -1,6 +1,7 @@
 import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
+import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -18,49 +19,50 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.zero,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SafeArea(
-              child: Padding(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
                 padding: AppPadding.instance.horizontalNormal,
                 child: _buildHeader(context),
               ),
-            ),
-            Padding(
-              padding: AppPadding.instance.horizontalNormal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildPageHeader(context),
-                  _buildRecomendedTitleText(context),
-                  AppSpaces.instance.vertical5,
-                ],
+              Padding(
+                padding: AppPadding.instance.horizontalNormal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPageHeader(context),
+                    _buildRecomendedTitleText(context),
+                    AppSpaces.instance.vertical5,
+                  ],
+                ),
               ),
-            ),
-            WaveCardWidget(
-              width: double.infinity,
-              backgroundColor: AppColor.white.getColor(),
-              padding: AppPadding.instance.allNormal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppSpaces.instance.vertical25,
-                  _buildRecommendedMeals(context),
-                  AppSpaces.instance.vertical25,
-                  _buildMacronutrients(context),
-                  AppSpaces.instance.vertical25,
-                  _buildAddButton(context),
-                  AppSpaces.instance.vertical20,
-                ],
+              WaveCardWidget(
+                width: double.infinity,
+                backgroundColor: AppColor.white.getColor(),
+                padding: AppPadding.instance.allNormal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppSpaces.instance.vertical25,
+                    _buildRecommendedMeals(context),
+                    AppSpaces.instance.vertical25,
+                    _buildMacronutrients(context),
+                    AppSpaces.instance.vertical25,
+                    _buildAddButton(context),
+                    AppSpaces.instance.vertical20,
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

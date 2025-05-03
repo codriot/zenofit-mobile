@@ -2,7 +2,6 @@ import 'package:diet_app_mobile/controller/home/chat/chat_view_controller.dart'
     show ChatViewController;
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
-import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -23,31 +22,35 @@ class ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
-      body: Stack(
-        children: [
-          Padding(
-            padding: AppPadding.instance.horizontalNormal,
-            child: Obx(() {
-              return NotificationListener<ScrollNotification>(
-                onNotification: controller.onNotification,
-                child: ListView(
-                  children: [
-                    _buildPageAppBar(context),
-                    _buildSearchBar(),
-                    AppSpaces.instance.vertical10,
-                    _buildListGenerateChatCard(context),
-                    if (controller.isLoading.value)
-                      _buildPageCircleProgressBar(),
-                  ],
-                ),
-              );
-            }),
-          ),
-          _buildPageRecommendedFilter(context),
-        ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
+            Padding(
+              padding: AppPadding.instance.horizontalNormal,
+              child: Obx(() {
+                return NotificationListener<ScrollNotification>(
+                  onNotification: controller.onNotification,
+                  child: ListView(
+                    children: [
+                      _buildPageAppBar(context),
+                      _buildSearchBar(),
+                      AppSpaces.instance.vertical10,
+                      _buildListGenerateChatCard(context),
+                      if (controller.isLoading.value)
+                        _buildPageCircleProgressBar(),
+                    ],
+                  ),
+                );
+              }),
+            ),
+            _buildPageRecommendedFilter(context),
+          ],
+        ),
       ),
     );
   }
@@ -66,8 +69,8 @@ class ChatView extends StatelessWidget {
       padding: AppPadding.instance.bottomNormal,
       child: InkWell(
         onTap: () {
-          NavigatorController.instance
-              .pushToPage(NavigateRoutesItems.chatDetail,
+          NavigatorController.instance.pushToPage(
+              NavigateRoutesItems.chatDetail,
               arguments: controller.items[index].messages);
         },
         child: SizedBox(
@@ -292,42 +295,41 @@ class ChatView extends StatelessWidget {
   Widget _buildSearchBar() {
     return Row(
       children: [
-        Expanded(
-          child: CustomTextField(
-            hintText: "Arama yapın",
-            controller: TextEditingController(),
-            showSearchIcon: true,
-            height: 40,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Lütfen bir değer girin';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              // Değer kaydedildiğinde yapılacak işlemler
-            },
-            onSubmit: (value) {
-              // Metin alanında "enter" tuşuna basıldığında yapılacak işlemler
-            },
-          ),
+        CustomTextField(
+          width: Get.width - 40 - (AppSizes.instance.normalValue * 2),
+          hintText: "Arama yapın",
+          controller: controller.searchController,
+          showSearchIcon: true,
+          padding: EdgeInsets.zero,
+          height: 40,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Lütfen bir değer girin';
+            }
+            return null;
+          },
+          onChange: (query) {
+            controller.searchChats(query ?? "");
+            controller.filterItems();
+          },
+          onSubmit: (value) {
+            FocusScope.of(Get.context!)
+                .unfocus(); // Enter'a basınca klavyeyi kapat
+          },
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 20, top: 8),
-          child: CustomElevatedButton(
-            backgroundColor: AppColor.transparent.getColor(),
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            height: 40,
-            width: 40,
-            child: SvgPicture.asset(
-              AppIconUtility.getIconPath("more", format: IconFormat.svg),
-            ),
-            onPressed: () {
-              controller.toggleMenuOpen();
-            },
+        CustomElevatedButton(
+          backgroundColor: AppColor.transparent.getColor(),
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          height: 40,
+          width: 40,
+          child: SvgPicture.asset(
+            AppIconUtility.getIconPath("more", format: IconFormat.svg),
           ),
+          onPressed: () {
+            controller.toggleMenuOpen();
+          },
         ),
       ],
     );

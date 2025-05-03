@@ -1,6 +1,5 @@
 import 'package:diet_app_mobile/controller/home/meal/meal_add_filter_search_detail_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
-import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
@@ -15,7 +14,6 @@ class MealAddFilterSearchDetailView
 
   @override
   Widget build(BuildContext context) {
-    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(

@@ -13,11 +13,15 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
   final void Function(String?)? onSubmit;
+  final void Function(String?)? onChange;
   final bool showSearchIcon;
   final EdgeInsets? padding;
   final double height; // Yükseklik parametresi
+  final double? width; // Yükseklik parametresi
+  final Widget? suffix; // Yükseklik parametresi
 
   const CustomTextField({
+    this.width,
     super.key,
     required this.hintText,
     required this.controller,
@@ -26,7 +30,7 @@ class CustomTextField extends StatelessWidget {
     this.onSubmit,
     this.showSearchIcon = false,
     this.padding,
-    this.height = 48, // Varsayılan yükseklik
+    this.height = 48, this.onChange, this.suffix, // Varsayılan yükseklik
   });
 
   @override
@@ -34,6 +38,7 @@ class CustomTextField extends StatelessWidget {
     return Container(
       margin: padding ?? const EdgeInsets.only(top: 10.0),
       height: height, // Yükseklik ayarı
+      width: width,
       decoration: BoxDecoration(
         color: Colors.white, // Arka plan rengi
         borderRadius: BorderRadius.circular(16), // Kenar yuvarlama
@@ -60,8 +65,10 @@ class CustomTextField extends StatelessWidget {
             vertical: 10, // İçerik üst ve alt boşluğu
             horizontal: 20, // İçerik sağ ve sol boşluğu
           ),
+          suffix: suffix,
           hintStyle: const TextStyle(color: Colors.grey), // Hint metin rengi
         ),
+        onChanged: onChange,
         validator: validator,
         onSaved: onSaved,
         onFieldSubmitted: onSubmit,

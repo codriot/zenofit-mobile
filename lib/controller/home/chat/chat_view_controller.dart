@@ -1,50 +1,81 @@
 import 'package:diet_app_mobile/model/chat/chat_model.dart';
 import 'package:diet_app_mobile/model/chat/message_model.dart';
+import 'package:flutter/material.dart' show TextEditingController;
 import 'package:flutter/widgets.dart' show ScrollNotification;
 import 'package:get/state_manager.dart';
 
 class ChatViewController extends GetxController {
-  var items = <ChatModel>[].obs; // Observable liste
-  var isMenuOpen = false.obs; // Menü durumunu tutacak
+  var items = <ChatModel>[].obs; // Filtrelenmiş liste
+  var allItems = <ChatModel>[].obs;  // Tüm liste
+  var isMenuOpen = false.obs; 
   var activeFilterIndex = 0.obs;
-  var isLoading = false.obs; // Loading durumu
-  var hasMoreItems = true.obs; // Daha fazla öğe var mı?
+  var isLoading = false.obs;
+  var hasMoreItems = true.obs;
+  final searchController = TextEditingController();
+  var searchText = ''.obs;
+
+  var isSearchActive = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadInitialItems(); // Başlangıçta öğeleri yükle
+    loadInitialItems();
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
+
+  void filterItems() {
+    final query = searchText.value;
+
+    if (query.isEmpty) {
+      items.assignAll(allItems);
+    } else {
+      final filtered = allItems.where((chat) {
+        final fullName = "${chat.name} ${chat.surName}".toLowerCase();
+        return fullName.contains(query);
+      }).toList();
+
+      items.assignAll(filtered);
+    }
+  }
+
+  void searchChats(String query) {
+    searchController.text = query;
+    searchText.value = query.toLowerCase();
   }
 
   void loadInitialItems() {
-    items.addAll(
-      List.generate(
-        10,
-        (index) {
-          return ChatModel(
-            imageUrl: "person",
-            lastChat:
-                "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-            name: "Furkan",
-            surName: "Yıldırım",
-            isOnline: index % 4 == 0 ? true : false,
-            unReadMessageCount: 1,
-            messages: List.generate(
-              10,
-              (index) => MessageModel(
-                sender: index % 2 == 0 ? "Furkan Yıldırım" : "Sen",
-                imageUrl: "person",
-                name: "Furkan",
-                surName: "Yıldırım",
-                time: "2025-04-11 13:45:00.000",
-                message:
-                    "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-              ),
+    final initialData = List.generate(
+      10,
+      (index) {
+        return ChatModel(
+          imageUrl: "person",
+          lastChat: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
+          name: "Furkan",
+          surName: "Yıldırım",
+          isOnline: index % 4 == 0,
+          unReadMessageCount: 1,
+          messages: List.generate(
+            10,
+            (i) => MessageModel(
+              sender: i % 2 == 0 ? "Furkan Yıldırım" : "Sen",
+              imageUrl: "person",
+              name: "Furkan",
+              surName: "Yıldırım",
+              time: "2025-04-11 13:45:00.000",
+              message: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
+
+    allItems.assignAll(initialData);
+    items.assignAll(initialData);
   }
 
   void toggleMenuOpen() {
@@ -52,84 +83,66 @@ class ChatViewController extends GetxController {
   }
 
   void toggleFilter(int index) {
-    if (activeFilterIndex.value == index) {
-      activeFilterIndex.value = -1; // Aynı butona tıklanırsa aktifliği kaldır
-    } else {
-      activeFilterIndex.value = index; // Aktif filtreyi değiştir
-    }
+    activeFilterIndex.value = activeFilterIndex.value == index ? -1 : index;
   }
 
   bool onNotification(ScrollNotification scrollInfo) {
     if (!isLoading.value &&
         scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-      loadMoreItems(); // Daha fazla öğe yükle
+      loadMoreItems();
     }
     return true;
   }
 
   void loadMoreItems() async {
-    if (isLoading.value || !hasMoreItems.value)
-      return; // Zaten yükleniyorsa veya daha fazla öğe yoksa çık
+    if (isLoading.value || !hasMoreItems.value) return;
 
-    isLoading.value = true; // Loading durumunu başlat
-
-    // Simüle edilmiş bir yükleme süresi
+    isLoading.value = true;
     await Future.delayed(Duration(seconds: 2));
 
-    // Daha fazla öğe ekle
     if (items.length < 100) {
-      // Toplamda 100 öğe var
-      items.addAll(
-        List.generate(
-          10,
-          (index) => ChatModel(
-            imageUrl: "person",
-            lastChat:
-                "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-            name: "Furkan",
-            surName: "Yıldırım",
-            isOnline: index % 4 == 0 ? true : false,
-            unReadMessageCount: 1,
-            messages: List.generate(
-              10,
-              (index) => MessageModel(
-                sender: "Furkan Yıldırım",
-                imageUrl: "person",
-                name: "Furkan",
-                surName: "Yıldırım",
-                time: "2025-04-11 13:45:00.000",
-                message:
-                    "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-              ),
+      final moreItems = List.generate(
+        10,
+        (index) => ChatModel(
+          imageUrl: "person",
+          lastChat: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
+          name: "Furkan",
+          surName: "Yıldırım",
+          isOnline: index % 4 == 0,
+          unReadMessageCount: 1,
+          messages: List.generate(
+            10,
+            (i) => MessageModel(
+              sender: "Furkan Yıldırım",
+              imageUrl: "person",
+              name: "Furkan",
+              surName: "Yıldırım",
+              time: "2025-04-11 13:45:00.000",
+              message: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
             ),
           ),
         ),
       );
+
+      allItems.addAll(moreItems);
+      filterItems(); // Arama varsa filtreleyerek ekle
     } else {
-      hasMoreItems.value = false; // Daha fazla öğe yok
+      hasMoreItems.value = false;
     }
 
-    isLoading.value = false; // Loading durumunu bitir
+    isLoading.value = false;
   }
 
   String timeAgo(String timeString) {
-    DateTime messageTime = DateTime.parse(timeString);
-    Duration difference = DateTime.now().difference(messageTime);
+    final messageTime = DateTime.parse(timeString);
+    final difference = DateTime.now().difference(messageTime);
 
-    if (difference.inSeconds < 60) {
-      return "az önce";
-    } else if (difference.inMinutes < 60) {
-      return "${difference.inMinutes} dk önce";
-    } else if (difference.inHours < 24) {
-      return "${difference.inHours} saat önce";
-    } else if (difference.inDays < 7) {
-      return "${difference.inDays} gün önce";
-    } else if (difference.inDays < 30) {
-      return "${(difference.inDays / 7).floor()} hafta önce";
-    } else if (difference.inDays < 365) {
-      return "${(difference.inDays / 30).floor()} ay önce";
-    } else {
-      return "${(difference.inDays / 365).floor()} yıl önce";
-    }
+    if (difference.inSeconds < 60) return "az önce";
+    if (difference.inMinutes < 60) return "${difference.inMinutes} dk önce";
+    if (difference.inHours < 24) return "${difference.inHours} saat önce";
+    if (difference.inDays < 7) return "${difference.inDays} gün önce";
+    if (difference.inDays < 30) return "${(difference.inDays / 7).floor()} hafta önce";
+    if (difference.inDays < 365) return "${(difference.inDays / 30).floor()} ay önce";
+    return "${(difference.inDays / 365).floor()} yıl önce";
   }
 }

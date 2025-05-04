@@ -2,7 +2,6 @@
 import 'package:diet_app_mobile/controller/discover/discover_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
-import 'package:diet_app_mobile/product/services/chrome_status_bar_service.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
@@ -16,88 +15,88 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class DiscoverView extends StatelessWidget {
-  final DiscoverController discoverController = Get.put(DiscoverController());
-
-  DiscoverView({super.key});
+class DiscoverView extends GetView<DiscoverController> {
+  const DiscoverView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ChromeStatusBarService.setDarkStatusBar();
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
-      appBar: _buildAppBar(),
-      body: Stack(
-        children: [
-          Padding(
-            padding: AppPadding.instance.horizontalNormal,
-            child: Obx(() {
-              return NotificationListener<ScrollNotification>(
-                onNotification: discoverController.onNotification,
-                child: ListView(
-                  children: [
-                    _buildPageGridViewBuilder(),
-                    if (discoverController.isLoading.value)
-                      _buildPageCircleProgressBar(),
-                  ],
-                ),
-              );
-            }),
-          ),
-          Positioned(
-            right: AppSizes.instance.normalValue,
-            child: Obx(
-              () => AnimatedSize(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                child: Container(
-                  width: Get.width * 0.56,
-                  height: discoverController.isMenuOpen.value
-                      ? Get.height * 0.16
-                      : 0,
-                  decoration: BoxDecoration(
-                    color: AppColor.black.getColor().withAlpha(200),
-                    borderRadius: AppRadius.instance.normalBorderRadius,
+      appBar: _buildAppBar(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+          controller.makeMenuOpenVal();
+        },
+        child: Stack(
+          children: [
+            Padding(
+              padding: AppPadding.instance.horizontalNormal,
+              child: Obx(() {
+                return NotificationListener<ScrollNotification>(
+                  onNotification: controller.onNotification,
+                  child: ListView(
+                    children: [
+                      _buildPageGridViewBuilder(),
+                      if (controller.isLoading.value)
+                        _buildPageCircleProgressBar(),
+                    ],
                   ),
-                  child: discoverController.isMenuOpen.value
-                      ? ClipRRect(
-                          borderRadius: AppRadius.instance.normalBorderRadius,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Önerilen Filtreleme",
-                                style: context.appGeneral.textTheme.bodyMedium
-                                    ?.copyWith(
-                                        color: AppColor.white.getColor()),
-                              ),
-                              _buildFilterButtonComponent(
-                                context: context,
-                                isActive: discoverController
-                                        .activeFilterIndex.value ==
-                                    0,
-                                text: "Senin için",
-                                trailingIcon: "account-circle-line",
-                                index: 0,
-                              ),
-                              _buildFilterButtonComponent(
-                                context: context,
-                                isActive: discoverController
-                                        .activeFilterIndex.value ==
-                                    1,
-                                text: "Kişileştirilmemiş",
-                                trailingIcon: "earth-line",
-                                index: 1,
-                              ),
-                            ],
-                          ),
-                        )
-                      : const SizedBox(),
-                ),
-              ),
+                );
+              }),
             ),
+            _buildFilterDiscoverItems(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildFilterDiscoverItems(BuildContext context) {
+    return Positioned(
+      right: AppSizes.instance.normalValue,
+      child: Obx(
+        () => AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          child: Container(
+            width: Get.width * 0.56,
+            height: controller.isMenuOpen.value ? Get.height * 0.16 : 0,
+            decoration: BoxDecoration(
+              color: AppColor.black.getColor().withAlpha(200),
+              borderRadius: AppRadius.instance.normalBorderRadius,
+            ),
+            child: controller.isMenuOpen.value
+                ? ClipRRect(
+                    borderRadius: AppRadius.instance.normalBorderRadius,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Önerilen Filtreleme",
+                          style: context.appGeneral.textTheme.bodyMedium
+                              ?.copyWith(color: AppColor.white.getColor()),
+                        ),
+                        _buildFilterButtonComponent(
+                          context: context,
+                          isActive: controller.activeFilterIndex.value == 0,
+                          text: "Senin için",
+                          trailingIcon: "account-circle-line",
+                          index: 0,
+                        ),
+                        _buildFilterButtonComponent(
+                          context: context,
+                          isActive: controller.activeFilterIndex.value == 1,
+                          text: "Kişileştirilmemiş",
+                          trailingIcon: "earth-line",
+                          index: 1,
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -111,7 +110,7 @@ class DiscoverView extends StatelessWidget {
   }) {
     return CustomElevatedButton(
       onPressed: () {
-        discoverController.toggleFilter(index);
+        controller.toggleFilter(index);
       },
       elevation: 0,
       backgroundColor: AppColor.transparent.getColor(),
@@ -153,7 +152,7 @@ class DiscoverView extends StatelessWidget {
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
-      itemCount: discoverController.items.length,
+      itemCount: controller.items.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
@@ -161,7 +160,7 @@ class DiscoverView extends StatelessWidget {
           onTap: () {
             NavigatorController.instance.pushToPage(
                 NavigateRoutesItems.discoverDetail,
-                arguments: discoverController.items[index]);
+                arguments: controller.items[index]);
           },
           child: Container(
             margin: const EdgeInsets.all(1),
@@ -175,7 +174,7 @@ class DiscoverView extends StatelessWidget {
                     color: AppColor.black12.getColor())
               ],
               image: DecorationImage(
-                  image: NetworkImage(discoverController.items[index].imageUrl),
+                  image: NetworkImage(controller.items[index].imageUrl),
                   fit: BoxFit.cover),
             ),
           ),
@@ -197,14 +196,14 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
       backgroundColor: AppColor.transparent.getColor(),
       automaticallyImplyLeading: false,
       title: CustomTextField(
         hintText: "Arama yapın",
-        controller: TextEditingController(),
+        controller: controller.discoverTextEditingController,
         showSearchIcon: true,
         height: 40,
         validator: (value) {
@@ -213,30 +212,45 @@ class DiscoverView extends StatelessWidget {
           }
           return null;
         },
-        onSaved: (value) {
-          // Değer kaydedildiğinde yapılacak işlemler
-        },
         onSubmit: (value) {
-          // Metin alanında "enter" tuşuna basıldığında yapılacak işlemler
+          FocusScope.of(context).unfocus();
         },
+        onChange: (String? query) {
+          controller.searchItems(query ?? "");
+        },
+        suffix: Obx(
+          () => controller.searchText.isNotEmpty
+              ? Positioned(
+                  right: 8,
+                  top: 8,
+                  child: InkWell(
+                    onTap: controller.clearSearch,
+                    borderRadius: AppRadius.instance.largeBorderRadius,
+                    child: SvgPicture.asset(AppIconUtility.getIconPath("close",
+                        format: IconFormat.svg)),
+                  ),
+                )
+              : const SizedBox(),
+        ),
       ),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 20, top: 8),
           child: CustomElevatedButton(
-              backgroundColor: AppColor.transparent.getColor(),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              height: 40,
-              width: 40,
-              child: SvgPicture.asset(
-                AppIconUtility.getIconPath("more", format: IconFormat.svg),
-              ),
-              onPressed: () {
-                discoverController.toggleMenuOpen();
-              }),
-        )
+            backgroundColor: AppColor.transparent.getColor(),
+            elevation: 0,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            height: 40,
+            width: 40,
+            child: SvgPicture.asset(
+              AppIconUtility.getIconPath("more", format: IconFormat.svg),
+            ),
+            onPressed: () {
+              controller.toggleMenuOpen();
+            },
+          ),
+        ),
       ],
     );
   }

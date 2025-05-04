@@ -316,6 +316,20 @@ class ChatView extends StatelessWidget {
             FocusScope.of(Get.context!)
                 .unfocus(); // Enter'a basınca klavyeyi kapat
           },
+          suffix: Obx(
+          () => controller.searchText.isNotEmpty
+              ? Positioned(
+                  right: 8,
+                  top: 8,
+                  child: InkWell(
+                    onTap: controller.clearSearch,
+                    borderRadius: AppRadius.instance.largeBorderRadius,
+                    child: SvgPicture.asset(AppIconUtility.getIconPath("close",
+                        format: IconFormat.svg)),
+                  ),
+                )
+              : const SizedBox(),
+        ),
         ),
         CustomElevatedButton(
           backgroundColor: AppColor.transparent.getColor(),

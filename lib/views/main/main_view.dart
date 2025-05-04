@@ -25,7 +25,7 @@ class MainView extends GetView<MainController> {
           physics: const NeverScrollableScrollPhysics(), // Kaydırma animasyonu için
           children: [
             const HomeView(), // Ana sayfa
-            DiscoverView(), // Keşfet sayfası
+            const DiscoverView(), // Keşfet sayfası
             DietitionView(),
             ProfileView(),
           ],

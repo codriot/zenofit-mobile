@@ -145,4 +145,10 @@ class ChatViewController extends GetxController {
     if (difference.inDays < 365) return "${(difference.inDays / 30).floor()} ay önce";
     return "${(difference.inDays / 365).floor()} yıl önce";
   }
+
+   void clearSearch() {
+    searchText.value = "";
+    searchController.clear();
+    items.assignAll(allItems);
+  }
 }

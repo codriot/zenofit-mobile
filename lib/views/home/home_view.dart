@@ -26,7 +26,7 @@ class HomeView extends GetView<HomeViewController> with HomeViewMixin {
               AppSpaces.instance.vertical20,
               buildWaterIntakeSection(context),
               AppSpaces.instance.vertical20,
-              buildDietPlanSection(context,Get.put<HomeViewController>(HomeViewController())),
+              buildDietPlanSection(context,controller),
             ],
           ),
         ),

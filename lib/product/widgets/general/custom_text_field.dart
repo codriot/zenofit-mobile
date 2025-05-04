@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:kartal/kartal.dart';
 
-
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
@@ -30,7 +29,9 @@ class CustomTextField extends StatelessWidget {
     this.onSubmit,
     this.showSearchIcon = false,
     this.padding,
-    this.height = 48, this.onChange, this.suffix, // Varsayılan yükseklik
+    this.height = 48,
+    this.onChange,
+    this.suffix, // Varsayılan yükseklik
   });
 
   @override
@@ -43,35 +44,40 @@ class CustomTextField extends StatelessWidget {
         color: Colors.white, // Arka plan rengi
         borderRadius: BorderRadius.circular(16), // Kenar yuvarlama
       ),
-      child: TextFormField(
-        controller: controller,
-        cursorColor: Colors.black,
-        decoration: InputDecoration(
-          prefixIcon: showSearchIcon
-              ? Padding(
-                  padding: AppPadding.instance.allSmall,
-                  child: SvgPicture.asset(
-                    'assets/icons/search.svg', // İkon dosya yolu
-                    width: 20,
-                    color: AppColor.grey.getColor(),
-                    height: 20,
-                    fit: BoxFit.contain,
-                  ),
-                )
-              : null,
-          hintText: hintText,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 10, // İçerik üst ve alt boşluğu
-            horizontal: 20, // İçerik sağ ve sol boşluğu
+      child: Stack(
+        children: [
+          TextFormField(
+            controller: controller,
+            cursorColor: Colors.black,
+            decoration: InputDecoration(
+              prefixIcon: showSearchIcon
+                  ? Padding(
+                      padding: AppPadding.instance.allSmall,
+                      child: SvgPicture.asset(
+                        'assets/icons/search.svg', // İkon dosya yolu
+                        width: 20,
+                        color: AppColor.grey.getColor(),
+                        height: 20,
+                        fit: BoxFit.contain,
+                      ),
+                    )
+                  : null,
+              hintText: hintText,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 10, // İçerik üst ve alt boşluğu
+                horizontal: 20, // İçerik sağ ve sol boşluğu
+              ),
+              hintStyle:
+                  const TextStyle(color: Colors.grey), // Hint metin rengi
+            ),
+            onChanged: onChange,
+            validator: validator,
+            onSaved: onSaved,
+            onFieldSubmitted: onSubmit,
           ),
-          suffix: suffix,
-          hintStyle: const TextStyle(color: Colors.grey), // Hint metin rengi
-        ),
-        onChanged: onChange,
-        validator: validator,
-        onSaved: onSaved,
-        onFieldSubmitted: onSubmit,
+          suffix ?? const SizedBox(),
+        ],
       ),
     );
   }

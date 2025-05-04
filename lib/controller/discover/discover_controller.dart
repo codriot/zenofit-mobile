@@ -1,132 +1,134 @@
 import 'dart:math';
-
 import 'package:diet_app_mobile/model/discover/discover_item_model.dart';
 import 'package:diet_app_mobile/model/general/comment_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class DiscoverController extends GetxController {
-  var items = <DiscoverItemModel>[].obs; // Observable liste
-  var isLoading = false.obs; // Loading durumu
-  var hasMoreItems = true.obs; // Daha fazla öğe var mı?
-  var isMenuOpen = false.obs; // Menü durumunu tutacak
-  var activeFilterIndex = (0).obs; // Aktif filtre indeksi (-1: hiçbiri)
+  var allItems = <DiscoverItemModel>[];      // Tüm öğeler (sabit veri)
+  var items = <DiscoverItemModel>[].obs;     // Görüntülenecek filtrelenmiş veri
+  var searchText = ''.obs;
+
+  var isLoading = false.obs;
+  var hasMoreItems = true.obs;
+  var isMenuOpen = false.obs;
+  var activeFilterIndex = (0).obs;
+
+  final TextEditingController discoverTextEditingController =
+      TextEditingController();
 
   @override
   void onInit() {
     super.onInit();
-    loadInitialItems(); // Başlangıçta öğeleri yükle
+    loadInitialItems();
   }
 
   void loadInitialItems() {
-    items.addAll(
-      List.generate(
-        10,
-        (index) {
-          String type = index % 2 == 0
-              ? 'post'
-              : 'video'; // Çift index ise 'post', tek index ise 'video'
-          String imageUrl =
-              'https://picsum.photos/200?random=${Random().nextInt(1000)}'; // Rastgele resim URL'si
-          return DiscoverItemModel(
-            type: type,
-            imageUrl: imageUrl,
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. $index",
-            likeCount: Random().nextInt(1000), // Rastgele beğeni sayısı
-            commentCount: Random().nextInt(100), // Rastgele yorum sayısı´
-            comments: List.generate(
-              10,
-              (index) => CommentModel(
-                userProfileUrl:
-                    'https://picsum.photos/50?random=${Random().nextInt(1000)}', // Rastgele profil resmi URL'si
-                userName: 'Kullanıcı ${index + 1}', // Kullanıcı adı
-                date: DateTime.now()
-                    .subtract(Duration(days: index))
-                    .toString(), // Yorum tarihi
-                likeCount:
-                    Random().nextInt(100).toString(), // Rastgele beğeni sayısı
-                comment:
-                    "Bu bir yorumdur. Yorum numarası: ${index + 1}", // Yorum içeriği
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+    final List<DiscoverItemModel> initialItems = List.generate(10, (index) {
+      String type = index % 2 == 0 ? 'post' : 'video';
+      String imageUrl = 'https://picsum.photos/200?random=${Random().nextInt(1000)}';
+      return DiscoverItemModel(
+        type: type,
+        imageUrl: imageUrl,
+        description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. $index",
+        likeCount: Random().nextInt(1000),
+        commentCount: Random().nextInt(100),
+        comments: List.generate(
+          10,
+          (index) => CommentModel(
+            userProfileUrl: 'https://picsum.photos/50?random=${Random().nextInt(1000)}',
+            userName: 'Kullanıcı ${index + 1}',
+            date: DateTime.now().subtract(Duration(days: index)).toString(),
+            likeCount: Random().nextInt(100).toString(),
+            comment: "Bu bir yorumdur. ${index + 1}",
+          ),
+        ),
+      );
+    });
 
-  void toggleMenuOpen(){
-    isMenuOpen.value = !isMenuOpen.value;
+    allItems = initialItems;
+    items.assignAll(allItems);
   }
 
   void loadMoreItems() async {
-    if (isLoading.value || !hasMoreItems.value)
-      return; // Zaten yükleniyorsa veya daha fazla öğe yoksa çık
+    if (isLoading.value || !hasMoreItems.value) return;
 
-    isLoading.value = true; // Loading durumunu başlat
-
-    // Simüle edilmiş bir yükleme süresi
+    isLoading.value = true;
     await Future.delayed(Duration(seconds: 2));
 
-    // Daha fazla öğe ekle
-    if (items.length < 100) {
-      // Toplamda 100 öğe var
-      items.addAll(
-        List.generate(
-          10,
-          (index) {
-            String type = (items.length + index) % 2 == 0
-                ? 'post'
-                : 'video'; // Çift index ise 'post', tek index ise 'video'
-            String imageUrl =
-                'https://picsum.photos/200?random=${Random().nextInt(1000)}'; // Rastgele resim URL'si
-            return DiscoverItemModel(
-              type: type,
-              imageUrl: imageUrl,
-              description: "Açıklama ${items.length + index + 1}",
-              likeCount: Random().nextInt(1000), // Rastgele beğeni sayısı
-              commentCount: Random().nextInt(100),
-              comments: List.generate(
-                10,
-                (index) => CommentModel(
-                  userProfileUrl:
-                      'https://picsum.photos/50?random=${Random().nextInt(1000)}', // Rastgele profil resmi URL'si
-                  userName: 'Kullanıcı ${index + 1}', // Kullanıcı adı
-                  date: DateTime.now()
-                      .subtract(Duration(days: index))
-                      .toString(), // Yorum tarihi
-                  likeCount: Random()
-                      .nextInt(100)
-                      .toString(), // Rastgele beğeni sayısı
-                  comment:
-                      "Bu bir yorumdur. Yorum numarası: ${index + 1}", // Yorum içeriği
-                ),
-              ), // Rastgele yorum sayısı
-            );
-          },
-        ),
-      );
+    if (allItems.length < 100) {
+      final newItems = List.generate(10, (index) {
+        String type = (allItems.length + index) % 2 == 0 ? 'post' : 'video';
+        String imageUrl = 'https://picsum.photos/200?random=${Random().nextInt(1000)}';
+        return DiscoverItemModel(
+          type: type,
+          imageUrl: imageUrl,
+          description: "Açıklama ${allItems.length + index + 1}",
+          likeCount: Random().nextInt(1000),
+          commentCount: Random().nextInt(100),
+          comments: List.generate(
+            10,
+            (index) => CommentModel(
+              userProfileUrl: 'https://picsum.photos/50?random=${Random().nextInt(1000)}',
+              userName: 'Kullanıcı ${index + 1}',
+              date: DateTime.now().subtract(Duration(days: index)).toString(),
+              likeCount: Random().nextInt(100).toString(),
+              comment: "Bu bir yorumdur. ${index + 1}",
+            ),
+          ),
+        );
+      });
+
+      allItems.addAll(newItems);
+      items.assignAll(allItems.where((item) =>
+        item.description.toLowerCase().contains(searchText.value.toLowerCase())));
     } else {
-      hasMoreItems.value = false; // Daha fazla öğe yok
+      hasMoreItems.value = false;
     }
 
-    isLoading.value = false; // Loading durumunu bitir
+    isLoading.value = false;
   }
 
   bool onNotification(ScrollNotification scrollInfo) {
-    if (!isLoading.value &&
-        scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-      loadMoreItems(); // Daha fazla öğe yükle
+    if (!isLoading.value && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+      loadMoreItems();
     }
     return true;
   }
 
+  void toggleMenuOpen() {
+    isMenuOpen.value = !isMenuOpen.value;
+  }
+
+  void makeMenuOpenVal() {
+    isMenuOpen.value = false;
+  }
+
   void toggleFilter(int index) {
     if (activeFilterIndex.value == index) {
-      activeFilterIndex.value = -1; // Aynı butona tıklanırsa aktifliği kaldır
+      activeFilterIndex.value = -1;
     } else {
-      activeFilterIndex.value = index; // Aktif filtreyi değiştir
+      activeFilterIndex.value = index;
     }
+  }
+
+  void searchItems(String query) {
+    searchText.value = query;
+
+    if (query.isEmpty) {
+      items.assignAll(allItems);
+    } else {
+      items.assignAll(
+        allItems.where((item) =>
+            item.description.toLowerCase().contains(query.toLowerCase())),
+      );
+    }
+  }
+
+  void clearSearch() {
+    searchText.value = "";
+    discoverTextEditingController.clear();
+    items.assignAll(allItems);
   }
 }

@@ -16,9 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class DietitionView extends StatelessWidget {
-  final DietitionViewController controller = Get.put(DietitionViewController());
-  DietitionView({super.key});
+class DietitionView extends GetView<DietitionViewController> {
+  const DietitionView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -154,15 +153,14 @@ class DietitionView extends StatelessWidget {
             ),
             width: double.infinity,
             padding: AppPadding.instance.allSmall,
-            height: 90,
             child: Row(
               children: [
                 Container(
                   decoration: BoxDecoration(
                       color: AppColor.crystalBell.getColor(),
                       borderRadius: AppRadius.instance.normalBorderRadius),
-                  width: 90 - AppSizes.instance.normalValue,
-                  height: 90 - AppSizes.instance.normalValue,
+                  width: Get.height * 0.15 - AppSizes.instance.normalValue,
+                  height: Get.height * 0.15 - AppSizes.instance.normalValue,
                   child: Image.asset(AppImageUtility.getImagePath("person")),
                 ),
                 AppSpaces.instance.horizontal10,

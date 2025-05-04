@@ -177,8 +177,8 @@ class ProfileView extends StatelessWidget {
 
   Container _buildProfileImage() {
     return Container(
-      width: 80,
-      height: 80,
+      width: Get.height * 0.14,
+      height: Get.height * 0.14,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(

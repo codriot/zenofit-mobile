@@ -85,7 +85,7 @@ class AppTheme {
             // fontFamily: poppins,
             ),
       ),
-      scaffoldBackgroundColor: const Color(0xff000000),
+      scaffoldBackgroundColor: AppColor.white.getColor(),
     );
   }
 }

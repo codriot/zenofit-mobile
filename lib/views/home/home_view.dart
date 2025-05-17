@@ -1,3 +1,6 @@
+import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
+import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
+import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/page_utils/home_view_mixin.dart';
 import 'package:flutter/material.dart';
 
@@ -8,32 +11,23 @@ class HomeView extends StatelessWidget with HomeViewMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: AppPadding.instance.horizontalNormal,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildHeader(),
-              const SizedBox(height: 24),
-              buildNutritionSection(),
-              const SizedBox(height: 20),
-              buildWaterIntakeSection(),
-              const SizedBox(height: 20),
-              buildDietPlanSection(),
+              buildHeader(context),
+              AppSpaces.instance.vertical20,
+              buildNutritionSection(context),
+              AppSpaces.instance.vertical20,
+              buildWaterIntakeSection(context),
+              AppSpaces.instance.vertical20,
+              buildDietPlanSection(context),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ana Sayfa'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Keşfet'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: 'Öğünlerim'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
       ),
     );
   }

@@ -26,7 +26,10 @@ dependencies:
   # iOS Style Icons
   cupertino_icons: ^1.0.8
   firebase_core: ^3.10.0
-
+  google_sign_in: ^6.2.2
+  firebase_auth: ^5.4.0
+  animations: ^2.0.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

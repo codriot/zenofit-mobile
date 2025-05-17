@@ -17,14 +17,14 @@ import 'package:diet_app_mobile/product/widgets/onboarding/onboarding_top_compon
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
 class OnboardingSixView extends StatelessWidget {
   OnboardingSixView({super.key});
 
   final GlobalOnboardingController globalOnboardingController =
       Get.find<GlobalOnboardingController>();
 
-  final OnboardingSixController controller =
-      Get.put(OnboardingSixController());
+  final OnboardingSixController controller = Get.put(OnboardingSixController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,8 @@ class OnboardingSixView extends StatelessWidget {
                     physics:
                         const NeverScrollableScrollPhysics(), // Kaydırmayı devre dışı bırak
                     padding: EdgeInsets.symmetric(
-                        vertical: AppSizes.instance.mediumValue,), // Dış boşluklar
+                      vertical: AppSizes.instance.mediumValue,
+                    ), // Dış boşluklar
                     itemBuilder: (context, index) {
                       final OnboardingSelectionCardModel model =
                           controller.onboardingSelectionCardModelFood[index];
@@ -73,7 +74,7 @@ class OnboardingSixView extends StatelessWidget {
                   globalOnboardingController.toggleOnboardingPageCount(
                       OnboardingPageCountEnum.onboardingPageSix.index);
                   NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.home);
+                      .pushToPage(NavigateRoutesItems.main);
                 },
                 text: "Next",
                 padding: AppPadding.instance.bottomNormal,
@@ -83,7 +84,12 @@ class OnboardingSixView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {},
+                onPressed: () {
+                  globalOnboardingController.toggleOnboardingPageCount(
+                      OnboardingPageCountEnum.onboardingPageSix.index);
+                  NavigatorController.instance
+                      .pushToPage(NavigateRoutesItems.main);
+                },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),
@@ -130,7 +136,7 @@ class OnboardingSixView extends StatelessWidget {
                 child: Text(
                   textAlign: TextAlign.center,
                   title,
-                  style: context.appGeneral.textTheme.titleMedium
+                  style: context.appGeneral.textTheme.titleSmall
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),

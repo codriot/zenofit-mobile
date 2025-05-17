@@ -44,7 +44,8 @@ class OnboardingThreeView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {},
+                onPressed: () {                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
+                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);},
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),

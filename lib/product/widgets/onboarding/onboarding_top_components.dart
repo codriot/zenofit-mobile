@@ -53,7 +53,7 @@ class OnboardingTopComponents extends StatelessWidget {
               padding: textPadding ?? EdgeInsets.zero,
               child: Text(
                 title,
-                style: context.appGeneral.textTheme.headlineSmall
+                style: context.appGeneral.textTheme.headlineMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center, // Text ortalama
               ),

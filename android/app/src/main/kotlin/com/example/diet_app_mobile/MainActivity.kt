@@ -1,4 +1,4 @@
-package com.example.diet_app_mobile
+package com.widgetwizzard.dietapp
 
 import io.flutter.embedding.android.FlutterActivity
 

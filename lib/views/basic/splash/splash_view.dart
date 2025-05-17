@@ -34,19 +34,17 @@ class SplashView extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.12),
               child: Text("İstediğin fit ve sağlıklı yaşama hazır mısın?",
                   textAlign: TextAlign.center,
-                  style: context.appGeneral.textTheme.headlineSmall?.copyWith(
+                  style: context.appGeneral.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   )),
             ),
             Padding(
               padding: EdgeInsets.only(
-                  top: Get.height * 0.02,
-                  left: Get.width * 0.12,
-                  right: Get.width * 0.12),
+                  top: Get.height * 0.02),
               child: Text(
                 textAlign: TextAlign.center,
                 "Yapay zeka ile ücretsiz bir şekilde bilgi alabilir ve kendinize özel bir diyet oluşturabilirsiniz.",
-                style: context.appGeneral.textTheme.bodyMedium
+                style: context.appGeneral.textTheme.bodyLarge
                     ?.copyWith(color: AppColor.shadowedSteel.getColor()),
               ),
             ),

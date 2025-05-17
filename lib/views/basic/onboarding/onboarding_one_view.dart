@@ -17,8 +17,7 @@ import 'package:get/get.dart';
 
 class OnboardingOneView extends StatelessWidget {
   OnboardingOneView({super.key});
-  final GlobalOnboardingController globalOnboardingController =
-      Get.put(GlobalOnboardingController());
+  final GlobalOnboardingController globalOnboardingController = Get.find<GlobalOnboardingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +50,10 @@ class OnboardingOneView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {},
+                onPressed: () {
+                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
+                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);
+                },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),

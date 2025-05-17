@@ -1,3 +1,4 @@
+import 'package:diet_app_mobile/controller/auth/register_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends GetView<RegisterController> {
   const RegisterView({super.key});
 
   @override
@@ -93,7 +94,7 @@ class RegisterView extends StatelessWidget {
       children: [
         Text(
           "Zaten bir hesabın var mı?",
-          style: context.appGeneral.textTheme.bodyMedium
+          style: context.appGeneral.textTheme.bodyLarge
               ?.copyWith(color: AppColor.shadowedSteel.getColor()),
         ),
         Padding(
@@ -101,7 +102,7 @@ class RegisterView extends StatelessWidget {
           child: InkWell(
             child: Text(
               "Giriş Yap",
-              style: context.appGeneral.textTheme.bodyMedium
+              style: context.appGeneral.textTheme.bodyLarge
                   ?.copyWith(color: AppColor.noxious.getColor()),
             ),
             onTap: () {
@@ -117,7 +118,7 @@ class RegisterView extends StatelessWidget {
     return Center(
       child: Text(
         "Kayıt Ol",
-        style: context.appGeneral.textTheme.headlineSmall?.copyWith(
+        style: context.appGeneral.textTheme.headlineMedium?.copyWith(
           fontWeight: FontWeight.bold,
           color: AppColor.noxious.getColor(),
         ),

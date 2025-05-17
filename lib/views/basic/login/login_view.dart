@@ -4,6 +4,7 @@ import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
+import 'package:diet_app_mobile/product/utils/app_utils/app_spaces..dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_sizes.dart';
@@ -20,65 +21,87 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        _buildAppLogo(),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-                color: AppColor.lightGreenGlint.getColor(),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(64),
-                  topRight: Radius.circular(64),
-                )),
-            child: Padding(
-              padding: EdgeInsets.only(top: Get.height * 0.03),
-              child: Padding(
-                padding: AppPadding.instance.horizontalMedium,
-                child: ListView(
-                  padding: EdgeInsets.zero,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: Get.height),
+              child: IntrinsicHeight(
+                child: Column(
                   children: [
-                    _buildMakeLoginText(context),
-                    _buildDoYouHaveAcountEither(context),
-                    _buildMailText(context),
-                    _buildPageTextField(context,
-                        hintText: "example@example.com", icon: "mail"),
-                    _buildPasswordText(context),
-                    _buildPageTextField(context,
-                        hintText: "example", icon: "password"),
-                    _buildForgetThePasswordText(context),
-                    _buildOrText(context),
-                    _buildLoginWithGooglOrApple(),
-                    GeneralPageButtonWidget(
-                      onPressed: () {
-                        NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
-                      },
-                      text: "Giriş Yap",
-                      padding: EdgeInsets.only(top: Get.height * 0.03),
+                    _buildAppLogo(),
+                    AppSpaces.instance.vertical15,
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColor.lightGreenGlint.getColor(),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(64),
+                            topRight: Radius.circular(64),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: AppPadding.instance.horizontalMedium,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppSpaces.instance.vertical20,
+                              _buildMakeLoginText(context),
+                              _buildDoYouHaveAcountEither(context),
+                              _buildMailText(context),
+                              _buildPageTextField(context,
+                                  hintText: "example@example.com",
+                                  icon: "mail",
+                                  controller: controller.mailController),
+                              _buildPasswordText(context),
+                              _buildPageTextField(context,
+                                  hintText: "example",
+                                  icon: "password",
+                                  controller: controller.passwordController),
+                              _buildForgetThePasswordText(context),
+                              _buildOrText(context),
+                              _buildLoginWithGooglOrApple(),
+                              GeneralPageButtonWidget(
+                                onPressed: () {
+                                  NavigatorController.instance.pushToPage(
+                                      NavigateRoutesItems.onboardingOne);
+                                },
+                                text: "Giriş Yap",
+                                padding:
+                                    EdgeInsets.only(top: Get.height * 0.03),
+                              ),
+                              _buildFingerPrintButton(),
+                              AppSpaces.instance.vertical15,
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    _buildFingerPrintButton()
                   ],
                 ),
               ),
             ),
           ),
         ),
-      ],
-    ));
+      ),
+    );
   }
 
   Padding _buildAppLogo() {
     return Padding(
-        padding: EdgeInsets.only(top: Get.height * 0.03),
-        child: Align(
-          alignment: Alignment.center,
-          child: Image.asset(
-            AppImageUtility.getImagePath("bitirme-logo"),
-            width: 120,
-            height: 120,
-          ),
+      padding: EdgeInsets.only(top: Get.height * 0.03),
+      child: Align(
+        alignment: Alignment.center,
+        child: Image.asset(
+          AppImageUtility.getImagePath("bitirme-logo"),
+          width: 120,
+          height: 120,
         ),
-      );
+      ),
+    );
   }
 
   Center _buildFingerPrintButton() {
@@ -88,8 +111,8 @@ class LoginView extends GetView<LoginController> {
         child: InkWell(
           child: SvgPicture.asset(
             AppIconUtility.getIconPath("finger", format: IconFormat.svg),
-            width: AppSizes.instance.iconSizeXLarge,
-            height: AppSizes.instance.iconSizeXLarge,
+            width: Get.height * 0.09,
+            height: Get.height * 0.09,
           ),
         ),
       ),
@@ -118,13 +141,14 @@ class LoginView extends GetView<LoginController> {
         Padding(
           padding: AppPadding.instance.leftNormal,
           child: GestureDetector(
-                       onTap: () async {
+            onTap: () async {
               // Google Sign-In işlemini başlat ve tamamlanmasını bekle
-           await AuthService().signInWithGoogle();
-            if (AuthService().currentUser != null) {
-              // Google Sign-In işlemi tamamlandıktan sonra sayfayı değiştir
-              NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
-            }
+              await AuthService().signInWithGoogle();
+              if (AuthService().currentUser != null) {
+                // Google Sign-In işlemi tamamlandıktan sonra sayfayı değiştir
+                NavigatorController.instance
+                    .pushToPage(NavigateRoutesItems.onboardingOne);
+              }
             },
             child: Container(
               decoration: BoxDecoration(
@@ -172,7 +196,7 @@ class LoginView extends GetView<LoginController> {
       padding: EdgeInsets.only(top: Get.height * 0.03),
       child: Text(
         "Şifre",
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
+        style: context.appGeneral.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -184,7 +208,7 @@ class LoginView extends GetView<LoginController> {
       padding: EdgeInsets.only(top: Get.height * 0.03),
       child: Text(
         "E-Posta",
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
+        style: context.appGeneral.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -234,6 +258,7 @@ class LoginView extends GetView<LoginController> {
     BuildContext context, {
     required String icon,
     required String hintText,
+    required TextEditingController controller,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -254,7 +279,7 @@ class LoginView extends GetView<LoginController> {
             child: CustomTextField(
                 padding: EdgeInsets.zero,
                 hintText: hintText,
-                controller: TextEditingController()),
+                controller: controller),
           ),
         ],
       ),

@@ -21,7 +21,7 @@ class CommentsBottomSheet extends StatelessWidget {
     return SafeArea(
       child: Container(
         padding: AppPadding.instance.topNormal,
-        height: Get.height * 0.95,
+        height: Get.height * 0.92,
         decoration: BoxDecoration(
           color: AppColor.whiteSolid.getColor(),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
@@ -95,7 +95,7 @@ class CommentsBottomSheet extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: AppColor.orochimaru.getColor(),
-            radius: 24,
+            radius: Get.height * 0.036,
             foregroundImage:
                 NetworkImage(item.comments[index].userProfileUrl ?? ""),
           ),

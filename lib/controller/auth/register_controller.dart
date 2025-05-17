@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../API/services/auth/auth_service.dart';
 import '../../product/navigator/navigate_route_items.dart';
@@ -12,6 +13,11 @@ class RegisterController extends GetxController {
   final RxString email = ''.obs;
   final RxString password = ''.obs;
   final RxString confirmPassword = ''.obs;
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordAgainController = TextEditingController();
 
   final AuthService _authService = AuthService();
 

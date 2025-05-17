@@ -23,9 +23,7 @@ class OnboardingThreeView extends StatelessWidget {
         child: Column(
           children: [
             OnboardingTopComponents(title: "Kilonuz Kaç?"),
-            Expanded(
-              child: WeightPickerWidget(),
-            ),
+            Expanded(child: WeightPickerWidget()),
             GeneralOnboardingPageCircleComponent(),
             Padding(
               padding: AppPadding.instance.horizontalMedium,
@@ -44,8 +42,12 @@ class OnboardingThreeView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);},
+                onPressed: () {
+                  globalOnboardingController.toggleOnboardingPageCount(
+                      OnboardingPageCountEnum.onboardingPageFour.index);
+                  NavigatorController.instance
+                      .pushToPage(NavigateRoutesItems.onboardingFour);
+                },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),

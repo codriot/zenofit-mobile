@@ -52,7 +52,8 @@ class OnboardingFiveView extends StatelessWidget {
                     physics:
                         const NeverScrollableScrollPhysics(), // Kaydırmayı devre dışı bırak
                     padding: EdgeInsets.symmetric(
-                        vertical: AppSizes.instance.mediumValue,), // Dış boşluklar
+                      vertical: AppSizes.instance.mediumValue,
+                    ), // Dış boşluklar
                     itemBuilder: (context, index) {
                       final OnboardingSelectionCardModel model =
                           controller.onboardingSelectionCardModelFood[index];
@@ -83,8 +84,12 @@ class OnboardingFiveView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);},
+                onPressed: () {
+                  globalOnboardingController.toggleOnboardingPageCount(
+                      OnboardingPageCountEnum.onboardingPageSix.index);
+                  NavigatorController.instance
+                      .pushToPage(NavigateRoutesItems.onboardingSix);
+                },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),

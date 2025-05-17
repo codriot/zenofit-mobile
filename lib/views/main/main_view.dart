@@ -1,9 +1,13 @@
 import 'package:diet_app_mobile/controller/main/main_controller.dart';
+import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_duration.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
+import 'package:diet_app_mobile/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class MainView extends GetView<MainController> {
@@ -18,10 +22,12 @@ class MainView extends GetView<MainController> {
           onPageChanged: (index) {
             controller.currentIndex.value = index;
           },
-          physics: const BouncingScrollPhysics(), // Kaydırma animasyonu için
+          physics: const NeverScrollableScrollPhysics(), // Kaydırma animasyonu için
           children: [
             const HomeView(), // Ana sayfa
-            DiscoverView(), // Keşfet sayfası
+            const DiscoverView(), // Keşfet sayfası
+            DietitionView(),
+            ProfileView(),
           ],
         ),
         bottomNavigationBar: AnimatedBottomNavigationBar(
@@ -46,11 +52,12 @@ class AnimatedBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: Get.height * 0.1,
       decoration: BoxDecoration(
         color: AppColor.white.getColor(),
         borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(36),
-          bottomRight: Radius.circular(36),
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
         ),
         boxShadow: const [
           BoxShadow(
@@ -63,46 +70,48 @@ class AnimatedBottomNavigationBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.home, 'Ana Sayfa', 0),
-          _buildNavItem(Icons.search, 'Keşfet', 1),
-          _buildNavItem(Icons.list, 'Diyetisyenler', 2),
-          _buildNavItem(Icons.person, 'Profil', 3),
+          _buildNavItem("home-line", 'Ana Sayfa', 0),
+          _buildNavItem("search-line", 'Keşfet', 1),
+          _buildNavItem("group-line", 'Diyetisyenler', 2),
+          _buildNavItem("user", 'Profil', 3),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(String icon, String label, int index) {
     final isSelected = currentIndex == index;
-
-    return GestureDetector(
+    return InkWell(
       onTap: () => onTap(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedContainer(
-            duration: AppDuration.instance.durationFast,
-            padding: EdgeInsets.symmetric(vertical: isSelected ? 10 : 0),
-            child: Icon(
-              icon,
-              color: isSelected
-                  ? AppColor.vividBlue.getColor()
-                  : AppColor.black.getColor(),
-            ),
-          ),
-          AnimatedContainer(
-            duration: AppDuration.instance.durationFast,
-            child: Text(
-              label,
-              style: TextStyle(
+      child: SizedBox(
+        width: Get.width * 0.25,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: AppDuration.instance.durationFast,
+              padding: EdgeInsets.symmetric(vertical: isSelected ? Get.height * 0.01 : 0),
+              child: SvgPicture.asset(
+                AppIconUtility.getIconPath(icon, format: IconFormat.svg),
                 color: isSelected
                     ? AppColor.vividBlue.getColor()
                     : AppColor.black.getColor(),
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),
-          ),
-        ],
+            AnimatedContainer(
+              duration: AppDuration.instance.durationFast,
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: isSelected
+                      ? AppColor.vividBlue.getColor()
+                      : AppColor.black.getColor(),
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

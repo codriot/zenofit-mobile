@@ -4,60 +4,70 @@ import 'package:get/get.dart';
 class AgePickerController extends GetxController {
   final ScrollController scrollController = ScrollController();
   var selectedAge = 25.obs; // Varsayılan yaş
-  final double itemHeight = 50.0; // Her bir öğenin yüksekliği
-  final double visibleRangeTop = 150.0; // Üst çizginin listview içindeki konumu
-  final double visibleRangeBottom = 200.0; // Alt çizginin listview içindeki konumu
+  final double itemHeight = 50; // Her bir öğenin yüksekliği
 
-  // Seçilen yaşa göre font boyutunu ve ağırlığını hesaplayan fonksiyon
-  Map<String, dynamic> getTextStyleForAge(int index) {
-    double fontSize = 24;
-    FontWeight fontWeight = FontWeight.bold;
+  // Sabit oranlar (345’e göre hesaplandı)
+  final double _topRatio = 150 / 345;
+  final double _bottomRatio = 200 / 345;
+
+  late double ageContainerHeight;
+  late double visibleRangeTop;
+  late double visibleRangeBottom;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // Gerçek yüksekliğe göre hesaplama
+    ageContainerHeight = Get.height * 0.48;
+    visibleRangeTop = ageContainerHeight * _topRatio;
+    visibleRangeBottom = ageContainerHeight * _bottomRatio;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      onScrollUpdate(); // Scroll güncellemesini başlat
+    });
+  }
+
+  TextStyle getTextStyleForAge(BuildContext context, int index) {
+    final textTheme = Theme.of(context).textTheme;
 
     if (index == selectedAge.value) {
-      fontSize = 24;
-      fontWeight = FontWeight.bold;
-    } else if (index == selectedAge.value - 1 || index == selectedAge.value + 1) {
-      fontSize = 20;
-      fontWeight = FontWeight.w500;
-    } else if (index == selectedAge.value - 2 || index == selectedAge.value + 2) {
-      fontSize = 16;
-      fontWeight = FontWeight.w400;
-    } else if (index == selectedAge.value - 3 || index == selectedAge.value + 3) {
-      fontSize = 12;
-      fontWeight = FontWeight.w300;
-    } else if (index == selectedAge.value - 4 || index == selectedAge.value + 4) {
-      fontSize = 12;
-      fontWeight = FontWeight.w300;
-    }
-
-    return {
-      'fontSize': fontSize,
-      'fontWeight': fontWeight,
-    };
-  }
-
-  void onScrollUpdate() {
-    // Scroll sırasında güncel seçimi kontrol et
-    final offset = scrollController.offset;
-
-    // ListView'in ortasındaki çizgi ile hizalama
-    final double listViewCenter = (visibleRangeTop + visibleRangeBottom) / 2;
-
-    // Ortadaki çizgiye en yakın elemanı seçmek için hesaplama
-    final int index = ((offset + listViewCenter - (itemHeight / 2)) / itemHeight).round();
-
-    // Seçili öğeyi güncelle
-    if (index >= 0 && index < 100) {
-      selectedAge.value = index;
+      return textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold);
+    } else if ((index - selectedAge.value).abs() == 1) {
+      return textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w600);
+    } else if ((index - selectedAge.value).abs() == 2) {
+      return textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500);
+    } else if ((index - selectedAge.value).abs() == 3) {
+      return textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400);
+    } else if ((index - selectedAge.value).abs() == 4) {
+      return textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w300);
+    } else {
+      return textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w200);
     }
   }
 
-  void onScrollEnd() {
-    // Scroll sona erdiğinde seçilen öğeyi tam olarak ortala
-    final offset = scrollController.offset;
-    final int index = (offset / itemHeight).round();
-    final double targetOffset = index * itemHeight;
+void onScrollUpdate() {
+  final offset = scrollController.offset;
+  final double listViewCenter = (visibleRangeTop + visibleRangeBottom) / 2;
 
+  int index = ((offset + listViewCenter - (itemHeight / 2)) / itemHeight).round();
+
+  // Clamp index between 0 and 99
+  index = index.clamp(0, 99);
+
+  selectedAge.value = index;
+}
+
+void onScrollEnd() {
+  if (!scrollController.hasClients) return;
+
+  final double listViewCenter = (visibleRangeTop + visibleRangeBottom) / 2;
+  int index = ((scrollController.offset + listViewCenter - (itemHeight / 2)) / itemHeight).round();
+  index = index.clamp(0, 125);
+
+  final double targetOffset = index * itemHeight - listViewCenter + (itemHeight / 2);
+
+  if ((scrollController.offset - targetOffset).abs() > 0.5) {
     scrollController.animateTo(
       targetOffset,
       duration: const Duration(milliseconds: 200),
@@ -65,18 +75,12 @@ class AgePickerController extends GetxController {
     );
   }
 
+  selectedAge.value = index;
+}
+
   @override
   void onClose() {
     scrollController.dispose();
     super.onClose();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    // İlk başlatmada scroll güncellemesini hemen başlatmak için
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onScrollUpdate(); // Scroll güncellemesini başlat
-    });
   }
 }

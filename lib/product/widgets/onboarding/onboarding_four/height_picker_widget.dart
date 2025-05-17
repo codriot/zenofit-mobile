@@ -2,8 +2,7 @@ import 'package:diet_app_mobile/product/controller/height_picker_controller.dart
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
-import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart'
-    show AppPadding;
+import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_sizes.dart';
 import 'package:diet_app_mobile/product/widgets/general/general_shadow_components.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +16,14 @@ class HeightPickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double containerHeight = Get.height * 0.45;
+
     return Padding(
       padding: AppPadding.instance.horizontalMedium,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Yükseklik Gösterimi
+          // Seçilen yükseklik metni
           Obx(() {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,12 +50,12 @@ class HeightPickerWidget extends StatelessWidget {
             );
           }),
 
-          // Yükseklik Seçici Çubuğu
+          // Yükseklik seçici çubuğu
           Padding(
             padding: AppPadding.instance.verticalMedium,
             child: Container(
-              height: 350,
-              width: 150, // Çubuğun genişliği
+              height: containerHeight,
+              width: 145,
               decoration: BoxDecoration(
                 color: AppColor.crystalBell.getColor(),
                 borderRadius: BorderRadius.circular(16),
@@ -66,32 +67,32 @@ class HeightPickerWidget extends StatelessWidget {
                     controller: controller.scrollController,
                     padding: EdgeInsets.zero,
                     itemCount: ((controller.maxHeight - controller.minHeight) /
-                            controller.increment)
-                        .toInt() +
+                                controller.increment)
+                            .toInt() +
                         1,
                     physics: const BouncingScrollPhysics(),
                     reverse: true,
                     itemBuilder: (context, index) {
-                      bool isMainHeight = index % 10 == 0; // Her 10 birim büyük çubuk
+                      bool isMainHeight = index % 10 == 0;
                       double heightValue =
                           controller.minHeight + index * controller.increment;
 
                       return SizedBox(
                         height: controller.itemHeight,
                         child: Stack(
-                          clipBehavior: Clip.none,
                           alignment: Alignment.center,
+                          clipBehavior: Clip.none,
                           children: [
-                            // Çubuklar
+                            // Çizgiler
                             Positioned(
-                              right: isMainHeight ? 24 : 32, // Çubuğun hizası
+                              right: isMainHeight ? 24 : 32,
                               child: Container(
-                                width: isMainHeight ? 40 : 24, // Büyük çubuk geniş
-                                height: 2, // Çubuğun yüksekliği
+                                width: isMainHeight ? 40 : 24,
+                                height: 2,
                                 color: Colors.black,
                               ),
                             ),
-                            // Büyük Çubukta Değer Gösterimi
+                            // Ana çizgilerde değer gösterimi
                             if (isMainHeight)
                               Positioned(
                                 right: 70,
@@ -112,7 +113,7 @@ class HeightPickerWidget extends StatelessWidget {
                       );
                     },
                   ),
-                  // Gösterge
+                  // Gösterge oku
                   Positioned(
                     top: 0,
                     left: 0,

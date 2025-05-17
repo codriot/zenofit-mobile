@@ -1,21 +1,32 @@
-
-
-
 import 'package:flutter/widgets.dart' show Curves, ScrollController, WidgetsBinding;
 import 'package:get/get.dart';
+
 class HeightPickerController extends GetxController {
-  var selectedHeight = 150.0.obs; // Başlangıç yükseklik değeri
-  final double itemHeight = 40.0; // Her bir öğenin yüksekliği
-  final double maxHeight = 230; // Maksimum yükseklik
-  final double minHeight = 50; // Minimum yükseklik
-  final double increment = 1; // Artış miktarı
+  var selectedHeight = 150.0.obs;
+
+  double itemHeight = 40.0;
+  final double maxHeight = 230;
+  final double minHeight = 50;
+  final double increment = 1;
 
   late ScrollController scrollController;
+
+  // Referans alınan sabit container yüksekliği
+  final double referenceContainerHeight = 350.0;
+  final double referenceItemHeight = 40.0;
 
   @override
   void onInit() {
     super.onInit();
     scrollController = ScrollController();
+
+    // Ekran yüksekliğine göre itemHeight'ı güncelle
+    final double currentContainerHeight = Get.height * 0.45;
+    itemHeight = calculateResponsiveHeight(
+      referenceContainerHeight: currentContainerHeight,
+      referenceValue: referenceContainerHeight,
+      ratioValue: referenceItemHeight,
+    );
 
     Future.delayed(Duration.zero, _setInitialPosition);
     scrollController.addListener(_scrollListener);
@@ -54,5 +65,13 @@ class HeightPickerController extends GetxController {
     if (heightValue >= minHeight && heightValue <= maxHeight) {
       updateSelectedHeight(heightValue);
     }
+  }
+
+  double calculateResponsiveHeight({
+    required double referenceContainerHeight,
+    required double referenceValue,
+    required double ratioValue,
+  }) {
+    return referenceContainerHeight * (ratioValue / referenceValue);
   }
 }

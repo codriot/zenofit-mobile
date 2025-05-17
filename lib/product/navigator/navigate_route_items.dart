@@ -1,16 +1,26 @@
 import 'package:diet_app_mobile/bindings/views/auth/login_binding.dart';
+import 'package:diet_app_mobile/bindings/views/auth/register_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_one_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_two_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_three_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_four_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_five_binding.dart';
 import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_six_binding.dart';
+import 'package:diet_app_mobile/bindings/views/dietition/dietition_view_binding.dart';
+import 'package:diet_app_mobile/bindings/views/discover/discover_view_binding.dart';
+import 'package:diet_app_mobile/bindings/views/home/home_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/main/main_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_fast_item_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_detail_binding.dart';
+import 'package:diet_app_mobile/bindings/views/profile/profile_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/water/add_water_binding.dart';
 import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_binding.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_complain_succes_view.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_complain_view.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_detail_view.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_view.dart';
+import 'package:diet_app_mobile/views/dietition/dietition_vote_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_detail_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
@@ -21,7 +31,11 @@ import 'package:diet_app_mobile/views/basic/onboarding/onboarding_one_view.dart'
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_two_view.dart';
 import 'package:diet_app_mobile/views/basic/register/register_view.dart';
 import 'package:diet_app_mobile/views/basic/splash/splash_view.dart';
+import 'package:diet_app_mobile/views/discover/discover_view.dart';
+import 'package:diet_app_mobile/views/home/aboned_view.dart';
 import 'package:diet_app_mobile/views/home/add_water_view.dart';
+import 'package:diet_app_mobile/views/home/chat_detail_view.dart';
+import 'package:diet_app_mobile/views/home/chat_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_detail_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_fast_item_view.dart';
@@ -29,6 +43,7 @@ import 'package:diet_app_mobile/views/home/meal_add_filter_search_detail_view.da
 import 'package:diet_app_mobile/views/home/meal_add_filter_search_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_view.dart';
 import 'package:diet_app_mobile/views/main/main_view.dart';
+import 'package:diet_app_mobile/views/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
@@ -54,6 +69,7 @@ class NavigatorRoutes {
         name: NavigateRoutesItems.register.withSlash,
         page: () => const RegisterView(),
         transition: Transition.cupertino,
+        binding: RegisterBinding(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
@@ -82,6 +98,7 @@ class NavigatorRoutes {
         name: NavigateRoutesItems.home.withSlash,
         page: () => const HomeView(),
         transition: Transition.cupertino,
+        binding: HomeViewBindings(),
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
 
@@ -162,6 +179,76 @@ class NavigatorRoutes {
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionDetail.withSlash,
+        page: () => DietitionDetailView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionComplain.withSlash,
+        page: () => const DietitionComplainView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionComplainSucces.withSlash,
+        page: () => const DietitionComplainSuccesView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietitionVote.withSlash,
+        page: () => const DietitionVoteView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.chat.withSlash,
+        page: () => ChatView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.chatDetail.withSlash,
+        page: () => ChatDetailView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.aboned.withSlash,
+        page: () => const AbonedView(),
+        binding: MainBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.discover.withSlash,
+        page: () => const DiscoverView(),
+        binding: DiscoverViewBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.dietition.withSlash,
+        page: () => DietitionView(),
+        binding: DietitionViewBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.profile.withSlash,
+        page: () => ProfileView(),
+        binding: ProfileViewBinding(),  
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
 
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
@@ -189,7 +276,17 @@ enum NavigateRoutesItems {
   addMealFilterSearchDetail,
   addWater,
   main,
+  discover,
   discoverDetail,
+  dietition,
+  dietitionDetail,
+  dietitionComplain,
+  dietitionComplainSucces,
+  dietitionVote,
+  chat,
+  chatDetail,
+  aboned,
+  profile,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

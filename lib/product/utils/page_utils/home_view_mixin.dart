@@ -1,3 +1,5 @@
+import 'package:diet_app_mobile/controller/home/home_view_controller.dart'
+    show ExpansionSection, HomeViewController;
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
@@ -6,6 +8,7 @@ import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.d
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_radius.dart';
 import 'package:diet_app_mobile/product/widgets/general/custom_elevated_button.dart';
+import 'package:diet_app_mobile/product/widgets/home/expantion_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
@@ -16,8 +19,7 @@ mixin HomeViewMixin {
     return Row(
       children: [
         Container(
-          width: 56,
-          height: 56,
+          width: Get.height * 0.07,
           decoration: BoxDecoration(
               shape: BoxShape.circle, color: AppColor.crystalBell.getColor()),
           margin: AppPadding.instance.rightNormal,
@@ -43,13 +45,18 @@ mixin HomeViewMixin {
           ],
         ),
         const Spacer(),
-        Container(
-          decoration: BoxDecoration(
-              color: AppColor.crystalBell.getColor(), shape: BoxShape.circle),
-          padding: AppPadding.instance.allSmall,
-          child: SvgPicture.asset(
-            AppIconUtility.getIconPath("message", format: IconFormat.svg),
-            height: 32,
+        InkWell(
+          borderRadius: BorderRadius.circular(32),
+          onTap: () {
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.chat);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: AppColor.crystalBell.getColor(), shape: BoxShape.circle),
+            padding: AppPadding.instance.allSmall,
+            child: SvgPicture.asset(
+              AppIconUtility.getIconPath("message", format: IconFormat.svg),
+            ),
           ),
         ),
       ],
@@ -125,7 +132,7 @@ mixin HomeViewMixin {
               child: buildNutritionCard(
                   'Kalori', '2500 Cal', AppColor.noxious.getColor(), context),
             ),
-            AppSpaces.instance.vertical10,
+            AppSpaces.instance.horizontal10,
             Expanded(
               child: buildNutritionCard('Protein', '2500 Cal',
                   AppColor.sweetPatato.getColor(), context),
@@ -140,7 +147,7 @@ mixin HomeViewMixin {
               child: buildNutritionCard('Karbonhidrat', '2500 Cal',
                   AppColor.vividBlue.getColor(), context),
             ),
-            AppSpaces.instance.vertical10,
+            AppSpaces.instance.horizontal10,
             Expanded(
               child: buildNutritionCard('Yağ', '2500 Cal',
                   AppColor.vaporwaweBlue.getColor(), context),
@@ -150,10 +157,11 @@ mixin HomeViewMixin {
         AppSpaces.instance.vertical15,
         CustomElevatedButton(
           onPressed: () {
-            NavigatorController.instance.pushToPage(NavigateRoutesItems.addMeal);
+            NavigatorController.instance
+                .pushToPage(NavigateRoutesItems.addMeal);
           },
           width: double.infinity,
-          height: 56,
+          height: Get.height * 0.07,
           elevation: 0,
           backgroundColor: AppColor.noxious.getColor(),
           shape: RoundedRectangleBorder(
@@ -193,8 +201,8 @@ mixin HomeViewMixin {
           Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -331,15 +339,16 @@ mixin HomeViewMixin {
                     CustomElevatedButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        NavigatorController.instance.pushToPage(
-                            NavigateRoutesItems.addWater);
+                        NavigatorController.instance
+                            .pushToPage(NavigateRoutesItems.addWater);
                       },
-                      width: 48,
-                      height: 48,
+                      width: Get.height * 0.07,
+                      height: Get.height * 0.07,
                       elevation: 0,
                       backgroundColor: AppColor.noxious.getColor(),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius:
+                            BorderRadius.circular(Get.height * 0.07 / 2),
                       ),
                       child: const Icon(Icons.add, color: Colors.white),
                     ),
@@ -353,7 +362,8 @@ mixin HomeViewMixin {
     );
   }
 
-  Widget buildDietPlanSection(BuildContext context) {
+  Widget buildDietPlanSection(
+      BuildContext context, HomeViewController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -408,78 +418,41 @@ mixin HomeViewMixin {
                 ],
               ),
               AppSpaces.instance.vertical10,
-              _buildExpandableItem(
-                'Sporcu diyeti nedir?',
-                '',
-                AppColor.noxious.getColor(),
-                context,
+              ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.diet,
+                title: 'Sporcu diyeti nedir?',
+                color: AppColor.noxious.getColor(),
+                subtitle: "Bu bölümde diyet bilgisi bulunucaktır.",
               ),
               AppSpaces.instance.vertical10,
-              _buildExpandableItem(
-                'Dikkat edilmesi gerekenler',
-                '',
-                AppColor.noxious.getColor(),
-                context,
+              ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.attention,
+                title: 'Dikkat edilmesi gerekenler',
+                color: AppColor.noxious.getColor(),
+                subtitle: "Bu bölümde diyet bilgisi bulunucaktır.",
               ),
               AppSpaces.instance.vertical10,
-              _buildExpandableItem(
-                'Neler daha çok yenilmeli?',
-                '',
-                AppColor.noxious.getColor(),
-                context,
+              ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.shouldEat,
+                title: 'Neler daha çok yenilmeli?',
+                color: AppColor.noxious.getColor(),
+                subtitle: 'Bu bölümde diyet bilgisi bulunucaktır.',
               ),
               AppSpaces.instance.vertical10,
-              _buildExpandableItem(
-                'Nelerden daha çok kaçınılmalı?',
-                '',
-                AppColor.noxious.getColor(),
-                context,
+              ExpantionTileWidget(
+                controller: controller,
+                section: ExpansionSection.shouldAvoid,
+                subtitle: "Bu bölümde diyet bilgisi bulunucaktır.",
+                title: 'Nelerden daha çok kaçınılmalı?',
+                color: AppColor.noxious.getColor(),
                 isLast: true,
               ),
             ],
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildExpandableItem(
-      String title, String subtitle, Color color, BuildContext context,
-      {bool? isLast = false}) {
-    return Column(
-      children: [
-        ExpansionTile(
-          childrenPadding: EdgeInsets.zero,
-          tilePadding: EdgeInsets.zero,
-          title: Text(
-            title,
-            style: context.appGeneral.textTheme.titleMedium?.copyWith(
-              color: AppColor.white.getColor(),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          trailing: Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColor.white.getColor(),
-          ),
-          shape: Border.all(color: Colors.transparent),
-          collapsedShape: Border.all(color: Colors.transparent),
-          children: [
-            Padding(
-              padding: AppPadding.instance.allSmall,
-              child: Text(
-                'Bu bölümde diyet planınızla ilgili detaylı bilgiler yer alacak.',
-                style: context.appGeneral.textTheme.bodyMedium
-                    ?.copyWith(color: AppColor.white.getColor()),
-              ),
-            ),
-          ],
-        ),
-        if (isLast == false)
-          Divider(
-            height: 1,
-            color: AppColor.white.getColor(),
-          ),
       ],
     );
   }

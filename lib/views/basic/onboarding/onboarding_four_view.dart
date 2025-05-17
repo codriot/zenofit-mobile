@@ -1,4 +1,3 @@
-
 import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
@@ -22,9 +21,7 @@ class OnboardingFourView extends StatelessWidget {
         child: Column(
           children: [
             OnboardingTopComponents(title: "Boyunuz Kaç?"),
-            Expanded(
-              child: HeightPickerWidget(),
-            ),
+            Expanded(child: HeightPickerWidget()),
             GeneralOnboardingPageCircleComponent(),
             Padding(
               padding: AppPadding.instance.horizontalMedium,
@@ -43,8 +40,12 @@ class OnboardingFourView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);},
+                onPressed: () {
+                  globalOnboardingController.toggleOnboardingPageCount(
+                      OnboardingPageCountEnum.onboardingPageFive.index);
+                  NavigatorController.instance
+                      .pushToPage(NavigateRoutesItems.onboardingFive);
+                },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
                 backgroundColor: AppColor.sweetPatato.getColor(),

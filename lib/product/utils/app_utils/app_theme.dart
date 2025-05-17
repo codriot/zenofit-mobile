@@ -1,5 +1,6 @@
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 
 class AppTheme {
   late ThemeData theme;
@@ -8,6 +9,15 @@ class AppTheme {
   AppTheme(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     theme = ThemeData(
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent, // Ya da istediğiniz renk
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent, // StatusBar rengini şeffaf yap
+          statusBarIconBrightness: Brightness.dark, // İkonları koyu yap
+          statusBarBrightness:
+              Brightness.light, // (Android için) Status bar'ı açık yap
+        ),
+      ),
       textTheme: TextTheme(
         displayLarge: TextStyle(
             fontSize: mediaQuery.size.width * 0.11,

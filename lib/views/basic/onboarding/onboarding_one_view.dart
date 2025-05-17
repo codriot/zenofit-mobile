@@ -1,4 +1,5 @@
 import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart';
+import 'package:diet_app_mobile/controller/basic/onboarding/onboarding_one_controller.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
@@ -15,32 +16,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class OnboardingOneView extends StatelessWidget {
+class OnboardingOneView extends GetView<OnboardingOneController> {
   OnboardingOneView({super.key});
-  final GlobalOnboardingController globalOnboardingController = Get.find<GlobalOnboardingController>();
+  final GlobalOnboardingController globalOnboardingController =
+      Get.find<GlobalOnboardingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            OnboardingTopComponents(title: "Cinsiyetiniz Nedir?",),
+            OnboardingTopComponents(
+              title: "Cinsiyetiniz Nedir?",
+            ),
             _buildPageGenderComponent(
-                context: context, icon: "men", text: "Erkek"),
+              context: context,
+              icon: "men",
+              text: "Erkek",
+              gender: GenderType.male,
+              onTap: () => controller.selectGender(GenderType.male),
+            ),
             _buildPageGenderComponent(
-                context: context, icon: "woman", text: "kadın"),
+                onTap: () => controller.selectedGender(GenderType.female),
+                gender: GenderType.female,
+                context: context,
+                icon: "woman",
+                text: "kadın"),
             _buildPageGenderComponent(
-                context: context, icon: "genderless", text: "Hiçbiri"),
+                onTap: () => controller.selectedGender(GenderType.none),
+                gender: GenderType.none,
+                context: context,
+                icon: "genderless",
+                text: "Hiçbiri"),
             _buildPageGenderComponent(
-                context: context, icon: "close", text: "Belirtmek İstemiyorum"),
+                gender: GenderType.preferNotToSay,
+                onTap: () =>
+                    controller.selectedGender(GenderType.preferNotToSay),
+                context: context,
+                icon: "close",
+                text: "Belirtmek İstemiyorum"),
             const Spacer(),
             GeneralOnboardingPageCircleComponent(),
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
                 onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageTwo.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingTwo);
+                  globalOnboardingController.toggleOnboardingPageCount(
+                      OnboardingPageCountEnum.onboardingPageTwo.index);
+                  NavigatorController.instance
+                      .pushToPage(NavigateRoutesItems.onboardingTwo);
                 },
                 text: "Next",
                 padding: AppPadding.instance.bottomNormal,
@@ -51,8 +75,10 @@ class OnboardingOneView extends StatelessWidget {
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
                 onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance.pushToPage(NavigateRoutesItems.main);
+                  globalOnboardingController.toggleOnboardingPageCount(
+                      OnboardingPageCountEnum.onboardingPageTwo.index);
+                  NavigatorController.instance
+                      .pushToPage(NavigateRoutesItems.onboardingTwo);
                 },
                 text: "Skip",
                 padding: AppPadding.instance.bottomNormal,
@@ -65,38 +91,58 @@ class OnboardingOneView extends StatelessWidget {
     );
   }
 
-  Container _buildPageGenderComponent(
+  Widget _buildPageGenderComponent(
       {required BuildContext context,
       required String text,
-      required String icon}) {
-    return Container(
-      margin: const EdgeInsets.only(top: 24),
-      decoration: BoxDecoration(
-          borderRadius: AppRadius.instance.mediumBorderRadius,
-          color: AppColor.crystalBell.getColor(),
-          boxShadow: [
-            generalComponentsShadow(),
-          ]),
-      padding: AppPadding.instance.leftMedium,
-      width: Get.width * 0.72,
-      height: 72,
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            AppIconUtility.getIconPath(icon, format: IconFormat.svg),
-            height: AppSizes.instance.iconSizeNormal,
-          ),
-          Padding(
-            padding: AppPadding.instance.leftSmall,
-            child: Text(
-              text,
-              style: context.appGeneral.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w400),
+      required String icon,
+      required void Function() onTap,
+      required GenderType gender}) {
+    return Obx(
+      () {
+        final isSelected = controller.isGenderSelected(gender);
+        return Padding(
+          padding: EdgeInsets.only(top: Get.height * 0.035),
+          child: InkWell(
+            borderRadius: AppRadius.instance.mediumBorderRadius,
+            onTap: () => controller.selectedGender(gender),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: AppRadius.instance.mediumBorderRadius,
+                  color: isSelected
+                      ? AppColor.vividBlue.getColor()
+                      : AppColor.crystalBell.getColor(),
+                  boxShadow: [
+                    generalComponentsShadow(),
+                  ]),
+              padding: AppPadding.instance.leftMedium,
+              width: Get.width * 0.72,
+              height: Get.height * 0.1,
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    AppIconUtility.getIconPath(icon, format: IconFormat.svg),
+                    height: AppSizes.instance.iconSizeNormal,
+                    color: isSelected
+                        ? AppColor.white.getColor()
+                        : AppColor.black.getColor(),
+                  ),
+                  Padding(
+                    padding: AppPadding.instance.leftSmall,
+                    child: Text(
+                      text,
+                      style: context.appGeneral.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: isSelected
+                              ? AppColor.white.getColor()
+                              : AppColor.black.getColor()),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-

@@ -16,48 +16,23 @@ import 'package:get/get.dart';
 class MealAddView extends GetView<MealAddController> {
   const MealAddView({super.key});
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
-      appBar: _buildPageAppBar(context),
-      body: Column(
-        children: [
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColor.transparent.getColor(),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.crystalBell.getColor(),
-                  spreadRadius: 1,
-                  blurRadius: 2,
-                  offset: const Offset(0, 1),
-                ),
+      body: CustomScrollView(
+        slivers: [
+          _buildPageAppBar(context),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                _buildDateContainer(),
+                AppSpaces.instance.vertical15,
+                _buildProgressSection(context),
+                AppSpaces.instance.vertical25,
+                _buildMealList(context),
+                AppSpaces.instance.vertical25,
               ],
-            ),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: controller.days.length,
-              itemBuilder: (context, index) {
-                final date = controller.days[index];
-                return AddMealButton(
-                    controller: controller, date: date, index: index);
-              },
-            ),
-          ),
-          AppSpaces.instance.vertical15,
-          Expanded(
-            child: SingleChildScrollView(
-              padding: AppPadding.instance.horizontalNormal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProgressSection(context),
-                  AppSpaces.instance.vertical25,
-                  _buildMealList(context),
-                ],
-              ),
             ),
           ),
         ],
@@ -65,19 +40,40 @@ class MealAddView extends GetView<MealAddController> {
     );
   }
 
-  AppBar _buildPageAppBar(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
+  Container _buildDateContainer() {
+    return Container(
+      height: Get.height * 0.07,
+      decoration: BoxDecoration(
+        color: AppColor.transparent.getColor(),
       ),
-      title: Text(
-        'Öğün Ekle',
-        style: context.appGeneral.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.days.length,
+        itemBuilder: (context, index) {
+          final date = controller.days[index];
+          return AddMealButton(
+              controller: controller, date: date, index: index);
+        },
+      ),
+    );
+  }
+
+  SliverAppBar _buildPageAppBar(BuildContext context) {
+    return SliverAppBar(
+      floating: false,
+      pinned: true,
+      elevation: 0,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text(
+          'Öğün Ekle',
+          style: context.appGeneral.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        background: Container(
+          color: AppColor.whiteSolid.getColor(), // Burada arka plan rengini belirleyebilirsiniz
         ),
       ),
     );
@@ -228,8 +224,7 @@ class MealAddView extends GetView<MealAddController> {
                     arguments: {'meal': MealModel.fromType(imageKey)},
                   );
                 },
-                width: 108,
-                height: 40,
+                width: Get.width * 0.3,
                 elevation: 0,
                 backgroundColor: AppColor.noxious.getColor(),
                 shape: RoundedRectangleBorder(
@@ -293,36 +288,28 @@ class AddMealButton extends StatelessWidget {
             return AnimatedContainer(
               duration: AppDuration.instance.durationFast,
               curve: Curves.easeInOut,
-              width: isSelected ? 140 : 50,
+              width: isSelected ? Get.width * 0.36 : Get.height * 0.07,
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColor.vividBlue.getColor()
                     : AppColor.white.getColor(),
                 borderRadius: AppRadius.instance.largeBorderRadius,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.crystalBell.getColor(),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
               ),
               child: Center(
                 child: isSelected
                     ? Padding(
-                      padding: AppPadding.instance.horizontalNormal,
-                      child: Text(
-                        'Bugün, ${date.day} ${controller.getMonthName(date.month)}',
-                        overflow: TextOverflow.ellipsis,
-                        style: context.appGeneral.textTheme.bodyMedium
-                            ?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.white.getColor(),
+                        padding: AppPadding.instance.horizontalNormal,
+                        child: Text(
+                          'Bugün, ${date.day} ${controller.getMonthName(date.month)}',
                           overflow: TextOverflow.ellipsis,
+                          style:
+                              context.appGeneral.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.white.getColor(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    )
+                      )
                     : Text(
                         date.day.toString(),
                         style:

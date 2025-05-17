@@ -10,10 +10,16 @@ class MealAddFilterSearchController extends GetxController {
   final RxList<Map<String, dynamic>> recentMeals = <Map<String, dynamic>>[].obs;
   final detailController = Get.find<MealAddDetailController>();
 
+  var isSearchActive = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     _loadInitialData();
+  }
+
+  void makeFalseSearchActive(){
+    isSearchActive.value = false;
   }
 
   void _loadInitialData() {
@@ -32,22 +38,23 @@ class MealAddFilterSearchController extends GetxController {
     );
   }
 
-  void onSearchChanged(String value) {
-    // Arama fonksiyonu
-    if (value.isEmpty) {
-      _loadInitialData();
-      return;
-    }
+void onSearchChanged(String value) {
+  isSearchActive.value = value.isNotEmpty;
 
-    final filteredMeals = recentMeals.where((meal) {
-      return meal['title']
-          .toString()
-          .toLowerCase()
-          .contains(value.toLowerCase());
-    }).toList();
-
-    recentMeals.value = filteredMeals;
+  if (value.isEmpty) {
+    _loadInitialData();
+    return;
   }
+
+  final filteredMeals = recentMeals.where((meal) {
+    return meal['title']
+        .toString()
+        .toLowerCase()
+        .contains(value.toLowerCase());
+  }).toList();
+
+  recentMeals.value = filteredMeals;
+}
 
   void onQuickAddPressed() {
     NavigatorController.instance.pushToPage(
@@ -60,6 +67,11 @@ class MealAddFilterSearchController extends GetxController {
       NavigateRoutesItems.addMealFilterSearchDetail,
       arguments: {'meal': meal},
     );
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    onSearchChanged(''); // Veya varsayılan arama davranışını tetiklemek için
   }
 
   @override

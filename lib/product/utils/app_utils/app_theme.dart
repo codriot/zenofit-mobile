@@ -10,6 +10,8 @@ class AppTheme {
     final mediaQuery = MediaQuery.of(context);
     theme = ThemeData(
       appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        toolbarHeight: 76,
         backgroundColor: Colors.transparent, // Ya da istediğiniz renk
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent, // StatusBar rengini şeffaf yap

@@ -76,7 +76,9 @@ class RegisterView extends GetView<RegisterController> {
                                     hintText: "example",
                                     icon: "password"),
                                 GeneralPageButtonWidget(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    controller.register();
+                                  },
                                   text: "Giriş Yap",
                                   padding:
                                       EdgeInsets.only(top: Get.height * 0.02),

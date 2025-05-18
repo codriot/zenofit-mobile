@@ -13,13 +13,14 @@ import 'package:get/get.dart';
 class OnboardingTopComponents extends StatelessWidget {
   OnboardingTopComponents({
     super.key,
-    required this.title, this.textPadding,
+    required this.title,
+    this.textPadding,
   });
   final String title;
   final GlobalOnboardingController globalOnboardingController =
       Get.put(GlobalOnboardingController());
-  final EdgeInsets? textPadding;  
-  
+  final EdgeInsets? textPadding;
+
   @override
   Widget build(BuildContext context) {
     return Column(

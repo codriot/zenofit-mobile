@@ -1,13 +1,13 @@
 class MenuModel {
   final String iconUrl;
   final String title;
-  final int dietitionCount;
+  final int DietitianCount;
   bool isSelected;
 
   MenuModel({
     required this.iconUrl,
     required this.title,
-    required this.dietitionCount,
+    required this.DietitianCount,
     this.isSelected = false,
   });
 }

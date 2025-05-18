@@ -16,11 +16,11 @@ import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_detai
 import 'package:diet_app_mobile/bindings/views/profile/profile_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/water/add_water_binding.dart';
 import 'package:diet_app_mobile/controller/home/meal/meal_add_detail_binding.dart';
-import 'package:diet_app_mobile/views/dietition/dietition_complain_succes_view.dart';
-import 'package:diet_app_mobile/views/dietition/dietition_complain_view.dart';
-import 'package:diet_app_mobile/views/dietition/dietition_detail_view.dart';
-import 'package:diet_app_mobile/views/dietition/dietition_view.dart';
-import 'package:diet_app_mobile/views/dietition/dietition_vote_view.dart';
+import 'package:diet_app_mobile/views/dietitian/dietitian_complain_succes_view.dart';
+import 'package:diet_app_mobile/views/dietitian/dietitian_complain_view.dart';
+import 'package:diet_app_mobile/views/dietitian/dietitian_detail_view.dart';
+import 'package:diet_app_mobile/views/dietitian/dietitian_view.dart';
+import 'package:diet_app_mobile/views/dietitian/dietitian_vote_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_detail_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_five_view.dart';
 import 'package:diet_app_mobile/views/basic/onboarding/onboarding_four_view.dart';
@@ -44,6 +44,9 @@ import 'package:diet_app_mobile/views/home/meal_add_filter_search_view.dart';
 import 'package:diet_app_mobile/views/home/meal_add_view.dart';
 import 'package:diet_app_mobile/views/main/main_view.dart';
 import 'package:diet_app_mobile/views/profile/profile_view.dart';
+import 'package:diet_app_mobile/views/profile/settings/blocked/blocked_view.dart';
+import 'package:diet_app_mobile/views/profile/settings/saved/saved_screen.dart';
+import 'package:diet_app_mobile/views/profile/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
@@ -175,81 +178,108 @@ class NavigatorRoutes {
     GetPage(
         name: NavigateRoutesItems.discoverDetail.withSlash,
         page: () => DiscoverDetailView(),
-        binding: MainBinding(),  
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
-        name: NavigateRoutesItems.dietitionDetail.withSlash,
-        page: () => DietitionDetailView(),
-        binding: MainBinding(),  
+        name: NavigateRoutesItems.dietitianDetail.withSlash,
+        page: () => DietitianDetailView(),
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
-        name: NavigateRoutesItems.dietitionComplain.withSlash,
-        page: () => const DietitionComplainView(),
-        binding: MainBinding(),  
+        name: NavigateRoutesItems.dietitianComplain.withSlash,
+        page: () => const DietitianComplainView(),
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
-        name: NavigateRoutesItems.dietitionComplainSucces.withSlash,
-        page: () => const DietitionComplainSuccesView(),
-        binding: MainBinding(),  
+        name: NavigateRoutesItems.dietitianComplainSucces.withSlash,
+        page: () => const DietitianComplainSuccesView(),
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
-        name: NavigateRoutesItems.dietitionVote.withSlash,
-        page: () => const DietitionVoteView(),
-        binding: MainBinding(),  
+        name: NavigateRoutesItems.dietitianVote.withSlash,
+        page: () => const DietitianVoteView(),
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.chat.withSlash,
         page: () => ChatView(),
-        binding: MainBinding(),  
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.chatDetail.withSlash,
         page: () => ChatDetailView(),
-        binding: MainBinding(),  
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.aboned.withSlash,
         page: () => const AbonedView(),
-        binding: MainBinding(),  
+        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.discover.withSlash,
         page: () => const DiscoverView(),
-        binding: DiscoverViewBinding(),  
+        binding: DiscoverViewBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
-        name: NavigateRoutesItems.dietition.withSlash,
-        page: () => DietitionView(),
-        binding: DietitionViewBinding(),  
+        name: NavigateRoutesItems.dietitian.withSlash,
+        page: () => const DietitianView(),
+        binding: DietitianViewBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.formerDietitian.withSlash,
+        page: () => const DietitianView(isFormer: true),
+        binding: DietitianViewBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.profile.withSlash,
         page: () => ProfileView(),
-        binding: ProfileViewBinding(),  
+        binding: ProfileViewBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
-
+    GetPage(
+        name: NavigateRoutesItems.settings.withSlash,
+        page: () => const SettingsView(),
+        binding: ProfileViewBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.savedScreen.withSlash,
+        page: () => const SavedScreen(),
+        binding: ProfileViewBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
+    GetPage(
+        name: NavigateRoutesItems.blocked.withSlash,
+        page: () => const BlockedView(),
+        binding: ProfileViewBinding(),
+        transition: Transition.zoom,
+        transitionDuration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut),
     // GetPage(name: NavigateRoutesItems.unknown.withSlash, page: () => const UnknownScreen(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     // StorageServices().loadData(StorageItems.isUserRegistered) == true ?  MainScreen() :
     //  const SplashScreen(),
@@ -278,15 +308,19 @@ enum NavigateRoutesItems {
   main,
   discover,
   discoverDetail,
-  dietition,
-  dietitionDetail,
-  dietitionComplain,
-  dietitionComplainSucces,
-  dietitionVote,
+  dietitian,
+  formerDietitian,
+  dietitianDetail,
+  dietitianComplain,
+  dietitianComplainSucces,
+  dietitianVote,
   chat,
   chatDetail,
   aboned,
   profile,
+  settings,
+  savedScreen,
+  blocked
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems {

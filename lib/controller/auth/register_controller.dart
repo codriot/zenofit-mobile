@@ -1,3 +1,4 @@
+import 'package:diet_app_mobile/API/services/general_serivce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../API/services/auth/auth_service.dart';
@@ -8,7 +9,7 @@ class RegisterController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isPasswordVisible = false.obs;
   final RxBool isConfirmPasswordVisible = false.obs;
-  
+
   final RxString name = ''.obs;
   final RxString email = ''.obs;
   final RxString password = ''.obs;
@@ -33,26 +34,25 @@ class RegisterController extends GetxController {
   void setEmail(String value) => email.value = value;
   void setPassword(String value) => password.value = value;
   void setConfirmPassword(String value) => confirmPassword.value = value;
-
   Future<void> register() async {
     if (!_validateInputs()) return;
 
     try {
       isLoading.value = true;
-      
-      // Kayıt işlemi
-      // await _authService.register(
-      //   email: email.value,
-      //   password: password.value,
-      //   name: name.value,
-      // );
 
-      // Başarılı kayıt sonrası onboarding'e yönlendirme
-      NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
+      // API ile kayıt işlemi
+      final authResponse =
+          await GeneralService.instance.register(email.value, password.value);
+
+      if (authResponse != null) {
+        // Başarılı kayıt sonrası onboarding'e yönlendirme
+        NavigatorController.instance
+            .pushToPage(NavigateRoutesItems.onboardingOne);
+      }
     } catch (e) {
       Get.snackbar(
         'Hata',
-        'Kayıt olurken bir hata oluştu: ${e.toString()}',
+        'Kayıt işlemi sırasında bir hata oluştu: $e',
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
@@ -105,7 +105,8 @@ class RegisterController extends GetxController {
       isLoading.value = true;
       await _authService.signInWithGoogle();
       if (_authService.currentUser != null) {
-        NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
+        NavigatorController.instance
+            .pushToPage(NavigateRoutesItems.onboardingOne);
       }
     } catch (e) {
       Get.snackbar(
@@ -132,4 +133,4 @@ class RegisterController extends GetxController {
       isLoading.value = false;
     }
   }
-} 
+}

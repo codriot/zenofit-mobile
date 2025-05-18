@@ -1,14 +1,14 @@
 // ID Generator için yardımcı sınıf
-class _DietitionIdGenerator {
+class _DietitianIdGenerator {
   static int _lastId = 0;
-  
+
   static String generateId() {
     _lastId++;
     return 'DIET_${_lastId.toString().padLeft(4, '0')}';
   }
 }
 
-class DietitionModel {
+class DietitianModel {
   final String id;
   final String? name;
   final String? lastName;
@@ -16,31 +16,31 @@ class DietitionModel {
   final int? patientCount;
   final String? experienceYears;
   final double? rating;
-  final String? aboutDietition;
+  final String? aboutDietitian;
   final String? aboutJob;
   final String? calender;
   final String? comments;
   final bool? isliked;
   final bool? isAvaible;
 
-  DietitionModel({
-      String? id,
-      required this.name,
-      required this.lastName,
-      required this.workBranch,
-      this.patientCount = 0,
-      required this.experienceYears,
-      this.rating = 0.0,
-      this.aboutDietition,
-      this.aboutJob,
-      this.calender,
-      this.comments,
-      this.isliked = false,
-      this.isAvaible = true,
-  }) : id = id ?? _DietitionIdGenerator.generateId();
+  DietitianModel({
+    String? id,
+    required this.name,
+    required this.lastName,
+    required this.workBranch,
+    this.patientCount = 0,
+    required this.experienceYears,
+    this.rating = 0.0,
+    this.aboutDietitian,
+    this.aboutJob,
+    this.calender,
+    this.comments,
+    this.isliked = false,
+    this.isAvaible = true,
+  }) : id = id ?? _DietitianIdGenerator.generateId();
 
   // Modeli kopyalama metodu
-  DietitionModel copyWith({
+  DietitianModel copyWith({
     String? id,
     String? name,
     String? lastname,
@@ -48,14 +48,14 @@ class DietitionModel {
     int? patientCount,
     String? experienceYears,
     double? rating,
-    String? aboutDietition,
+    String? aboutDietitian,
     String? aboutJob,
     String? calender,
     String? comments,
     bool? isliked,
     bool? isAvaible,
   }) {
-    return DietitionModel(
+    return DietitianModel(
       id: id ?? this.id,
       name: name ?? this.name,
       lastName: lastname ?? this.lastName,
@@ -63,7 +63,7 @@ class DietitionModel {
       patientCount: patientCount ?? this.patientCount,
       experienceYears: experienceYears ?? this.experienceYears,
       rating: rating ?? this.rating,
-      aboutDietition: aboutDietition ?? this.aboutDietition,
+      aboutDietitian: aboutDietitian ?? this.aboutDietitian,
       aboutJob: aboutJob ?? this.aboutJob,
       calender: calender ?? this.calender,
       comments: comments ?? this.comments,
@@ -82,7 +82,7 @@ class DietitionModel {
       'patientCount': patientCount,
       'experienceYears': experienceYears,
       'rating': rating,
-      'aboutDietition': aboutDietition,
+      'aboutDietitian': aboutDietitian,
       'aboutJob': aboutJob,
       'calender': calender,
       'comments': comments,
@@ -91,8 +91,8 @@ class DietitionModel {
     };
   }
 
-  factory DietitionModel.fromJson(Map<String, dynamic> json) {
-    return DietitionModel(
+  factory DietitianModel.fromJson(Map<String, dynamic> json) {
+    return DietitianModel(
       id: json['id'],
       name: json['name'],
       lastName: json['lastname'],
@@ -100,7 +100,7 @@ class DietitionModel {
       patientCount: json['patientCount'],
       experienceYears: json['experienceYears'],
       rating: json['rating'],
-      aboutDietition: json['aboutDietition'],
+      aboutDietitian: json['aboutDietitian'],
       aboutJob: json['aboutJob'],
       calender: json['calender'],
       comments: json['comments'],

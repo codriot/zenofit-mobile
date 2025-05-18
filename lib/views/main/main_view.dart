@@ -2,7 +2,7 @@ import 'package:diet_app_mobile/controller/main/main_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_duration.dart';
-import 'package:diet_app_mobile/views/dietition/dietition_view.dart';
+import 'package:diet_app_mobile/views/dietitian/dietitian_view.dart';
 import 'package:diet_app_mobile/views/discover/discover_view.dart';
 import 'package:diet_app_mobile/views/home/home_view.dart';
 import 'package:diet_app_mobile/views/profile/profile_view.dart';
@@ -22,11 +22,12 @@ class MainView extends GetView<MainController> {
           onPageChanged: (index) {
             controller.currentIndex.value = index;
           },
-          physics: const NeverScrollableScrollPhysics(), // Kaydırma animasyonu için
+          physics:
+              const NeverScrollableScrollPhysics(), // Kaydırma animasyonu için
           children: [
             const HomeView(), // Ana sayfa
             const DiscoverView(), // Keşfet sayfası
-            DietitionView(),
+            DietitianView(),
             ProfileView(),
           ],
         ),
@@ -90,7 +91,8 @@ class AnimatedBottomNavigationBar extends StatelessWidget {
           children: [
             AnimatedContainer(
               duration: AppDuration.instance.durationFast,
-              padding: EdgeInsets.symmetric(vertical: isSelected ? Get.height * 0.01 : 0),
+              padding: EdgeInsets.symmetric(
+                  vertical: isSelected ? Get.height * 0.01 : 0),
               child: SvgPicture.asset(
                 AppIconUtility.getIconPath(icon, format: IconFormat.svg),
                 color: isSelected

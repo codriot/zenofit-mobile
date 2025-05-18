@@ -5,6 +5,7 @@ import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_padding.dart';
 import 'package:diet_app_mobile/product/widgets/general/general_page_button.dart';
+import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +17,15 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       floatingActionButton: Padding(
         padding: AppPadding.instance.horizontalMedium,
-        child: GeneralPageButtonWidget(onPressed: () {
-          NavigatorController.instance.pushToPage(NavigateRoutesItems.login);
-        }, text: "Başla"),
+        child: GeneralPageButtonWidget(
+            onPressed: () async {
+              // Kullanıcı splash ekranını gördüğünü kaydet
+              await StorageService.instance
+                  .saveData(StorageItems.splashSeen, true);
+              NavigatorController.instance
+                  .pushToPage(NavigateRoutesItems.login);
+            },
+            text: "Başla"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Padding(
@@ -39,8 +46,7 @@ class SplashView extends StatelessWidget {
                   )),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                  top: Get.height * 0.02),
+              padding: EdgeInsets.only(top: Get.height * 0.02),
               child: Text(
                 textAlign: TextAlign.center,
                 "Yapay zeka ile ücretsiz bir şekilde bilgi alabilir ve kendinize özel bir diyet oluşturabilirsiniz.",

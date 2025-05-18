@@ -2,7 +2,7 @@ import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NavigatorController extends GetxController{
+class NavigatorController extends GetxController {
   NavigatorController._();
   static NavigatorController instance = NavigatorController._();
   final GlobalKey<NavigatorState> _navigatorGlobalKey = GlobalKey();

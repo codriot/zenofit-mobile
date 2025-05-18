@@ -67,7 +67,10 @@ class ChatDetailView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _buildFilterButtonComponent(
-                          onPressed: () {NavigatorController.instance.pushToPage(NavigateRoutesItems.dietitionComplain);},
+                          onPressed: () {
+                            NavigatorController.instance.pushToPage(
+                                NavigateRoutesItems.dietitianComplain);
+                          },
                           context: context,
                           text: "Şikayet Et",
                           trailingIcon: "error-warning-line",
@@ -82,7 +85,10 @@ class ChatDetailView extends StatelessWidget {
                           iconColor: AppColor.goldenGlam.getColor(),
                         ),
                         _buildFilterButtonComponent(
-                          onPressed: () {controller.showBlockUserBottomSheet(context,widget: const AbonedView());},
+                          onPressed: () {
+                            controller.showBlockUserBottomSheet(context,
+                                widget: const AbonedView());
+                          },
                           context: context,
                           text: "Engelle",
                           trailingIcon: "forbid-line",

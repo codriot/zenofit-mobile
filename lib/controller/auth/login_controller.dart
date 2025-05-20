@@ -1,4 +1,6 @@
 import 'package:diet_app_mobile/API/services/general_serivce.dart';
+import 'package:diet_app_mobile/API/services/storage_service.dart';
+import 'package:diet_app_mobile/model/user_model.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:flutter/widgets.dart' show TextEditingController;
@@ -31,23 +33,42 @@ class LoginController extends GetxController {
   }
 
   Future<void> login() async {
+    setEmail(mailController.text.trim());
+    setPassword(passwordController.text.trim());
     if (!_validateInputs()) return;
 
     try {
       isLoading.value = true;
 
-      // API ile kayıt işlemi
-      final authResponse =
-          await GeneralService.instance.login(email.value, password.value);
+      final loginResponse = await GeneralService.instance.login(email.value, password.value);
 
-      if (authResponse != null) {
-        // Başarılı kayıt sonrası onboarding'e yönlendirme
-        NavigatorController.instance
-            .pushToPage(NavigateRoutesItems.home);
+      if (loginResponse != null && loginResponse.accessToken.isNotEmpty) {
+        await StorageService.instance.saveData(StorageItems.token, loginResponse.accessToken);
+
+        final userResponse = await GeneralService.instance.authorizedGet('/users/me');
+        if (userResponse != null && userResponse.data != null && userResponse.data is Map<String, dynamic>) {
+          final user = UserModel.fromJson(userResponse.data);
+          await StorageService.instance.saveData(StorageItems.user, user.toJson());
+
+          if (user.age == null ||
+              user.gender == null ||
+              user.height == null ||
+              user.weight == null ||
+              user.goal == null ||
+              user.activityLevel == null) {
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
+          } else {
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.home);
+          }
+        } else {
+          Get.snackbar(
+            'Hata',
+            'Kullanıcı verisi alınamadı. Lütfen tekrar giriş yapın.',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       }
-      
     } catch (e) {
-      // Hata yönetimi
       Get.snackbar(
         'Hata',
         'Giriş yapılırken bir hata oluştu',
@@ -82,7 +103,6 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    // Controller dispose edilirken yapılacak işlemler
     super.onClose();
   }
-} 
+}

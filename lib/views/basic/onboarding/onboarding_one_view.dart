@@ -11,7 +11,6 @@ import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_sizes.da
 import 'package:diet_app_mobile/product/widgets/general/general_page_button.dart';
 import 'package:diet_app_mobile/product/widgets/general/general_shadow_components.dart';
 import 'package:diet_app_mobile/product/widgets/onboarding/onboarding_page_circle.dart';
-import 'package:diet_app_mobile/product/widgets/onboarding/onboarding_top_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -26,9 +25,7 @@ class OnboardingOneView extends GetView<OnboardingOneController> {
       body: SafeArea(
         child: Column(
           children: [
-            OnboardingTopComponents(
-              title: "Cinsiyetiniz Nedir?",
-            ),
+            _onboardingTopComponentPage(context),
             _buildPageGenderComponent(
               context: context,
               icon: "men",
@@ -143,6 +140,35 @@ class OnboardingOneView extends GetView<OnboardingOneController> {
           ),
         );
       },
+    );
+  }
+
+  Widget _onboardingTopComponentPage(BuildContext context){
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.center, // Text'i ortalamak için kullanılır
+          children: [
+            Padding(
+              padding: EdgeInsets.zero,
+              child: Text(
+                "Cinsiyetiniz Nedir?",
+                style: context.appGeneral.textTheme.headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center, // Text ortalama
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: AppPadding.instance.horizontalMedium,
+          child: Text(
+            "Size daha iyi bir seçenek sunabilmemiz için bilgileri boş bırakmayınız.",
+            textAlign: TextAlign.center,
+            style: context.appGeneral.textTheme.bodyMedium?.copyWith(),
+          ),
+        ),
+      ],
     );
   }
 }

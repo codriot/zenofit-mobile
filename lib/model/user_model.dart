@@ -4,7 +4,7 @@ class UserModel {
   final String? name;
   final String createdAt;
   final int? age;
-  final String? gender;
+  String? gender;
   final double? height;
   final double? weight;
   final String? goal;

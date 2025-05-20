@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 class GlobalOnboardingController extends GetxController {
+
   final onboardingPageCount = [
     true,
     false,

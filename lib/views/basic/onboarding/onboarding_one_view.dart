@@ -17,8 +17,7 @@ import 'package:get/get.dart';
 
 class OnboardingOneView extends GetView<OnboardingOneController> {
   OnboardingOneView({super.key});
-  final GlobalOnboardingController globalOnboardingController =
-      Get.find<GlobalOnboardingController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,29 +56,10 @@ class OnboardingOneView extends GetView<OnboardingOneController> {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(
-                      OnboardingPageCountEnum.onboardingPageTwo.index);
-                  NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.onboardingTwo);
-                },
+                onPressed: controller.pushToOtherPage,
                 text: "Next",
                 padding: AppPadding.instance.bottomNormal,
                 isIconActive: true,
-              ),
-            ),
-            Padding(
-              padding: AppPadding.instance.horizontalMedium,
-              child: GeneralPageButtonWidget(
-                onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(
-                      OnboardingPageCountEnum.onboardingPageTwo.index);
-                  NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.onboardingTwo);
-                },
-                text: "Skip",
-                padding: AppPadding.instance.bottomNormal,
-                backgroundColor: AppColor.sweetPatato.getColor(),
               ),
             ),
           ],

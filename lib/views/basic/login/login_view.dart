@@ -30,57 +30,70 @@ class LoginView extends GetView<LoginController> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: Get.height),
               child: IntrinsicHeight(
-                child: Column(
-                  children: [
-                    _buildAppLogo(),
-                    AppSpaces.instance.vertical15,
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColor.lightGreenGlint.getColor(),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(64),
-                            topRight: Radius.circular(64),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: AppPadding.instance.horizontalMedium,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppSpaces.instance.vertical20,
-                              _buildMakeLoginText(context),
-                              _buildDoYouHaveAcountEither(context),
-                              _buildMailText(context),
-                              _buildPageTextField(context,
-                                  hintText: "example@example.com",
-                                  icon: "mail",
-                                  controller: controller.mailController),
-                              _buildPasswordText(context),
-                              _buildPageTextField(context,
-                                  hintText: "example",
-                                  icon: "password",
-                                  controller: controller.passwordController),
-                              _buildForgetThePasswordText(context),
-                              _buildOrText(context),
-                              _buildLoginWithGooglOrApple(),
-                              GeneralPageButtonWidget(
-                                onPressed: () {
-                                  controller.login();
-                                },
-                                text: "Giriş Yap",
-                                padding:
-                                    EdgeInsets.only(top: Get.height * 0.03),
+                child: Obx(() {
+                  return Stack(
+                    children: [
+                      Column(
+                        children: [
+                          _buildAppLogo(),
+                          AppSpaces.instance.vertical15,
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColor.lightGreenGlint.getColor(),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(64),
+                                  topRight: Radius.circular(64),
+                                ),
                               ),
-                              _buildFingerPrintButton(),
-                              AppSpaces.instance.vertical15,
-                            ],
+                              child: Padding(
+                                padding: AppPadding.instance.horizontalMedium,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AppSpaces.instance.vertical20,
+                                    _buildMakeLoginText(context),
+                                    _buildDoYouHaveAcountEither(context),
+                                    _buildMailText(context),
+                                    _buildPageTextField(context,
+                                        hintText: "example@example.com",
+                                        icon: "mail",
+                                        controller: controller.mailController),
+                                    _buildPasswordText(context),
+                                    _buildPageTextField(context,
+                                        hintText: "example",
+                                        icon: "password",
+                                        controller: controller.passwordController),
+                                    _buildForgetThePasswordText(context),
+                                    _buildOrText(context),
+                                    _buildLoginWithGooglOrApple(),
+                                    GeneralPageButtonWidget(
+                                      onPressed: () {
+                                        controller.login();
+                                      },
+                                      text: "Giriş Yap",
+                                      padding:
+                                          EdgeInsets.only(top: Get.height * 0.03),
+                                    ),
+                                    _buildFingerPrintButton(),
+                                    AppSpaces.instance.vertical15,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (controller.isLoading.value)
+                        Container(
+                          color: Colors.black.withOpacity(0.3),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
             ),
           ),

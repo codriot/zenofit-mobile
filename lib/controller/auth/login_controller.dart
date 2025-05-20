@@ -1,3 +1,6 @@
+import 'package:diet_app_mobile/API/services/general_serivce.dart';
+import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
+import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:flutter/widgets.dart' show TextEditingController;
 import 'package:get/get.dart';
 
@@ -32,13 +35,17 @@ class LoginController extends GetxController {
 
     try {
       isLoading.value = true;
-      // TODO: Login işlemleri burada yapılacak
-      // Örnek:
-      // await authService.login(email.value, password.value);
-      // await storageService.saveToken(response.token);
+
+      // API ile kayıt işlemi
+      final authResponse =
+          await GeneralService.instance.login(email.value, password.value);
+
+      if (authResponse != null) {
+        // Başarılı kayıt sonrası onboarding'e yönlendirme
+        NavigatorController.instance
+            .pushToPage(NavigateRoutesItems.home);
+      }
       
-      // Başarılı login sonrası ana sayfaya yönlendirme
-      // Get.offAllNamed(AppRoutes.HOME);
     } catch (e) {
       // Hata yönetimi
       Get.snackbar(

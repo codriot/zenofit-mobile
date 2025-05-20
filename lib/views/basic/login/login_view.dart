@@ -66,8 +66,7 @@ class LoginView extends GetView<LoginController> {
                               _buildLoginWithGooglOrApple(),
                               GeneralPageButtonWidget(
                                 onPressed: () {
-                                  NavigatorController.instance.pushToPage(
-                                      NavigateRoutesItems.onboardingOne);
+                                  controller.login();
                                 },
                                 text: "Giriş Yap",
                                 padding:

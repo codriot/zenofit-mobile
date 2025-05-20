@@ -6,5 +6,5 @@ class ApiBase {
   static ApiBase get instance => _instance;
 
   // API'nin temel URL'si
-  final String baseApiUrl = "http://localhost:8000/api";
+  final String baseApiUrl = "https://fastapi-ai-backend-o373.onrender.com/api";
 }

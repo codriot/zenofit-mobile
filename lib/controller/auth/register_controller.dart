@@ -35,6 +35,10 @@ class RegisterController extends GetxController {
   void setPassword(String value) => password.value = value;
   void setConfirmPassword(String value) => confirmPassword.value = value;
   Future<void> register() async {
+    setName(nameController.text.toString());
+    setEmail(emailController.text.toString());
+    setPassword(passwordController.text.toString());
+    setConfirmPassword(passwordAgainController.text.toString());
     if (!_validateInputs()) return;
 
     try {
@@ -46,6 +50,7 @@ class RegisterController extends GetxController {
 
       if (authResponse != null) {
         // Başarılı kayıt sonrası onboarding'e yönlendirme
+        
         NavigatorController.instance
             .pushToPage(NavigateRoutesItems.onboardingOne);
       }
@@ -70,7 +75,7 @@ class RegisterController extends GetxController {
       return false;
     }
 
-    if (email.value.isEmpty || !GetUtils.isEmail(email.value)) {
+    if (email.value.isEmpty || !email.contains("@")) {
       Get.snackbar(
         'Hata',
         'Geçerli bir email adresi giriniz',

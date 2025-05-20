@@ -62,13 +62,13 @@ class RegisterView extends GetView<RegisterController> {
                                     textEditingController:
                                         controller.emailController,
                                     hintText: "example@gmail.com",
-                                    icon: "password"),
+                                    icon: "mail"),
                                 _buildInputText(context, text: "Şifre"),
                                 _buildPageTextField(context,
                                     textEditingController:
                                         controller.passwordController,
                                     hintText: "example",
-                                    icon: "mail"),
+                                    icon: "password"),
                                 _buildInputText(context, text: "Şifre Yeniden"),
                                 _buildPageTextField(context,
                                     textEditingController:

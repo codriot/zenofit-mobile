@@ -14,18 +14,26 @@ class GeneralService {
     _dio.options.validateStatus = (status) {
       return status! < 500;
     };
+    _dio.options.followRedirects = true;
+    _dio.options.maxRedirects = 5;
+    _dio.interceptors.add(dio.LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      logPrint: (object) => print(object),
+    ));
   }
 
   // Kullanıcı kaydı için API isteği
   Future<AuthResponse?> register(String email, String password) async {
     try {
       final response = await _dio.post(
-        "${ApiBase.instance.baseApiUrl}/users",
+        "${ApiBase.instance.baseApiUrl}/users/",
         data: {
           "email": email,
           "password": password,
         },
       );
+      print("status code :${response.statusCode}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         // API yanıtından AuthResponse nesnesini oluştur
@@ -42,8 +50,12 @@ class GeneralService {
 
         return authResponse;
       } else {
-        // Hata durumunda bildirim göster
-        _showErrorSnackbar("Kayıt başarısız: ${response.statusMessage}");
+        // Hata mesajını response.data['detail']'den al
+        String errorMessage = "Kayıt başarısız";
+        if (response.data != null && response.data is Map && response.data['detail'] != null) {
+          errorMessage = response.data['detail'];
+        }
+        _showErrorSnackbar(errorMessage);
         return null;
       }
     } catch (e) {
@@ -56,7 +68,7 @@ class GeneralService {
   Future<AuthResponse?> login(String email, String password) async {
     try {
       final response = await _dio.post(
-        "${ApiBase.instance.baseApiUrl}/users/login",
+        "${ApiBase.instance.baseApiUrl}/users/login/",
         data: {
           "email": email,
           "password": password,

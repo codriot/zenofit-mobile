@@ -10,6 +10,7 @@ enum StorageItems {
   user,
   isLoggedIn,
   splashSeen,
+  nutritionCalories,
 }
 
 class StorageService {

@@ -18,47 +18,57 @@ class OnboardingSixController extends GetxController {
   Future<void> pushToOtherPage() async {
     isLoading.value = true;
     try {
-      // Get user data from storage
-      final userData = StorageService.instance.loadData(StorageItems.user);
-      if (userData == null) {
-        throw Exception('User data not found');
-      }
-
-      // Parse user data
-      final Map<String, dynamic> userJson = userData is String 
-          ? jsonDecode(userData) 
-          : userData as Map<String, dynamic>;
-      
-      final user = UserModel.fromJson(userJson);
-      int selectedIndex = isActiveList.indexWhere((element) => element == true);
-      user.goal = onboardingSelectionCardModelFood[selectedIndex].title;
-      
-      // Get email and password from storage
-      final email = StorageService.instance.loadData(StorageItems.email);
-      final password = StorageService.instance.loadData(StorageItems.password);
-      // Create final data to send
-      final Map<String, dynamic> finalUserData = user.toJson();
-      finalUserData['email'] = email;
-      finalUserData['password'] = password;
-      
-      print("kayıt edildi: ${user.goal}");
-      await StorageService.instance.saveData(StorageItems.user, user.toJson());
-      print("user verileri: $user");
-      
-      await GeneralService.instance
-          .authorizedPut('/users/me', data: finalUserData)
-          .whenComplete(() {
-        NavigatorController.instance.pushToPage(NavigateRoutesItems.home);
-      });
+      final user = await _updateUserGoal();
+      await _updateUserOnServer(user);
+      await _fetchAndStoreNutritionData();
+      NavigatorController.instance.pushToPage(NavigateRoutesItems.home);
     } catch (e) {
       print('Error in pushToOtherPage: $e');
       Get.snackbar(
         'Hata',
-        'Veri gönderilirken bir hata oluştu',
+        'Veri gönderilirken bir hata oluştu: $e',
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<UserModel> _updateUserGoal() async {
+    final userData = StorageService.instance.loadData(StorageItems.user);
+    if (userData == null) throw Exception('User data not found');
+    final Map<String, dynamic> userJson = userData is String
+        ? jsonDecode(userData)
+        : userData as Map<String, dynamic>;
+    final user = UserModel.fromJson(userJson);
+
+    int selectedIndex = isActiveList.indexWhere((element) => element == true);
+    user.goal = onboardingSelectionCardModelFood[selectedIndex].title;
+
+    await StorageService.instance.saveData(StorageItems.user, user.toJson());
+    return user;
+  }
+
+  Future<void> _updateUserOnServer(UserModel user) async {
+    final email = StorageService.instance.loadData(StorageItems.email);
+    final password = StorageService.instance.loadData(StorageItems.password);
+
+    final Map<String, dynamic> finalUserData = user.toJson();
+    finalUserData['email'] = email;
+    finalUserData['password'] = password;
+
+    await GeneralService.instance.authorizedPut('/users/me', data: finalUserData);
+  }
+
+  Future<void> _fetchAndStoreNutritionData() async {
+    final response = await GeneralService.instance.authorizedGet('/nutrition/ai/calculate-calories');
+    if (response != null && response.data is Map<String, dynamic>) {
+      await StorageService.instance.saveData(
+        StorageItems.nutritionCalories,
+        response.data,
+      );
+    } else {
+      throw Exception('Kalori verisi alınamadı');
     }
   }
 

@@ -22,52 +22,66 @@ class OnboardingSixView extends GetView<OnboardingSixController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            OnboardingTopComponents(
-              title: "Hedefiniz Nedir?",
-              textPadding: AppPadding.instance.horizontalLarge,
-            ),
-            Expanded(
-              child: Padding(
+            Column(
+              children: [
+                OnboardingTopComponents(
+                  title: "Hedefiniz Nedir?",
+                  textPadding: AppPadding.instance.horizontalLarge,
+                ),
+                Expanded(
+                  child: Padding(
+                      padding: AppPadding.instance.horizontalMedium,
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, // Her satırda 3 öğe olacak
+                          crossAxisSpacing:
+                              AppSizes.instance.mediumValue, // Yatay boşluk
+                          mainAxisSpacing:
+                              AppSizes.instance.mediumValue, // Dikey boşluk
+                        ),
+                        itemCount: controller.onboardingSelectionCardModelFood
+                            .length, // Liste eleman sayısı kadar oluşturur
+                        shrinkWrap: true, // GridView'ı içeriğe göre küçült
+                        physics:
+                            const NeverScrollableScrollPhysics(), // Kaydırmayı devre dışı bırak
+                        padding: EdgeInsets.symmetric(
+                          vertical: AppSizes.instance.mediumValue,
+                        ), // Dış boşluklar
+                        itemBuilder: (context, index) {
+                          final OnboardingSelectionCardModel model = controller
+                              .onboardingSelectionCardModelFood[index];
+                          return _buildFoodOptionContainer(
+                            index: index,
+                            context: context,
+                            icon: model.icon,
+                            title: model.title,
+                          );
+                        },
+                      )),
+                ),
+                GeneralOnboardingPageCircleComponent(),
+                Padding(
                   padding: AppPadding.instance.horizontalMedium,
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, // Her satırda 3 öğe olacak
-                      crossAxisSpacing:
-                          AppSizes.instance.mediumValue, // Yatay boşluk
-                      mainAxisSpacing:
-                          AppSizes.instance.mediumValue, // Dikey boşluk
-                    ),
-                    itemCount: controller.onboardingSelectionCardModelFood
-                        .length, // Liste eleman sayısı kadar oluşturur
-                    shrinkWrap: true, // GridView'ı içeriğe göre küçült
-                    physics:
-                        const NeverScrollableScrollPhysics(), // Kaydırmayı devre dışı bırak
-                    padding: EdgeInsets.symmetric(
-                      vertical: AppSizes.instance.mediumValue,
-                    ), // Dış boşluklar
-                    itemBuilder: (context, index) {
-                      final OnboardingSelectionCardModel model =
-                          controller.onboardingSelectionCardModelFood[index];
-                      return _buildFoodOptionContainer(
-                        index: index,
-                        context: context,
-                        icon: model.icon,
-                        title: model.title,
-                      );
-                    },
-                  )),
+                  child: GeneralPageButtonWidget(
+                    onPressed: controller.pushToOtherPage,
+                    text: "Next",
+                    padding: AppPadding.instance.bottomNormal,
+                    isIconActive: true,
+                  ),
+                ),
+              ],
             ),
-            GeneralOnboardingPageCircleComponent(),
-            Padding(
-              padding: AppPadding.instance.horizontalMedium,
-              child: GeneralPageButtonWidget(
-                onPressed: controller.pushToOtherPage,
-                text: "Next",
-                padding: AppPadding.instance.bottomNormal,
-                isIconActive: true,
-              ),
+            Obx(
+              () => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black.withOpacity(0.2),
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: const Center(child: CircularProgressIndicator()),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),

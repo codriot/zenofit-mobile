@@ -20,7 +20,7 @@ class HomeView extends GetView<HomeViewController> with HomeViewMixin {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildHeader(context),
+              buildHeader(context,controller),
               AppSpaces.instance.vertical20,
               buildNutritionSection(context),
               AppSpaces.instance.vertical20,

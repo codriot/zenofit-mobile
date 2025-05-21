@@ -15,7 +15,7 @@ import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:get/get.dart';
 
 mixin HomeViewMixin {
-  Widget buildHeader(BuildContext context) {
+  Widget buildHeader(BuildContext context,HomeViewController controller) {
     return Row(
       children: [
         Container(
@@ -34,7 +34,7 @@ mixin HomeViewMixin {
                     AppIconUtility.getIconPath("hand", format: IconFormat.svg)),
                 Padding(
                   padding: AppPadding.instance.leftSmall,
-                  child: Text('Selam Furkan',
+                  child: Text(controller.userName.value,
                       style: context.appGeneral.textTheme.titleSmall
                           ?.copyWith(fontWeight: FontWeight.w500)),
                 ),

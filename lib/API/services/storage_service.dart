@@ -50,8 +50,13 @@ class StorageService {
     if (jsonString == null) return null;
 
     try {
-      final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-      return UserModel.fromJson(jsonMap);
+      if (jsonString is String) {
+        final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+        return UserModel.fromJson(jsonMap);
+      } else if (jsonString is Map<String, dynamic>) {
+        return UserModel.fromJson(jsonString);
+      }
+      return null;
     } catch (e) {
       print('User decode error: $e');
       return null;

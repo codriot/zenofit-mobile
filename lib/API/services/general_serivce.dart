@@ -39,13 +39,15 @@ class GeneralService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         // API yanıtından AuthResponse nesnesini oluştur
         final authResponse = AuthResponse.fromJson(response.data);
+        print("API Response user: ${authResponse.user.toJson()}");
 
         // Token ve kullanıcı bilgilerini sakla
         await StorageService.instance
             .saveData(StorageItems.token, authResponse.accessToken);
         final updatedUser = authResponse.user.copyWith(name: name);
+        print("Updated user with name: ${updatedUser.toJson()}");
         await StorageService.instance.saveUser(updatedUser);
-        print("user name: ${updatedUser.name}");
+        print("Saved user to storage: ${StorageService.instance.loadUser()?.toJson()}");
         await StorageService.instance.saveData(StorageItems.isLoggedIn, true);
         await StorageService.instance.saveData(StorageItems.email, email);
         await StorageService.instance.saveData(StorageItems.password, password);

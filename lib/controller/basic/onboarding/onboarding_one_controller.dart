@@ -1,10 +1,8 @@
 import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart';
-import 'package:diet_app_mobile/model/user_model.dart';
 import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
 import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:get/get.dart';
-import 'dart:convert';
 
 enum GenderType { male, female, none, preferNotToSay }
 
@@ -34,41 +32,16 @@ class OnboardingOneController extends GetxController {
     }
 
     try {
-      // Get user data from storage
-      final userData = StorageService.instance.loadData(StorageItems.user);
-      if (userData == null) {
+      final user = StorageService.instance.loadUser();
+      if (user == null) {
         throw Exception('User data not found');
       }
 
-      // Parse user data
-      final Map<String, dynamic> userJson = userData is String 
-          ? jsonDecode(userData) 
-          : userData as Map<String, dynamic>;
+      user.gender = selectedGender.value.toString().split('.').last;
+      await StorageService.instance.saveUser(user);
       
-      final user = UserModel.fromJson(userJson);
-      
-      // Set gender based on selection
-      switch (selectedGender.value) {
-        case GenderType.male:
-          user.gender = "male";
-          break;
-        case GenderType.female:
-          user.gender = "female";
-          break;
-        case GenderType.none:
-          user.gender = "other";
-          break;
-        case GenderType.preferNotToSay:
-          user.gender = "prefer_not_to_say";
-          break;
-        default:
-          user.gender = null;
-      }
-
-      // Save updated user data
-      await StorageService.instance.saveData(StorageItems.user, user.toJson());
-      
-      // Navigate to next page
+      globalOnboardingController.toggleOnboardingPageCount(
+          OnboardingPageCountEnum.onboardingPageTwo.index);
       NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingTwo);
     } catch (e) {
       print('Error in pushToOtherPage: $e');

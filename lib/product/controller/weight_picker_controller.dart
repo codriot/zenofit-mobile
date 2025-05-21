@@ -52,8 +52,9 @@ class WeightPickerController extends GetxController {
   }
 
   void updateSelectedWeight(double weight) {
-    print("weight: $weight");
     selectedWeight.value = weight;
+    selectedWeight.value += 0.8;  //sapma payı
+    print("weight new: $selectedWeight");
   }
 
   void _scrollListener() {

@@ -1,8 +1,5 @@
-import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart';
 import 'package:diet_app_mobile/controller/basic/onboarding/onboarding_five_controller.dart';
 import 'package:diet_app_mobile/model/onboarding/onboarding_selection_card_model.dart';
-import 'package:diet_app_mobile/product/navigator/navigate_route_items.dart';
-import 'package:diet_app_mobile/product/navigator/navigator_controller.dart';
 import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/app_general.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
@@ -18,13 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class OnboardingFiveView extends StatelessWidget {
-  OnboardingFiveView({super.key});
-  final GlobalOnboardingController globalOnboardingController =
-      Get.find<GlobalOnboardingController>();
+class OnboardingFiveView extends GetView<OnboardingFiveController> {
+  const OnboardingFiveView({super.key});
 
-  final OnboardingFiveController controller =
-      Get.find<OnboardingFiveController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,29 +63,10 @@ class OnboardingFiveView extends StatelessWidget {
             Padding(
               padding: AppPadding.instance.horizontalMedium,
               child: GeneralPageButtonWidget(
-                onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(
-                      OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.onboardingSix);
-                },
+                onPressed: controller.pushToOtherPage,
                 text: "Next",
                 padding: AppPadding.instance.bottomNormal,
                 isIconActive: true,
-              ),
-            ),
-            Padding(
-              padding: AppPadding.instance.horizontalMedium,
-              child: GeneralPageButtonWidget(
-                onPressed: () {
-                  globalOnboardingController.toggleOnboardingPageCount(
-                      OnboardingPageCountEnum.onboardingPageSix.index);
-                  NavigatorController.instance
-                      .pushToPage(NavigateRoutesItems.onboardingSix);
-                },
-                text: "Skip",
-                padding: AppPadding.instance.bottomNormal,
-                backgroundColor: AppColor.sweetPatato.getColor(),
               ),
             ),
           ],

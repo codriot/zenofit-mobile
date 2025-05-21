@@ -53,7 +53,8 @@ class HeightPickerController extends GetxController {
   }
 
   void updateSelectedHeight(double height) {
-    selectedHeight.value = height;
+    selectedHeight.value = height + 4;
+    print("selectedHeight: $selectedHeight");
   }
 
   void _scrollListener() {

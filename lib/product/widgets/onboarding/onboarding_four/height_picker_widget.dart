@@ -29,7 +29,7 @@ class HeightPickerWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (controller.selectedHeight.value + 4).toStringAsFixed(0),
+                  (controller.selectedHeight.value).toStringAsFixed(0),
                   style: context.appGeneral.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     shadows: [generalComponentsShadow()],

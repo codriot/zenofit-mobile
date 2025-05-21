@@ -46,11 +46,11 @@ class RegisterController extends GetxController {
 
       // API ile kayıt işlemi
       final authResponse =
-          await GeneralService.instance.register(email.value, password.value);
+          await GeneralService.instance.register(email.value, password.value,name.value);
 
       if (authResponse != null) {
         // Başarılı kayıt sonrası onboarding'e yönlendirme
-        
+
         NavigatorController.instance
             .pushToPage(NavigateRoutesItems.onboardingOne);
       }

@@ -25,7 +25,7 @@ class GeneralService {
   }
 
   // Kullanıcı kaydı için API isteği
-  Future<AuthResponse?> register(String email, String password) async {
+  Future<AuthResponse?> register(String email, String password, String name) async {
     try {
       final response = await _dio.post(
         "${ApiBase.instance.baseApiUrl}/users/",
@@ -43,14 +43,23 @@ class GeneralService {
         // Token ve kullanıcı bilgilerini sakla
         await StorageService.instance
             .saveData(StorageItems.token, authResponse.accessToken);
-        await StorageService.instance.saveUser(authResponse.user);
+        final updatedUser = authResponse.user.copyWith(name: name);
+        await StorageService.instance.saveUser(updatedUser);
+        print("user name: ${updatedUser.name}");
         await StorageService.instance.saveData(StorageItems.isLoggedIn, true);
-
-        return authResponse;
+        await StorageService.instance.saveData(StorageItems.email, email);
+        await StorageService.instance.saveData(StorageItems.password, password);
+        return AuthResponse(
+          user: updatedUser,
+          accessToken: authResponse.accessToken,
+          tokenType: authResponse.tokenType,
+        );
       } else {
         // Hata mesajını response.data['detail']'den al
         String errorMessage = "Kayıt başarısız";
-        if (response.data != null && response.data is Map && response.data['detail'] != null) {
+        if (response.data != null &&
+            response.data is Map &&
+            response.data['detail'] != null) {
           errorMessage = response.data['detail'];
         }
         _showErrorSnackbar(errorMessage);
@@ -64,30 +73,32 @@ class GeneralService {
 
   // Kullanıcı girişi için API isteği
   Future<LoginResponseModel?> login(String email, String password) async {
-  try {
-    final response = await _dio.post(
-      "${ApiBase.instance.baseApiUrl}/auth/",
-      data: {
-        "email": email,
-        "password": password,
-      },
-    );
+    try {
+      final response = await _dio.post(
+        "${ApiBase.instance.baseApiUrl}/auth/",
+        data: {
+          "email": email,
+          "password": password,
+        },
+      );
 
-    if (response.statusCode == 200) {
-      return LoginResponseModel.fromJson(response.data);
-    } else {
-      String errorMessage = "Giriş başarısız";
-      if (response.data != null && response.data is Map && response.data['detail'] != null) {
-        errorMessage = response.data['detail'];
+      if (response.statusCode == 200) {
+        return LoginResponseModel.fromJson(response.data);
+      } else {
+        String errorMessage = "Giriş başarısız";
+        if (response.data != null &&
+            response.data is Map &&
+            response.data['detail'] != null) {
+          errorMessage = response.data['detail'];
+        }
+        _showErrorSnackbar(errorMessage);
+        return null;
       }
-      _showErrorSnackbar(errorMessage);
+    } catch (e) {
+      _showErrorSnackbar("Giriş işlemi sırasında bir hata oluştu: $e");
       return null;
     }
-  } catch (e) {
-    _showErrorSnackbar("Giriş işlemi sırasında bir hata oluştu: $e");
-    return null;
   }
-}
 
   // Authorization header'ı içeren GET isteği
   Future<dio.Response?> authorizedGet(String endpoint) async {
@@ -136,6 +147,31 @@ class GeneralService {
         ),
       );
 
+      return response;
+    } catch (e) {
+      _showErrorSnackbar("İşlem sırasında bir hata oluştu: $e");
+      return null;
+    }
+  }
+
+  // Authorization header'ı içeren PUT isteği
+  Future<dio.Response?> authorizedPut(String endpoint,
+      {Map<String, dynamic>? data}) async {
+    try {
+      final token = StorageService.instance.loadData(StorageItems.token);
+      if (token == null) {
+        _showErrorSnackbar("Oturum bilgisi bulunamadı");
+        return null;
+      }
+      final response = await _dio.put(
+        "${ApiBase.instance.baseApiUrl}$endpoint",
+        data: data,
+        options: dio.Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
       return response;
     } catch (e) {
       _showErrorSnackbar("İşlem sırasında bir hata oluştu: $e");

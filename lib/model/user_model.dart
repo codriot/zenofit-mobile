@@ -3,12 +3,12 @@ class UserModel {
   final String email;
   final String? name;
   final String createdAt;
-  final int? age;
+  int? age;
   String? gender;
-  final double? height;
-  final double? weight;
-  final String? goal;
-  final String? activityLevel;
+  double? height;
+  double? weight;
+  String? goal;
+  String? activityLevel;
 
   UserModel({
     required this.userId,
@@ -22,6 +22,32 @@ class UserModel {
     this.goal,
     this.activityLevel,
   });
+
+  UserModel copyWith({
+    int? userId,
+    String? email,
+    String? name,
+    String? createdAt,
+    int? age,
+    String? gender,
+    double? height,
+    double? weight,
+    String? goal,
+    String? activityLevel,
+  }) {
+    return UserModel(
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      createdAt: createdAt ?? this.createdAt,
+      age: age ?? this.age,
+      gender: gender ?? this.gender,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      goal: goal ?? this.goal,
+      activityLevel: activityLevel ?? this.activityLevel,
+    );
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

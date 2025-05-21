@@ -5,6 +5,8 @@ import 'package:get_storage/get_storage.dart';
 
 enum StorageItems {
   token,
+  email,
+  password,
   user,
   isLoggedIn,
   splashSeen,

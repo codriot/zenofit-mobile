@@ -44,6 +44,8 @@ class LoginController extends GetxController {
 
       if (loginResponse != null && loginResponse.accessToken.isNotEmpty) {
         await StorageService.instance.saveData(StorageItems.token, loginResponse.accessToken);
+        await StorageService.instance.saveData(StorageItems.email, email.value);
+        await StorageService.instance.saveData(StorageItems.password, password.value);
 
         final userResponse = await GeneralService.instance.authorizedGet('/users/me');
         if (userResponse != null && userResponse.data != null && userResponse.data is Map<String, dynamic>) {

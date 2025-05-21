@@ -28,7 +28,7 @@ class WeightPickerWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (controller.selectedWeight.value + 0.8).toStringAsFixed(1), // Kilo değeri 1 ondalık basamağa yuvarlanacak
+                  (controller.selectedWeight.value).toStringAsFixed(1), // Kilo değeri 1 ondalık basamağa yuvarlanacak
                   style: context.appGeneral.textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       shadows: [generalComponentsShadow()]),

@@ -151,7 +151,7 @@ class ChatDetailView extends GetView<ChatDetailController> {
           padding: EdgeInsets.only(bottom: Get.height * 0.1),
           itemBuilder: (context, index) {
             final message = controller.messages[index];
-            final isCurrentUser = message.receiverId == controller.currentUserId;
+            final isCurrentUser = message.senderId == controller.currentUserId;
             
             return AnimatedOpacity(
               opacity: 1.0,
@@ -211,7 +211,7 @@ class ChatDetailView extends GetView<ChatDetailController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Dyt. ${message.senderId}",
+                  "Dyt. ${controller.senderUser.value?.name}",
                   style: context.appGeneral.textTheme.labelLarge,
                 ),
                 Container(

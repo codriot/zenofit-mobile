@@ -120,7 +120,8 @@ class ChatDetailController extends GetxController {
       final response = await GeneralService.instance.authorizedPost(
         '/messages/',
         data: {
-          'receiver_id': senderId,
+          'sender_id': currentUserId,
+          'receiver_id': 2,
           'message_content': content,
         },
       );

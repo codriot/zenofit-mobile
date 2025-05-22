@@ -126,46 +126,50 @@ mixin HomeViewMixin {
           ),
         ),
         AppSpaces.instance.vertical20,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: buildNutritionCard(
-                  'Kalori',
-                  '${controller.userNutiritionCalories?.totalCalories.toInt()} Cal',
-                  AppColor.noxious.getColor(),
-                  context),
-            ),
-            AppSpaces.instance.horizontal10,
-            Expanded(
-              child: buildNutritionCard(
-                  'Protein',
-                  '${controller.userNutiritionCalories?.proteinNeed.toInt()} gr',
-                  AppColor.sweetPatato.getColor(),
-                  context),
-            ),
-          ],
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: buildNutritionCard(
+                    'Kalori',
+                    '${controller.userNutiritionCalories.value?.totalCalories.toInt()} Cal',
+                    AppColor.noxious.getColor(),
+                    context),
+              ),
+              AppSpaces.instance.horizontal10,
+              Expanded(
+                child: buildNutritionCard(
+                    'Protein',
+                    '${controller.userNutiritionCalories.value?.proteinNeed.toInt()} gr',
+                    AppColor.sweetPatato.getColor(),
+                    context),
+              ),
+            ],
+          ),
         ),
         AppSpaces.instance.vertical10,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: buildNutritionCard(
-                  'Karbonhidrat',
-                  '${controller.userNutiritionCalories?.carbsNeed.toInt()} gr',
-                  AppColor.vividBlue.getColor(),
-                  context),
-            ),
-            AppSpaces.instance.horizontal10,
-            Expanded(
-              child: buildNutritionCard(
-                  'Yağ',
-                  '${controller.userNutiritionCalories?.fatNeed.toInt()} gr',
-                  AppColor.vaporwaweBlue.getColor(),
-                  context),
-            ),
-          ],
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: buildNutritionCard(
+                    'Karbonhidrat',
+                    '${controller.userNutiritionCalories.value?.carbsNeed.toInt()} gr',
+                    AppColor.vividBlue.getColor(),
+                    context),
+              ),
+              AppSpaces.instance.horizontal10,
+              Expanded(
+                child: buildNutritionCard(
+                    'Yağ',
+                    '${controller.userNutiritionCalories.value?.fatNeed.toInt()} gr',
+                    AppColor.vaporwaweBlue.getColor(),
+                    context),
+              ),
+            ],
+          ),
         ),
         AppSpaces.instance.vertical15,
         CustomElevatedButton(
@@ -283,22 +287,24 @@ mixin HomeViewMixin {
                         ?.copyWith(color: AppColor.grey.getColor()),
                   ),
                   AppSpaces.instance.vertical10,
-                  Row(
-                    children: [
-                      Text(
-                        '${controller.currentWaterAmount.value}L',
-                        style:
-                            context.appGeneral.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.vaporwaweBlue.getColor(),
+                  Obx(
+                    () => Row(
+                      children: [
+                        Text(
+                          '${controller.currentWaterAmount.value}L',
+                          style:
+                              context.appGeneral.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.vaporwaweBlue.getColor(),
+                          ),
                         ),
-                      ),
-                      Text(
-                        ' / ${controller.calculateDailyWaterIntakeLiters()}L',
-                        style: context.appGeneral.textTheme.titleLarge
-                            ?.copyWith(color: AppColor.grey.getColor()),
-                      ),
-                    ],
+                        Text(
+                          ' / ${controller.calculateDailyWaterIntakeLiters().toStringAsFixed(1)}L',
+                          style: context.appGeneral.textTheme.titleLarge
+                              ?.copyWith(color: AppColor.grey.getColor()),
+                        ),
+                      ],
+                    ),
                   ),
                   AppSpaces.instance.vertical15,
                   Obx(

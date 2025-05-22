@@ -15,10 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class ChatView extends StatelessWidget {
-  ChatView({super.key});
-
-  final ChatViewController controller = Get.put(ChatViewController());
+class ChatView extends GetView<ChatViewController> {
+  const ChatView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +63,32 @@ class ChatView extends StatelessWidget {
   }
 
   Padding _buildChatCardButton(int index, BuildContext context) {
+    final user = controller.items[index];
     return Padding(
       padding: AppPadding.instance.bottomNormal,
       child: InkWell(
-        onTap: () {
-          NavigatorController.instance.pushToPage(
+        onTap: () async {
+          // Kullanıcı bilgilerini al
+          final userInfo = await controller.getSenderUserInfo(user.userId ?? 0);
+          if (userInfo != null) {
+
+            print("mesajlar: ${user.messages}");
+            NavigatorController.instance.pushToPage(
               NavigateRoutesItems.chatDetail,
-              arguments: controller.items[index].messages);
+              arguments: {
+                'messages': user.messages ?? [], // List<MessageModel>
+                'senderUser': userInfo, // UserModel
+              },
+            );
+          } else {
+            Get.snackbar(
+              'Hata',
+              'Kullanıcı bilgileri alınamadı',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+          }
         },
         child: SizedBox(
           width: double.infinity,
@@ -87,7 +104,7 @@ class ChatView extends StatelessWidget {
                   image: DecorationImage(
                     image: AssetImage(
                       AppImageUtility.getImagePath(
-                        "${controller.items[index].imageUrl}",
+                        user.imageUrl ?? "person",
                       ),
                     ),
                   ),
@@ -103,15 +120,16 @@ class ChatView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Dyt. ${controller.items[index].name} ${controller.items[index].surName}",
+                          "Dyt. ${user.name} ${user.surName}",
                           style: context.appGeneral.textTheme.bodyLarge
                               ?.copyWith(fontWeight: FontWeight.w500),
                         ),
-                        Text(
-                          controller.timeAgo(
-                              "${controller.items[index].messages?.last.time}"),
-                          style: context.appGeneral.textTheme.bodyMedium,
-                        ),
+                        if (user.lastChat != null)
+                          Text(
+                            controller.timeAgo(
+                                (user.messages?.first.sentAt).toString()),
+                            style: context.appGeneral.textTheme.bodyMedium,
+                          ),
                       ],
                     ),
                     Row(
@@ -119,29 +137,34 @@ class ChatView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            "${controller.items[index].messages?.last.message}",
+                            user.messages?.first.messageContent ?? "",
                             style: context.appGeneral.textTheme.bodyMedium,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        AppSpaces.instance.horizontal10,
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                AppColor.vividBlue.getColor().withOpacity(0.6),
-                          ),
-                          child: Text(
-                            "${controller.items[index].unReadMessageCount}",
-                            style: context.appGeneral.textTheme.bodyMedium
-                                ?.copyWith(
-                              color: AppColor.white.getColor(),
-                              fontWeight: FontWeight.bold,
+                        if (user.unReadMessageCount != null &&
+                            user.unReadMessageCount! > 0)
+                          AppSpaces.instance.horizontal10,
+                        if (user.unReadMessageCount != null &&
+                            user.unReadMessageCount! > 0)
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColor.vividBlue
+                                  .getColor()
+                                  .withOpacity(0.6),
+                            ),
+                            child: Text(
+                              "${user.unReadMessageCount}",
+                              style: context.appGeneral.textTheme.bodyMedium
+                                  ?.copyWith(
+                                color: AppColor.white.getColor(),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ],
@@ -317,19 +340,20 @@ class ChatView extends StatelessWidget {
                 .unfocus(); // Enter'a basınca klavyeyi kapat
           },
           suffix: Obx(
-          () => controller.searchText.isNotEmpty
-              ? Positioned(
-                  right: 8,
-                  top: 8,
-                  child: InkWell(
-                    onTap: controller.clearSearch,
-                    borderRadius: AppRadius.instance.largeBorderRadius,
-                    child: SvgPicture.asset(AppIconUtility.getIconPath("close",
-                        format: IconFormat.svg)),
-                  ),
-                )
-              : const SizedBox(),
-        ),
+            () => controller.searchText.isNotEmpty
+                ? Positioned(
+                    right: 8,
+                    top: 8,
+                    child: InkWell(
+                      onTap: controller.clearSearch,
+                      borderRadius: AppRadius.instance.largeBorderRadius,
+                      child: SvgPicture.asset(AppIconUtility.getIconPath(
+                          "close",
+                          format: IconFormat.svg)),
+                    ),
+                  )
+                : const SizedBox(),
+          ),
         ),
         CustomElevatedButton(
           backgroundColor: AppColor.transparent.getColor(),

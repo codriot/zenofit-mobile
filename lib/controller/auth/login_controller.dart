@@ -60,7 +60,7 @@ class LoginController extends GetxController {
               user.activityLevel == null) {
             NavigatorController.instance.pushToPage(NavigateRoutesItems.onboardingOne);
           } else {
-            NavigatorController.instance.pushToPage(NavigateRoutesItems.home);
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.main);
           }
         } else {
           Get.snackbar(

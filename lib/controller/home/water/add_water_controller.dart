@@ -27,7 +27,7 @@ class AddWaterController extends GetxController {
   // Seçili miktar
   final RxInt selectedAmount = 0.obs;
 
-  late final HomeViewController _homeViewController;
+  HomeViewController? _homeViewController;
 
   @override
   void onInit() {
@@ -38,8 +38,14 @@ class AddWaterController extends GetxController {
   }
 
   void _initializeHomeController() {
-    _homeViewController = Get.find<HomeViewController>();
-    targetWaterAmount.value = _homeViewController.calculateDailyWaterIntakeLiters();
+    try {
+      _homeViewController = Get.find<HomeViewController>();
+      targetWaterAmount.value = _homeViewController!.calculateDailyWaterIntakeLiters();
+    } catch (e) {
+      print("HomeViewController bulunamadı: $e");
+      // Varsayılan hedef su miktarını ayarla
+      targetWaterAmount.value = 2.5; // Varsayılan değer
+    }
   }
 
   void _loadWaterData() {

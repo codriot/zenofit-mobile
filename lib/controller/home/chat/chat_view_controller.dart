@@ -1,20 +1,24 @@
+import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:diet_app_mobile/model/chat/chat_model.dart';
 import 'package:diet_app_mobile/model/chat/message_model.dart';
+import 'package:diet_app_mobile/model/user_model.dart';
 import 'package:flutter/material.dart' show TextEditingController;
 import 'package:flutter/widgets.dart' show ScrollNotification;
 import 'package:get/state_manager.dart';
+import 'package:diet_app_mobile/API/services/general_serivce.dart';
 
 class ChatViewController extends GetxController {
-  var items = <ChatModel>[].obs; // Filtrelenmiş liste
-  var allItems = <ChatModel>[].obs;  // Tüm liste
-  var isMenuOpen = false.obs; 
+  var items = <ChatModel>[].obs;
+  var allItems = <ChatModel>[].obs;
+  var isMenuOpen = false.obs;
   var activeFilterIndex = 0.obs;
   var isLoading = false.obs;
   var hasMoreItems = true.obs;
   final searchController = TextEditingController();
   var searchText = ''.obs;
-
-  var isSearchActive = false.obs;
+  var currentPage = 1.obs;
+  var totalPages = 1.obs;
+  var userCache = <int, UserModel>{}.obs;
 
   @override
   void onInit() {
@@ -28,9 +32,89 @@ class ChatViewController extends GetxController {
     super.onClose();
   }
 
-  void filterItems() {
-    final query = searchText.value;
+  Future<UserModel?> getSenderUserInfo(int userId) async {
+    // Önce cache'de kontrol et
+    if (userCache.containsKey(userId)) {
+      return userCache[userId];
+    }
 
+    try {
+      final response = await GeneralService.instance.authorizedGet('/users/$userId');
+      if (response != null && response.statusCode == 200) {
+        final userData = UserModel.fromJson(response.data);
+        // Cache'e ekle
+        userCache[userId] = userData;
+        return userData;
+      }
+    } catch (e) {
+      print('Error fetching user info: $e');
+    }
+    return null;
+  }
+
+  Future<List<ChatModel>> _convertMessagesToChatModels(List<MessageModel> messages) async {
+    // Mesajları gönderen ID'ye göre grupla
+    final Map<int, List<MessageModel>> groupedMessages = {};
+    for (var message in messages) {
+      if (!groupedMessages.containsKey(message.senderId)) {
+        groupedMessages[message.senderId] = [];
+      }
+      groupedMessages[message.senderId]!.add(message);
+    }
+
+    // Her grup için bir ChatModel oluştur
+    List<ChatModel> chatModels = [];
+    for (var entry in groupedMessages.entries) {
+      final messages = entry.value;
+      messages.sort((a, b) => b.sentAt.compareTo(a.sentAt));
+      final lastMessage = messages.first;
+
+      // Kullanıcı bilgilerini al
+      final userInfo = await getSenderUserInfo(entry.key);
+
+      chatModels.add(ChatModel(
+        imageUrl: "person",
+        name: userInfo?.name ?? "Kullanıcı ${entry.key}",
+        surName: "",
+        lastChat: lastMessage.messageContent,
+        unReadMessageCount: messages.where((m) => m.senderId != StorageService.instance.loadUser()?.userId).length,
+        messages: messages,
+        isOnline: true,
+        userId: entry.key,
+      ));
+    }
+    return chatModels;
+  }
+
+  Future<void> loadInitialItems() async {
+    try {
+      isLoading.value = true;
+      final response = await GeneralService.instance.authorizedGet('/messages/?page=1&page_size=10');
+
+      if (response != null && response.statusCode == 200) {
+        final data = response.data;
+        final messages = (data['items'] as List)
+            .map((item) => MessageModel.fromJson(item))
+            .toList();
+
+        final chatModels = await _convertMessagesToChatModels(messages);
+        
+        allItems.assignAll(chatModels);
+        items.assignAll(chatModels);
+        
+        currentPage.value = data['page'];
+        totalPages.value = data['pages'];
+        hasMoreItems.value = currentPage.value < totalPages.value;
+      }
+    } catch (e) {
+      print('Error loading messages: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void filterItems() {
+    final query = searchText.value.toLowerCase();
     if (query.isEmpty) {
       items.assignAll(allItems);
     } else {
@@ -38,7 +122,6 @@ class ChatViewController extends GetxController {
         final fullName = "${chat.name} ${chat.surName}".toLowerCase();
         return fullName.contains(query);
       }).toList();
-
       items.assignAll(filtered);
     }
   }
@@ -46,36 +129,6 @@ class ChatViewController extends GetxController {
   void searchChats(String query) {
     searchController.text = query;
     searchText.value = query.toLowerCase();
-  }
-
-  void loadInitialItems() {
-    final initialData = List.generate(
-      10,
-      (index) {
-        return ChatModel(
-          imageUrl: "person",
-          lastChat: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-          name: "Furkan",
-          surName: "Yıldırım",
-          isOnline: index % 4 == 0,
-          unReadMessageCount: 1,
-          messages: List.generate(
-            10,
-            (i) => MessageModel(
-              sender: i % 2 == 0 ? "Furkan Yıldırım" : "Sen",
-              imageUrl: "person",
-              name: "Furkan",
-              surName: "Yıldırım",
-              time: "2025-04-11 13:45:00.000",
-              message: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-            ),
-          ),
-        );
-      },
-    );
-
-    allItems.assignAll(initialData);
-    items.assignAll(initialData);
   }
 
   void toggleMenuOpen() {
@@ -94,43 +147,35 @@ class ChatViewController extends GetxController {
     return true;
   }
 
-  void loadMoreItems() async {
+  Future<void> loadMoreItems() async {
     if (isLoading.value || !hasMoreItems.value) return;
 
-    isLoading.value = true;
-    await Future.delayed(Duration(seconds: 2));
+    try {
+      isLoading.value = true;
+      final nextPage = currentPage.value + 1;
+      
+      final response = await GeneralService.instance.authorizedGet('/messages/?page=$nextPage&page_size=10');
 
-    if (items.length < 100) {
-      final moreItems = List.generate(
-        10,
-        (index) => ChatModel(
-          imageUrl: "person",
-          lastChat: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-          name: "Furkan",
-          surName: "Yıldırım",
-          isOnline: index % 4 == 0,
-          unReadMessageCount: 1,
-          messages: List.generate(
-            10,
-            (i) => MessageModel(
-              sender: "Furkan Yıldırım",
-              imageUrl: "person",
-              name: "Furkan",
-              surName: "Yıldırım",
-              time: "2025-04-11 13:45:00.000",
-              message: "Lorem impus dolat sit contact sit lorem impus dolar sit teacht contact.",
-            ),
-          ),
-        ),
-      );
+      if (response != null && response.statusCode == 200) {
+        final data = response.data;
+        final messages = (data['items'] as List)
+            .map((item) => MessageModel.fromJson(item))
+            .toList();
 
-      allItems.addAll(moreItems);
-      filterItems(); // Arama varsa filtreleyerek ekle
-    } else {
-      hasMoreItems.value = false;
+        final newChatModels = await _convertMessagesToChatModels(messages);
+        
+        allItems.addAll(newChatModels);
+        filterItems();
+        
+        currentPage.value = data['page'];
+        totalPages.value = data['pages'];
+        hasMoreItems.value = currentPage.value < totalPages.value;
+      }
+    } catch (e) {
+      print('Error loading more messages: $e');
+    } finally {
+      isLoading.value = false;
     }
-
-    isLoading.value = false;
   }
 
   String timeAgo(String timeString) {
@@ -146,7 +191,7 @@ class ChatViewController extends GetxController {
     return "${(difference.inDays / 365).floor()} yıl önce";
   }
 
-   void clearSearch() {
+  void clearSearch() {
     searchText.value = "";
     searchController.clear();
     items.assignAll(allItems);

@@ -14,13 +14,11 @@ import 'package:diet_app_mobile/views/home/aboned_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:diet_app_mobile/model/chat/message_model.dart';
 
-class ChatDetailView extends StatelessWidget {
-  final ChatDetailController controller = Get.put(ChatDetailController());
-  final TextEditingController messageController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
+class ChatDetailView extends GetView<ChatDetailController> {
 
-  ChatDetailView({super.key});
+  const ChatDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -143,17 +141,24 @@ class ChatDetailView extends StatelessWidget {
   Expanded _buildChatLvbBubbleContainers() {
     return Expanded(
       child: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return ListView.builder(
           reverse: true,
-          controller: scrollController,
+          controller: controller.scrollController,
           itemCount: controller.messages.length,
+          padding: EdgeInsets.only(bottom: Get.height * 0.1),
           itemBuilder: (context, index) {
+            final message = controller.messages[index];
+            final isCurrentUser = message.receiverId == controller.currentUserId;
+            
             return AnimatedOpacity(
               opacity: 1.0,
               duration: AppDuration.instance.durationFast,
-              child: controller.messages[index].sender != "Sen"
-                  ? _buildOtherPersonChatContentContainer(index, context)
-                  : _buildYourChatContentContainer(index, context),
+              child: isCurrentUser
+                  ? _buildYourChatContentContainer(message, context)
+                  : _buildOtherPersonChatContentContainer(message, context),
             );
           },
         );
@@ -161,18 +166,27 @@ class ChatDetailView extends StatelessWidget {
     );
   }
 
-  void _sendMessage(String message) {
+  void _sendMessage(String message) async {
     if (message.isNotEmpty) {
-      controller.sendMessage(message);
-      messageController.clear();
-      Future.delayed(const Duration(milliseconds: 100), () {
-        scrollController.jumpTo(scrollController.position.minScrollExtent);
-      });
+      final success = await controller.sendMessage(message);
+      if (success) {
+        controller.messageController.clear();
+        Future.delayed(const Duration(milliseconds: 100), () {
+          controller.scrollController.jumpTo(controller.scrollController.position.minScrollExtent);
+        });
+      } else {
+        Get.snackbar(
+          'Hata',
+          'Mesaj gönderilemedi',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     }
   }
 
-  Container _buildOtherPersonChatContentContainer(
-      int index, BuildContext context) {
+  Container _buildOtherPersonChatContentContainer(MessageModel message, BuildContext context) {
     return Container(
       margin: AppPadding.instance.bottomMedium,
       padding: AppPadding.instance.horizontalNormal,
@@ -185,11 +199,8 @@ class ChatDetailView extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColor.orochimaru.getColor().withOpacity(0.6),
-              image: DecorationImage(
-                image: AssetImage(
-                  AppImageUtility.getImagePath(
-                      "${controller.messages[index].imageUrl}"),
-                ),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/person.png'),
               ),
             ),
           ),
@@ -200,29 +211,26 @@ class ChatDetailView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${controller.messages[index].sender}",
+                  "Dyt. ${message.senderId}",
                   style: context.appGeneral.textTheme.labelLarge,
                 ),
                 Container(
                   padding: AppPadding.instance.allNormal,
-                  width:
-                      Get.width - (AppSizes.instance.normalValue * 2 + 40 + 10),
+                  width: Get.width - (AppSizes.instance.normalValue * 2 + 40 + 10),
                   decoration: BoxDecoration(
-                      color: AppColor.crystalBell.getColor().withOpacity(0.6),
-                      borderRadius: BorderRadius.only(
-                        topRight:
-                            Radius.circular(AppSizes.instance.mediumValue),
-                        bottomRight:
-                            Radius.circular(AppSizes.instance.mediumValue),
-                        bottomLeft:
-                            Radius.circular(AppSizes.instance.mediumValue),
-                      )),
+                    color: AppColor.crystalBell.getColor().withOpacity(0.6),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(AppSizes.instance.mediumValue),
+                      bottomRight: Radius.circular(AppSizes.instance.mediumValue),
+                      bottomLeft: Radius.circular(AppSizes.instance.mediumValue),
+                    ),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Wrap(
                         children: [
-                          Text("${controller.messages[index].message}"),
+                          Text(message.messageContent),
                         ],
                       ),
                     ],
@@ -230,22 +238,20 @@ class ChatDetailView extends StatelessWidget {
                 ),
                 AppSpaces.instance.vertical5,
                 Text(
-                  controller.messages[index].time != null &&
-                          controller.messages[index].time!.contains(" ")
-                      ? "${controller.messages[index].time!.split(" ")[1].substring(0, 5)}"
-                      : '00:00',
+                  message.sentAt.toString().substring(11, 16),
                   style: context.appGeneral.textTheme.bodySmall?.copyWith(
-                      color: AppColor.black.getColor().withOpacity(0.6)),
+                    color: AppColor.black.getColor().withOpacity(0.6),
+                  ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Container _buildYourChatContentContainer(int index, BuildContext context) {
+  Container _buildYourChatContentContainer(MessageModel message, BuildContext context) {
     return Container(
       margin: AppPadding.instance.bottomMedium,
       padding: AppPadding.instance.horizontalNormal,
@@ -258,31 +264,30 @@ class ChatDetailView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "${controller.messages[index].sender}",
+                  "Sen",
                   style: context.appGeneral.textTheme.labelLarge,
                 ),
                 Container(
                   padding: AppPadding.instance.allNormal,
-                  width:
-                      Get.width - (AppSizes.instance.normalValue * 2 + 40 + 10),
+                  width: Get.width - (AppSizes.instance.normalValue * 2 + 40 + 10),
                   decoration: BoxDecoration(
-                      color: AppColor.vividBlue.getColor().withOpacity(0.6),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(AppSizes.instance.mediumValue),
-                        bottomRight:
-                            Radius.circular(AppSizes.instance.mediumValue),
-                        bottomLeft:
-                            Radius.circular(AppSizes.instance.mediumValue),
-                      )),
+                    color: AppColor.vividBlue.getColor().withOpacity(0.6),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppSizes.instance.mediumValue),
+                      bottomRight: Radius.circular(AppSizes.instance.mediumValue),
+                      bottomLeft: Radius.circular(AppSizes.instance.mediumValue),
+                    ),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Wrap(
                         children: [
                           Text(
-                            "${controller.messages[index].message} $index",
-                            style: context.appGeneral.textTheme.bodyMedium
-                                ?.copyWith(color: AppColor.white.getColor()),
+                            message.messageContent,
+                            style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                              color: AppColor.white.getColor(),
+                            ),
                           ),
                         ],
                       ),
@@ -291,14 +296,10 @@ class ChatDetailView extends StatelessWidget {
                 ),
                 AppSpaces.instance.vertical5,
                 Text(
-                  controller.messages[index].time != null &&
-                          controller.messages[index].time!.contains(" ")
-                      ? controller.messages[index].time!
-                          .split(" ")[1]
-                          .substring(0, 5)
-                      : '00:00',
+                  message.sentAt.toString().substring(11, 16),
                   style: context.appGeneral.textTheme.bodySmall?.copyWith(
-                      color: AppColor.black.getColor().withOpacity(0.6)),
+                    color: AppColor.black.getColor().withOpacity(0.6),
+                  ),
                 ),
               ],
             ),
@@ -310,11 +311,8 @@ class ChatDetailView extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColor.orochimaru.getColor().withOpacity(0.6),
-              image: DecorationImage(
-                image: AssetImage(
-                  AppImageUtility.getImagePath(
-                      "${controller.messages[index].imageUrl}"),
-                ),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/person.png'),
               ),
             ),
           ),
@@ -327,6 +325,7 @@ class ChatDetailView extends StatelessWidget {
     return Container(
       margin: AppPadding.instance.horizontalNormal,
       padding: AppPadding.instance.horizontalNormal,
+      height: Get.height * 0.07,
       decoration: BoxDecoration(
         color: AppColor.orochimaru.getColor(),
         borderRadius: AppRadius.instance.normalBorderRadius,
@@ -345,7 +344,7 @@ class ChatDetailView extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
-              controller: messageController,
+              controller: controller.messageController,
               cursorColor: Colors.black,
               decoration: const InputDecoration(
                 hintText: "Bir mesaj yaz.",
@@ -370,7 +369,7 @@ class ChatDetailView extends StatelessWidget {
               height: 32,
             ),
             onPressed: () {
-              _sendMessage(messageController.text);
+              _sendMessage(controller.messageController.text);
               FocusScope.of(context).unfocus();
             },
           ),
@@ -394,7 +393,7 @@ class ChatDetailView extends StatelessWidget {
               color: AppColor.orochimaru.getColor(),
               image: DecorationImage(
                 image: AssetImage(
-                  (AppImageUtility.getImagePath("person")),
+                  AppImageUtility.getImagePath("person"),
                 ),
               ),
             ),
@@ -405,11 +404,11 @@ class ChatDetailView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Dyt. Furkan Yıldırım",
+                Obx(() => Text(
+                  "Dyt. ${controller.senderUser.value?.name ?? ''}",
                   style: context.appGeneral.textTheme.titleSmall
                       ?.copyWith(fontWeight: FontWeight.w500),
-                ),
+                )),
                 Row(
                   children: [
                     Container(
@@ -429,11 +428,13 @@ class ChatDetailView extends StatelessWidget {
           ),
           AppSpaces.instance.space,
           IconButton(
-              onPressed: () {
-                controller.toggleMenuOpen();
-              },
-              icon: SvgPicture.asset(
-                  AppIconUtility.getIconPath("more-2", format: IconFormat.svg)))
+            onPressed: () {
+              controller.toggleMenuOpen();
+            },
+            icon: SvgPicture.asset(
+              AppIconUtility.getIconPath("more-2", format: IconFormat.svg),
+            ),
+          )
         ],
       ),
     );

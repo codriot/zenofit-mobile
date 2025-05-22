@@ -195,7 +195,7 @@ class AddWaterView extends GetView<AddWaterController> {
                                 ),
                               ),
                               Text(
-                                ' / ${controller.targetWaterAmount.value}L',
+                                ' / ${controller.targetWaterAmount.value.toStringAsFixed(1)}L',
                                 style: context.appGeneral.textTheme.titleLarge
                                     ?.copyWith(color: AppColor.grey.getColor()),
                               ),

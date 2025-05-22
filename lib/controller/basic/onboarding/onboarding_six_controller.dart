@@ -21,7 +21,7 @@ class OnboardingSixController extends GetxController {
       final user = await _updateUserGoal();
       await _updateUserOnServer(user);
       await _fetchAndStoreNutritionData();
-      NavigatorController.instance.pushToPage(NavigateRoutesItems.home);
+      NavigatorController.instance.pushToPage(NavigateRoutesItems.main);
     } catch (e) {
       print('Error in pushToOtherPage: $e');
       Get.snackbar(

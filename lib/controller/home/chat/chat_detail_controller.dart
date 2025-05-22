@@ -1,45 +1,74 @@
 import 'package:diet_app_mobile/model/chat/message_model.dart';
+import 'package:diet_app_mobile/model/user_model.dart';
 import 'package:diet_app_mobile/product/utils/app_utils/const_utils/app_colors.dart';
-import 'package:flutter/cupertino.dart' show Widget;
-import 'package:flutter/material.dart' show showModalBottomSheet;
+import 'package:flutter/cupertino.dart' show ScrollController, Widget;
+import 'package:flutter/material.dart'
+    show TextEditingController, showModalBottomSheet;
 import 'package:flutter/widgets.dart' show BuildContext;
 import 'package:get/get.dart';
+import 'package:diet_app_mobile/API/services/general_serivce.dart';
+import 'package:diet_app_mobile/API/services/storage_service.dart';
 
 class ChatDetailController extends GetxController {
-  var messages = <MessageModel>[].obs; // Observable list of messages
-  var isMenuOpen = false.obs; // Menü durumunu tutacak
+  var messages = <MessageModel>[].obs;
+  var isMenuOpen = false.obs;
+  var isLoading = false.obs;
+  late int senderId;
+  late int currentUserId;
+  var senderUser = Rxn<UserModel>();
+
+  final TextEditingController messageController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+
   @override
   void onInit() {
     super.onInit();
-    messages.addAll(Get.arguments);
+
+    final args = Get.arguments as Map<String, dynamic>;
+
+    messages.assignAll(args['messages'] as List<MessageModel>? ?? <MessageModel>[]);
+    senderUser.value = args['senderUser'] as UserModel?;
+
+    senderId = senderUser.value?.userId ?? 0;
+
+    loadCurrentUserId();
+  }
+
+  void loadCurrentUserId() {
+    final user = StorageService.instance.loadUser();
+    if (user != null) {
+      currentUserId = user.userId;
+    } else {
+      // Handle case where user is not logged in or user data is not available
+      // Perhaps navigate to login or show an error
+      print("Error: Current user ID not found!");
+    }
+  }
+
+  Future<bool> sendMessage(String content) async {
+    try {
+      final response = await GeneralService.instance.authorizedPost(
+        '/messages/',
+        data: {
+          'receiver_id': senderId,
+          'message_content': content,
+        },
+      );
+
+      if (response != null && response.statusCode == 200) {
+        final newMessage = MessageModel.fromJson(response.data);
+        messages.insert(0, newMessage);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print('Error sending message: $e');
+      return false;
+    }
   }
 
   void toggleMenuOpen() {
     isMenuOpen.value = !isMenuOpen.value;
-  }
-
-  void sendMessage(String content) {
-    final newMessage = MessageModel(
-      sender: "Sen",
-      imageUrl: "person", // Kullanıcı resmi
-      name: "Senin Adın", // Kullanıcı adı
-      surName: "Soyadın", // Kullanıcı soyadı
-      message: content,
-      time: DateTime.now().toString().substring(11, 16), // Zamanı al
-    );
-    messages.insert(0, newMessage);
-  }
-
-  void receiveMessage(String content) {
-    final newMessage = MessageModel(
-      sender: "Dyt. Furkan Yıldırım",
-      imageUrl: "person", // Diğer kişinin resmi
-      name: "Dyt.",
-      surName: "Furkan Yıldırım",
-      message: content,
-      time: DateTime.now().toString().substring(11, 16), // Zamanı al
-    );
-    messages.insert(0, newMessage);
   }
 
   void showBlockUserBottomSheet(BuildContext context,

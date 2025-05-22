@@ -9,6 +9,8 @@ import 'package:diet_app_mobile/bindings/views/basic/onboarding/onboarding_six_b
 import 'package:diet_app_mobile/bindings/views/dietition/dietition_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/discover/discover_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/home/home_view_binding.dart';
+import 'package:diet_app_mobile/bindings/views/main/chat_detail_binding.dart';
+import 'package:diet_app_mobile/bindings/views/main/chat_view_binding.dart';
 import 'package:diet_app_mobile/bindings/views/main/main_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_fast_item_binding.dart';
 import 'package:diet_app_mobile/bindings/views/meal/meal_add_filter_search_binding.dart';
@@ -192,35 +194,32 @@ class NavigatorRoutes {
     GetPage(
         name: NavigateRoutesItems.dietitianComplain.withSlash,
         page: () => const DietitianComplainView(),
-        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.dietitianComplainSucces.withSlash,
         page: () => const DietitianComplainSuccesView(),
-        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.dietitianVote.withSlash,
         page: () => const DietitianVoteView(),
-        binding: MainBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.chat.withSlash,
-        page: () => ChatView(),
-        binding: MainBinding(),
+        page: () => const ChatView(),
+        binding: ChatViewBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),
     GetPage(
         name: NavigateRoutesItems.chatDetail.withSlash,
-        page: () => ChatDetailView(),
-        binding: MainBinding(),
+        page: () => const ChatDetailView(),
+        binding: ChatDetailBinding(),
         transition: Transition.zoom,
         transitionDuration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut),

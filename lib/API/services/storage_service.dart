@@ -11,6 +11,7 @@ enum StorageItems {
   isLoggedIn,
   splashSeen,
   nutritionCalories,
+  waterData,
 }
 
 class StorageService {
@@ -42,25 +43,12 @@ class StorageService {
   }
 
   Future<void> saveUser(UserModel user) async {
-    final jsonString = jsonEncode(user.toJson());
-    await saveData(StorageItems.user, jsonString);
+    await saveData(StorageItems.user, user.toJson());
   }
 
   UserModel? loadUser() {
-    final jsonString = loadData(StorageItems.user);
-    if (jsonString == null) return null;
-
-    try {
-      if (jsonString is String) {
-        final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-        return UserModel.fromJson(jsonMap);
-      } else if (jsonString is Map<String, dynamic>) {
-        return UserModel.fromJson(jsonString);
-      }
-      return null;
-    } catch (e) {
-      print('User decode error: $e');
-      return null;
-    }
+    final userMap = loadData(StorageItems.user);
+    if (userMap == null) return null;
+    return UserModel.fromJson(userMap);
   }
 }

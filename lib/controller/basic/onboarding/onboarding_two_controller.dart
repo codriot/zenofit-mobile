@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart';
 import 'package:diet_app_mobile/model/user_model.dart';
@@ -13,8 +14,11 @@ class OnboardingTwoController extends GetxController {
       final agePickerController = Get.find<AgePickerController>();
 
   Future<void> pushToOtherPage() async {
-    final userJson = StorageService.instance.loadData(StorageItems.user);
+    
+    final userJsonRaw = StorageService.instance.loadData(StorageItems.user);
+    final userJson = userJsonRaw is String ? jsonDecode(userJsonRaw) : userJsonRaw;
     final user = UserModel.fromJson(userJson);
+
     user.age = agePickerController.selectedAge.value;
     print("kayıt edildi: ${user.age}");
     await StorageService.instance.saveData(StorageItems.user, user.toJson());

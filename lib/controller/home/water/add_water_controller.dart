@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:diet_app_mobile/controller/home/home_view_controller.dart';
+import 'package:diet_app_mobile/API/services/storage_service.dart';
 
 class AddWaterController extends GetxController {
   // Seçili gün için RxInt (0'dan başlayarak)
@@ -9,9 +11,9 @@ class AddWaterController extends GetxController {
   final RxList<DateTime> days = <DateTime>[].obs;
 
   // Su miktarı değerleri
-  final RxDouble currentWaterAmount = 1.5.obs;
-  final RxDouble targetWaterAmount = 2.5.obs;
-  final RxDouble waterProgress = 0.6.obs;
+  final RxDouble currentWaterAmount = 0.0.obs;
+  final RxDouble targetWaterAmount = 0.0.obs;
+  final RxDouble waterProgress = 0.0.obs;
 
   // Eklenen su miktarları listesi
   final RxList<int> addedWaterAmounts = <int>[].obs;
@@ -20,15 +22,54 @@ class AddWaterController extends GetxController {
   final TextEditingController manualWaterController = TextEditingController();
 
   // Seçilebilir su miktarları
-  final List<int> waterAmounts = [100, 200, 250, 300, 350 , 400];
+  final List<int> waterAmounts = [100, 200, 250, 300, 350, 400];
 
   // Seçili miktar
   final RxInt selectedAmount = 0.obs;
+
+  late final HomeViewController _homeViewController;
 
   @override
   void onInit() {
     super.onInit();
     _initializeDays();
+    _initializeHomeController();
+    _loadWaterData();
+  }
+
+  void _initializeHomeController() {
+    _homeViewController = Get.find<HomeViewController>();
+    targetWaterAmount.value = _homeViewController.calculateDailyWaterIntakeLiters();
+  }
+
+  void _loadWaterData() {
+    final savedData = StorageService.instance.loadData(StorageItems.waterData);
+    if (savedData != null) {
+      final List<dynamic> savedAmounts = savedData['amounts'] as List<dynamic>;
+      addedWaterAmounts.assignAll(savedAmounts.map((e) => e as int).toList());
+      _updateWaterAmounts();
+    }
+  }
+
+  void _updateWaterAmounts() {
+    // Toplam su miktarını hesapla
+    double totalAmount = 0;
+    for (var waterAmount in addedWaterAmounts) {
+      totalAmount += waterAmount / 1000; // ml'yi L'ye çevir
+    }
+    
+    // Değerleri güncelle
+    currentWaterAmount.value = totalAmount;
+    waterProgress.value = currentWaterAmount.value / targetWaterAmount.value;
+    if (waterProgress.value > 1) waterProgress.value = 1;
+  }
+
+  void _saveWaterData() {
+    final data = {
+      'amounts': addedWaterAmounts,
+      'date': DateTime.now().toIso8601String(),
+    };
+    StorageService.instance.saveData(StorageItems.waterData, data);
   }
 
   @override
@@ -81,18 +122,11 @@ class AddWaterController extends GetxController {
     // Eklenen miktarı listeye ekle
     addedWaterAmounts.add(amount);
     
-    // Toplam su miktarını hesapla
-    double totalAmount = 0;
-    for (var waterAmount in addedWaterAmounts) {
-      totalAmount += waterAmount / 1000; // ml'yi L'ye çevir
-    }
+    // Değerleri güncelle
+    _updateWaterAmounts();
     
-    // Toplam miktarı güncelle
-    currentWaterAmount.value = totalAmount;
-    
-    // Progress'i güncelle
-    waterProgress.value = currentWaterAmount.value / targetWaterAmount.value;
-    if (waterProgress.value > 1) waterProgress.value = 1;
+    // Verileri kaydet
+    _saveWaterData();
   }
 
   // Tarih formatını döndüren fonksiyon

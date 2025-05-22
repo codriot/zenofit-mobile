@@ -22,9 +22,9 @@ class HomeView extends GetView<HomeViewController> with HomeViewMixin {
             children: [
               buildHeader(context,controller),
               AppSpaces.instance.vertical20,
-              buildNutritionSection(context),
+              buildNutritionSection(context,controller),
               AppSpaces.instance.vertical20,
-              buildWaterIntakeSection(context),
+              buildWaterIntakeSection(context,controller),
               AppSpaces.instance.vertical20,
               buildDietPlanSection(context,controller),
             ],

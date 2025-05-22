@@ -15,7 +15,7 @@ import 'package:diet_app_mobile/product/services/icon_and_image_services.dart';
 import 'package:get/get.dart';
 
 mixin HomeViewMixin {
-  Widget buildHeader(BuildContext context,HomeViewController controller) {
+  Widget buildHeader(BuildContext context, HomeViewController controller) {
     return Row(
       children: [
         Container(
@@ -63,7 +63,8 @@ mixin HomeViewMixin {
     );
   }
 
-  Widget buildNutritionSection(BuildContext context) {
+  Widget buildNutritionSection(
+      BuildContext context, HomeViewController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -130,12 +131,18 @@ mixin HomeViewMixin {
           children: [
             Expanded(
               child: buildNutritionCard(
-                  'Kalori', '2500 Cal', AppColor.noxious.getColor(), context),
+                  'Kalori',
+                  '${controller.userNutiritionCalories?.totalCalories.toInt()} Cal',
+                  AppColor.noxious.getColor(),
+                  context),
             ),
             AppSpaces.instance.horizontal10,
             Expanded(
-              child: buildNutritionCard('Protein', '2500 Cal',
-                  AppColor.sweetPatato.getColor(), context),
+              child: buildNutritionCard(
+                  'Protein',
+                  '${controller.userNutiritionCalories?.proteinNeed.toInt()} gr',
+                  AppColor.sweetPatato.getColor(),
+                  context),
             ),
           ],
         ),
@@ -144,13 +151,19 @@ mixin HomeViewMixin {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: buildNutritionCard('Karbonhidrat', '2500 Cal',
-                  AppColor.vividBlue.getColor(), context),
+              child: buildNutritionCard(
+                  'Karbonhidrat',
+                  '${controller.userNutiritionCalories?.carbsNeed.toInt()} gr',
+                  AppColor.vividBlue.getColor(),
+                  context),
             ),
             AppSpaces.instance.horizontal10,
             Expanded(
-              child: buildNutritionCard('Yağ', '2500 Cal',
-                  AppColor.vaporwaweBlue.getColor(), context),
+              child: buildNutritionCard(
+                  'Yağ',
+                  '${controller.userNutiritionCalories?.fatNeed.toInt()} gr',
+                  AppColor.vaporwaweBlue.getColor(),
+                  context),
             ),
           ],
         ),
@@ -234,7 +247,8 @@ mixin HomeViewMixin {
     );
   }
 
-  Widget buildWaterIntakeSection(BuildContext context) {
+  Widget buildWaterIntakeSection(
+      BuildContext context, HomeViewController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -272,7 +286,7 @@ mixin HomeViewMixin {
                   Row(
                     children: [
                       Text(
-                        '1.5L',
+                        '${controller.currentWaterAmount.value}L',
                         style:
                             context.appGeneral.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -280,44 +294,47 @@ mixin HomeViewMixin {
                         ),
                       ),
                       Text(
-                        ' / 2.5L',
+                        ' / ${controller.calculateDailyWaterIntakeLiters()}L',
                         style: context.appGeneral.textTheme.titleLarge
                             ?.copyWith(color: AppColor.grey.getColor()),
                       ),
                     ],
                   ),
                   AppSpaces.instance.vertical15,
-                  SizedBox(
-                    height: 64,
-                    width: Get.width - 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              AppIconUtility.getIconPath(
-                                "water-circle",
-                                format: IconFormat.png,
+                  Obx(
+                    () => SizedBox(
+                      height: 64,
+                      width: Get.width - 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.waterHistory.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                AppIconUtility.getIconPath(
+                                  "water-circle",
+                                  format: IconFormat.png,
+                                ),
+                                height: 40,
                               ),
-                              height: 40,
-                            ),
-                            Padding(
-                              padding: AppPadding.instance.leftSmall,
-                              child: Text(
-                                '500 ml',
-                                style: context.appGeneral.textTheme.bodyMedium
-                                    ?.copyWith(
-                                        color: AppColor.black.getColor()),
+                              Padding(
+                                padding: AppPadding.instance.leftSmall,
+                                child: Text(
+                                  '${controller.waterHistory[index]} ml',
+                                  style: context.appGeneral.textTheme.bodyMedium
+                                      ?.copyWith(
+                                    color: AppColor.black.getColor(),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      itemCount: 5,
                     ),
-                  )
+                  ),
                 ],
               ),
               Padding(

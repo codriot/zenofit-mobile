@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart';
 import 'package:diet_app_mobile/model/onboarding/onboarding_selection_card_model.dart';
@@ -13,7 +15,8 @@ class OnboardingFiveController extends GetxController {
   late RxList<bool> isActiveList;
 
   Future<void> pushToOtherPage() async {
-    final userJson = StorageService.instance.loadData(StorageItems.user);
+    final userJsonRaw = StorageService.instance.loadData(StorageItems.user);
+    final userJson = userJsonRaw is String ? jsonDecode(userJsonRaw) : userJsonRaw;
     final user = UserModel.fromJson(userJson);
     int selectedIndex = isActiveList.indexWhere((element) => element == true);
     user.activityLevel = onboardingSelectionCardModelFood[selectedIndex].title;

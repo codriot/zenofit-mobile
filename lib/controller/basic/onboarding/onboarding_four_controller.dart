@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:diet_app_mobile/controller/basic/global_onboarding_controller.dart'
     show GlobalOnboardingController, OnboardingPageCountEnum;
@@ -14,7 +16,8 @@ class OnboardingFourController extends GetxController {
   final heightPickerController = Get.find<HeightPickerController>();
 
   Future<void> pushToOtherPage() async {
-    final userJson = StorageService.instance.loadData(StorageItems.user);
+    final userJsonRaw = StorageService.instance.loadData(StorageItems.user);
+    final userJson = userJsonRaw is String ? jsonDecode(userJsonRaw) : userJsonRaw;
     final user = UserModel.fromJson(userJson);
     user.height = heightPickerController.selectedHeight.value;
     print("kayıt edildi: ${user.height}");

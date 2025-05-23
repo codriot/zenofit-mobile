@@ -21,44 +21,52 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
     return Scaffold(
       backgroundColor: AppColor.whiteSolid.getColor(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.zero,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: AppPadding.instance.horizontalNormal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(context),
-                    _buildPageHeader(context),
-                    _buildRecomendedTitleText(context),
-                    AppSpaces.instance.vertical5,
-                  ],
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          
+          return SingleChildScrollView(
+            padding: EdgeInsets.zero,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: AppPadding.instance.horizontalNormal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(context),
+                      _buildPageHeader(context),
+                      _buildRecomendedTitleText(context),
+                      AppSpaces.instance.vertical5,
+                    ],
+                  ),
                 ),
-              ),
-              WaveCardWidget(
-                width: double.infinity,
-                backgroundColor: AppColor.white.getColor(),
-                padding: AppPadding.instance.allNormal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppSpaces.instance.vertical25,
-                    _buildRecommendedMeals(context),
-                    AppSpaces.instance.vertical25,
-                    _buildMacronutrients(context),
-                    AppSpaces.instance.vertical25,
-                    _buildAddButton(context),
-                    AppSpaces.instance.vertical20,
-                  ],
+                WaveCardWidget(
+                  width: double.infinity,
+                  backgroundColor: AppColor.white.getColor(),
+                  padding: AppPadding.instance.allNormal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppSpaces.instance.vertical25,
+                      _buildRecommendedMeals(context),
+                      AppSpaces.instance.vertical25,
+                      _buildMacronutrients(context),
+                      AppSpaces.instance.vertical25,
+                      _buildAddButton(context),
+                      AppSpaces.instance.vertical20,
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -94,7 +102,7 @@ class MealAddDetailView extends GetView<MealAddDetailController> {
         clipBehavior: Clip.none,
         children: [
           Text(
-            "${controller.selectedMeal.value?.subtitle}",
+            controller.selectedMeal.value?.subtitle ?? 'Önerilen Öğün',
             style: context.appGeneral.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),

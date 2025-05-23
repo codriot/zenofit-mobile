@@ -138,35 +138,29 @@ class MealAddView extends GetView<MealAddController> {
   }
 
   Widget _buildMealList(BuildContext context) {
+    final List<Map<String, String>> meals = [
+      {
+        'title': 'Kahvaltı',
+        'type': 'breakfast',
+      },
+      {
+        'title': 'Öğle Yemeği',
+        'type': 'lunch',
+      },
+      {
+        'title': 'Akşam Yemeği',
+        'type': 'dinner',
+      },
+    ];
+
     return Column(
       children: [
-        _buildMealItem(
+        ...meals.map((meal) => _buildMealItem(
           context,
-          'Kahvaltı',
-          'Önerilen Öğün - 300 / 500 kalori',
-          'breakfast',
-        ),
-        AppSpaces.instance.vertical15,
-        _buildMealItem(
-          context,
-          'Öğle Yemeği',
+          meal['title']!,
           'Önerilen Öğün - 800 / 1100 kalori',
-          'lunch',
-        ),
-        AppSpaces.instance.vertical15,
-        _buildMealItem(
-          context,
-          'Atıştırmalıklar',
-          'Önerilen Öğün - 400 / 500 kalori',
-          'snacks',
-        ),
-        AppSpaces.instance.vertical15,
-        _buildMealItem(
-          context,
-          'Akşam Yemeği',
-          'Önerilen Öğün - 800 / 1100 kalori',
-          'dinner',
-        ),
+          meal['type']!,
+        )),
       ],
     );
   }

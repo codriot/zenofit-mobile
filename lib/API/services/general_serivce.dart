@@ -2,6 +2,7 @@ import 'package:diet_app_mobile/API/model/login_response_model.dart';
 import 'package:diet_app_mobile/API/services/api_base.dart';
 import 'package:diet_app_mobile/API/services/storage_service.dart';
 import 'package:diet_app_mobile/model/user_model.dart';
+import 'package:diet_app_mobile/model/recipe_model.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -178,6 +179,26 @@ class GeneralService {
     } catch (e) {
       _showErrorSnackbar("İşlem sırasında bir hata oluştu: $e");
       return null;
+    }
+  }
+
+  // Yemek tariflerini getiren metod
+  Future<List<RecipeModel>> getRecipesByMealType(String mealType) async {
+    try {
+      final response = await _dio.get(
+        "${ApiBase.instance.baseApiUrl}/recipes/$mealType",
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = response.data;
+        return jsonData.map((json) => RecipeModel.fromJson(json)).toList();
+      } else {
+        _showErrorSnackbar("Tarifler yüklenirken bir hata oluştu");
+        return [];
+      }
+    } catch (e) {
+      _showErrorSnackbar("Tarifler yüklenirken bir hata oluştu: $e");
+      return [];
     }
   }
 

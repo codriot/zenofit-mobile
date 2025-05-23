@@ -59,21 +59,24 @@ class ProfileView extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 1,
-        crossAxisSpacing: 20,
+        crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemCount: 6,
+      itemCount: controller.postImages.length,
       itemBuilder: (context, index) {
-        return _buildGridViewItem();
+        return _buildGridViewItem(controller.postImages[index]);
       },
     );
   }
 
-  Container _buildGridViewItem() {
+  Widget _buildGridViewItem(String imageUrl) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.grey.getColor().withOpacity(0.6),
-        borderRadius: AppRadius.instance.halfBorderRadius,
+        borderRadius: AppRadius.instance.normalBorderRadius,
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
